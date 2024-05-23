@@ -21,8 +21,6 @@ export default function SignUp() {
   }
 
   const handleRegister = () => {
-    console.log(prenomUp);
-    console.log("click");
     fetch("http://localhost:3000/users/signup", {
       method: "POST",
       headers: { "Content-Type": "application/json" },

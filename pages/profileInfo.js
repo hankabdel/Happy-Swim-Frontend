@@ -1,15 +1,18 @@
 import styles from "../styles/ProfileInfo.module.css";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useState } from "react";
 import Modal from "react-modal";
+import { addAnnonce } from "../reducers/annonce";
 
 export default function profileInfo() {
   const user = useSelector((state) => state.user.value);
+  const dispatch = useDispatch();
+
   const [isOpen, setIsOpen] = useState(false);
   const [adresse, setAdresse] = useState("");
   const [personne, setPersonne] = useState("");
   const [prix, setPrix] = useState("");
-  const [text, setText] = useState("");
+  const [titre, setTitre] = useState("");
   const [description, setDescription] = useState("");
   const [image, setImage] = useState(null);
 
@@ -30,16 +33,29 @@ export default function profileInfo() {
     },
   };
 
-  const handleRegister = () => {
-    const newAnnonce = {
-      titre: text,
-      description,
-      adresse,
-      personne,
-      prix,
-    };
-
-    dispatch(addAnnonce(newAnnonce));
+  const handleAdd = () => {
+    fetch("http://localhost:3000/annonces/add", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        titre: titre,
+        description: description,
+        adresse: adresse,
+        personne: personne,
+        prix: prix,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        if (data.result) {
+          dispatch(addAnnonce({ id: data._id }));
+          setDescription("");
+          setAdresse("");
+          setPersonne("");
+          setPrix("");
+        }
+      });
     setIsOpen(false);
   };
 
@@ -66,8 +82,8 @@ export default function profileInfo() {
                   type="text"
                   placeholder="Le titre de votre annonce"
                   className={styles.in}
-                  onChange={(e) => setText(e.target.value)}
-                  value={text}
+                  onChange={(e) => setTitre(e.target.value)}
+                  value={titre}
                 ></input>
 
                 <input
@@ -116,7 +132,7 @@ export default function profileInfo() {
                 <div className={styles.buttonAjouter}>
                   <button
                     className={styles.buttonUp2}
-                    onClick={() => handleRegister()}
+                    onClick={() => handleAdd()}
                   >
                     Créez votre annonce +
                   </button>
