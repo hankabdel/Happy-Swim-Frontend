@@ -1,0 +1,58 @@
+.login{
+    display: flex;
+    flex-direction: row;
+}
+
+
+.container1{
+    display: flex;
+    flex-direction: column;
+    background-color:rgb(21,29,39);
+    height: 100vh;
+    width: 25vw;  
+    justify-content: space-between;
+}
+
+
+.logoLoginContainer{
+padding-left: 30px;
+padding-top: 30px;
+}
+
+.logoLoginContainer1{
+    height: 70px;
+    width: 70px;
+}
+
+
+
+.container2{
+    background-color: rgb(21,29,39);
+    height: 100vh;
+    width: 50vw;
+    border-left: grey 0.3px solid;
+    border-right: gray 0.3px solid;
+
+}
+.container3{
+    background-color: rgb(21,29,39);
+    height: 100vh;
+    width: 25vw;
+}
+
+
+.buttonOut{
+    color:black;
+    border-radius: 2rem;
+    cursor: pointer;
+    width: 120.02px;
+    height: 42.66px;
+    border: none;
+    background-color:rgb(21,29,39);
+    border: white 1px solid;
+}
+
+.buttonOut{
+    color: white;
+    display: flex;
+}

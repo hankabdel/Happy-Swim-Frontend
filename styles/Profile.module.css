@@ -1,0 +1,99 @@
+.container{
+    height: 92vh;
+    width: 100vw;
+    display: flex;
+    }
+    
+    
+    .image{
+    height: 92vh;
+    width: 50vw;
+    background-image: url("../public//Image/d9.jpg");
+
+
+    }
+    
+    .textContainer{
+      height: 92vh;
+    width: 50vw;
+    display: flex;
+    flex-direction: column;
+    background: rgb(16,74,150);
+    background: linear-gradient(356deg, rgba(16,74,150,1) 10%, rgba(74,121,171,1) 91%);
+    border: solid 1.5px #03254f;
+    }
+    
+    
+    
+    .textContainer{
+      padding-left: 30px;
+      padding: 20px;
+    }
+    
+
+    
+    .h1{
+    
+      color: white;
+      font-size: 55px;
+      font-family: 'Times New Roman', Times, serif;
+      padding-left: 20%;
+    }
+    
+
+    .ph{
+      color: white;
+      font-size: 30px;
+      font-family: 'Times New Roman', Times, serif;    
+      padding-left: 39%;
+      padding-top: 5%;
+    }
+    
+    
+    .pSing{
+      color: white;
+      font-family: 'Times New Roman', Times, serif;
+      font-size: 15px;
+      padding-left: 42%;
+    }
+    
+
+    .buttonUp{
+      color: white;
+      border-radius: 2rem;
+      cursor: pointer;
+      width: 120.02px;
+      height: 42.66px;
+      border: none;
+      background-color: #3653f8;
+    }
+    
+
+
+    .buttomIn{
+      color: white;
+      border-radius: 2rem;
+      cursor: pointer;
+      width: 120.02px;
+      height: 42.66px;
+      border: 1px solid;
+      background-color: rgb(21,29,39);
+    
+    }
+    
+    .buttom{
+      padding-top: 40px;
+    }
+
+    .buttomSingUp{
+      padding-left: 45%;
+      padding-bottom: 5%;
+    }
+
+    
+
+    .buttomSingIn{
+      padding-left: 45%;
+      padding-top: 2%;
+    }
+    

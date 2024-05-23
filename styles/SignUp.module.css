@@ -1,0 +1,60 @@
+.container{
+    display: flex;
+    flex-direction: column;
+    padding-left: 50px;
+}
+
+
+.buttonUp{
+    color: white;
+    border-radius: 10rem;
+    width: 120.02px;
+    height: 42.66px;
+    cursor: pointer;
+    border: none;
+    background-color: #3653f8;
+  }
+  
+  .buttonUp3{
+    padding-left: 35%;
+    padding-top: 80px;
+  }
+
+  .buttonUp2{
+    color:black;
+    border-radius: 2rem;
+    cursor: pointer;
+    width: 120.02px;
+    height: 42.66px;
+    border: none;
+    background-color:white;
+
+}
+
+
+
+.h1{
+    font-size: 30px;
+    color: white;
+    padding-left: 9%;
+  }
+
+  .input{
+    display: flex;
+    flex-direction: column;
+    width:300px ;
+    height: 200px;
+    padding: 15px;
+    gap: 10px;
+  }
+
+  .in{
+    border: solid 1.5px #9e9e9e;
+    border-radius: 1rem;
+    background: none;
+    padding: 1rem;
+    font-size: 1rem;
+    color: #000000;
+    background-color: #d6d6d6;
+
+  }

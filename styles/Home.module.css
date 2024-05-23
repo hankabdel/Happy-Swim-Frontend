@@ -1,22 +1,62 @@
 .main {
   display: flex;
+  height: 92vh;
+  width: 100vw;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  padding: 4rem 0;
 }
 
-.title {
-  line-height: 1.15;
-  font-size: 4rem;
+
+.container {
+  height: 92vh;
+  width: 100vw;
+  display: flex;
+  flex-direction: row;
+  background-image: url("../public//Image/image36.jpg");
+
+
 }
 
-.title a {
-  color: #0070f3;
-  text-decoration: none;
+
+.h1{
+  color: white;
+  font-family:  Georgia, Times, 'Times New Roman', serif;
+  padding-left: 25%;
 }
 
-.title a:hover, .title a:focus, .title a:active {
-  text-decoration: underline;
+.h2{
+  color: white;
+  font-family:    Geneva, Verdana, sans-serif;
+  padding-left: 25%;
 }
+
+
+.image{
+  width: 57vw;
+}
+
+.logo{
+  padding-top: 5%;
+  padding-left: 40%;
+}
+.logoh{
+  height: 40%;
+  width: 40%;
+}
+
+
+.imageFond{
+  height: 92vh;
+  width: 100vw;
+  clip-path: polygon(0% 0%, 29.7% 0%, 56.5% 50.8%, 30.7% 100%, 0% 100%, 0% 50%);
+
+}
+
+
+.annonce {
+height: 92vh;
+width: 43vw;
+
+
+}
+
+

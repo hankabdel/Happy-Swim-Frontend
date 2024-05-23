@@ -1,0 +1,40 @@
+.main {
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+  flex-direction: column;
+}
+
+
+
+.container {
+  height: 50vh;
+  width: 100vw;
+}
+
+.imageFond{
+  height: 50vh;
+  width: 100vw;
+}
+
+.annonce {
+height: 32vh;
+width: 100vw;
+  /* background-color: cadetblue; */
+}
+
+.footer{
+  height: 10vh;
+  width: 100vw;
+  
+}
+
+
+
+
+.textColor{
+font-family: 'Times New Roman', Times, serif;
+color: white;  
+  
+}
+
