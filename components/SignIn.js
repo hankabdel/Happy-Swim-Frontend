@@ -15,7 +15,8 @@ export default function SignIn() {
 
   const router = useRouter();
   if (user.token) {
-    router.push("/loginPage");
+    console.log("---->je charge");
+    router.push("/");
   }
 
   const handleConnection = () => {

@@ -1,4 +1,5 @@
 import styles from "../styles/Home.module.css";
+import Annonce from "../components/Annonce";
 
 export default function Home() {
   return (
@@ -15,7 +16,7 @@ export default function Home() {
           <div className={styles.logo}>
             <img className={styles.logoh} src="/logoh.png" alt="logo" />
           </div>
-          <div>
+          <div className={styles.h1H2}>
             <h1 className={styles.h1}>Le bonheur est partagé</h1>
             <h2 className={styles.h2}>
               Vous avez la possibilité de louer une piscine privée partout en
@@ -23,7 +24,17 @@ export default function Home() {
             </h2>
             {/* <p>Happy swim, Deux façons de rendre les gens heureux!</p> */}
           </div>
+          <div className={styles.imgDsn}>
+            <img
+              className={styles.imageDsn}
+              src="image/image22.jpg"
+              alt="logo"
+            />
+          </div>
         </div>
+      </div>
+      <div className={styles.containerAnnonce}>
+        <Annonce />
       </div>
     </div>
   );

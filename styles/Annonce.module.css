@@ -1,0 +1,77 @@
+.main{
+  height: 100vh;
+  width: 100vw;
+}
+
+  
+  .annonceContainer{
+    display: flex;
+    flex-direction: row;
+    padding-top: 10%;
+    gap: 80px;   
+}
+
+
+.card {
+    width: 250px;
+    height: 350px;
+    background: rgb(17, 4, 134);
+    border-radius: 15px;
+    display: flex;
+    color: white;
+    position: relative;
+    flex-direction: column;
+    background: linear-gradient(to right, rgb(20, 30, 48), rgb(36, 59, 85));
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+
+.card:hover > .moon {
+  font-size: 23px;
+}
+
+
+
+.card:hover > .imageFond {
+height: 51%;
+overflow: hidden;
+width: 100%; 
+
+}
+
+
+
+
+  .imageFond{
+    height: 50%;
+    transition: all 0.3s ease-in-out;
+  }
+
+
+
+  .card:hover {
+    cursor: pointer;
+    transform: scale(1.05);
+
+  }
+
+  
+  .container {
+    display: flex;
+    overflow-x: scroll;
+    width: 60vw;
+    height: 500px;
+    scroll-padding-top: 24px;
+    border-radius: 8px;
+    margin-left: 20%;
+    padding-left: 1%;
+}
+  
+
+
+.info{
+  padding-left: 6%;
+}

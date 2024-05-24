@@ -17,7 +17,7 @@ export default function SignUp() {
 
   const router = useRouter();
   if (user.token) {
-    router.push("/loginPage");
+    router.push("/");
   }
 
   const handleRegister = () => {
