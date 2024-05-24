@@ -1,6 +1,7 @@
 import styles from "../styles/Annonce.module.css";
 import React from "react";
 import { useEffect, useState } from "react";
+import Heart from "./Heart";
 
 export default function Annonce() {
   const [annonceData, setAnnonceData] = useState([]);
@@ -9,6 +10,7 @@ export default function Annonce() {
   const [adresse, setAdresse] = useState("");
   const [personne, setPersonne] = useState("");
   const [prix, setPrix] = useState("");
+  const [active, setActive] = useState(false);
 
   useEffect(() => {
     fetch("http://localhost:3000/annonces/recover", {
@@ -25,10 +27,14 @@ export default function Annonce() {
         console.log("----->data", annonce);
         setAnnonceData(annonce.data);
       });
-    // .catch((error) => {
-    //   console.error("error", error);
-    // });
   }, []);
+
+  const handleCopyAnnonce = (annonce) => {
+    history.push({
+      pathname: "/mesFavoris",
+      state: { annonce: annonce },
+    });
+  };
 
   return (
     <div className={styles.main}>
@@ -45,6 +51,9 @@ export default function Annonce() {
                 <h2>{annonce.titre}</h2>
                 <p>Adresse : {annonce.adresse}</p>
                 <p>Prix : {annonce.prix}</p>
+                <div className={styles.heart}>
+                  <Heart onClick={() => handleCopyAnnonce()} />
+                </div>
               </div>
             </div>
           ))}

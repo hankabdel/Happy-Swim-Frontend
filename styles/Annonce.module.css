@@ -73,5 +73,18 @@ width: 100%;
 
 
 .info{
+  display: flex;
+  flex-direction: column;
   padding-left: 6%;
+  background-color: rgb(46, 84, 117);
 }
+
+
+
+/* Coeur */
+
+.heart{
+  display: flex;
+justify-content: flex-end;
+padding-right: 20px;
+padding-bottom: 10px;}
