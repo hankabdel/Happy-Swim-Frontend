@@ -2,10 +2,17 @@ import styles from "../styles/ProfileInfo.module.css";
 import { useSelector, useDispatch } from "react-redux";
 import { useState } from "react";
 import Modal from "react-modal";
-import { addAnnonce } from "../reducers/annonce";
+import {
+  addAnnonce,
+  removeAnnonce,
+  removeAllAnnonce,
+} from "../reducers/annonce";
+import { logout } from "../reducers/user";
+import Link from "next/link";
 
 export default function profileInfo() {
   const user = useSelector((state) => state.user.value);
+  const annonceReducer = useSelector((state) => state.annonce.value);
   const dispatch = useDispatch();
 
   const [isOpen, setIsOpen] = useState(false);
@@ -15,6 +22,8 @@ export default function profileInfo() {
   const [titre, setTitre] = useState("");
   const [description, setDescription] = useState("");
   const [image, setImage] = useState(null);
+
+  // console.log("=======>reducer", annonceReducer);
 
   const customStyles = {
     overlay: {
@@ -33,10 +42,18 @@ export default function profileInfo() {
     },
   };
 
+  const handleLogout = () => {
+    dispatch(logout());
+    dispatch(removeAllAnnonce());
+  };
+
   const handleAdd = () => {
     fetch("http://localhost:3000/annonces/add", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${user.token}`,
+      },
       body: JSON.stringify({
         titre: titre,
         description: description,
@@ -47,9 +64,30 @@ export default function profileInfo() {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
+        console.log("DATA WHEN ADD BDD", data);
         if (data.result) {
-          dispatch(addAnnonce({ id: data._id }));
+          dispatch(addAnnonce(data.data));
+          console.log("-----data", data.data);
+          setDescription("");
+          setAdresse("");
+          setPersonne("");
+          setPrix("");
+          console.log("---->hello", annonceReducer);
+        }
+      });
+    setIsOpen(false);
+  };
+
+  const handleRemove = () => {
+    fetch("http://localhost:3000/annonces/`${userId}`", {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        // console.log("------>sup", data);
+        if (data.result) {
+          dispatch(removeAnnonce({ id: data._id }));
           setDescription("");
           setAdresse("");
           setPersonne("");
@@ -68,7 +106,7 @@ export default function profileInfo() {
         <h3 className={styles.info}>Email: {user.email}</h3>
         <div className={styles.buttonAnnonce}>
           <button className={styles.button} onClick={() => setIsOpen(true)}>
-            Annonce (0)
+            Ajouter Annonce (0)
           </button>
           <Modal
             isOpen={isOpen}
@@ -140,6 +178,19 @@ export default function profileInfo() {
               </div>
             </div>
           </Modal>
+        </div>
+        <div className={styles.supprimer} onClick={() => handleRemove()}>
+          <button className={styles.button}>supprimer Annonce</button>
+        </div>
+        <div className={styles.deconnectezVous}>
+          <Link href="/">
+            <button
+              className={styles.deconnectez}
+              onClick={() => handleLogout()}
+            >
+              Déconnectez-vous
+            </button>
+          </Link>
         </div>
       </div>
     </div>

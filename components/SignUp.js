@@ -43,10 +43,6 @@ export default function SignUp() {
       });
   };
 
-  // const handleLougout = () => {
-  //   dispatch(logout());
-  // };
-
   const customStyles = {
     overlay: {
       backgroundColor: "rgba(0, 0, 0, 0.6)",

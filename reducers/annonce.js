@@ -9,15 +9,19 @@ export const annoncesSlice = createSlice({
   initialState,
   reducers: {
     addAnnonce: (state, action) => {
-      state.value.push(action.payload);
+      state.value.push(action.payload.data);
     },
     removeAnnonce: (state, action) => {
       state.value = state.value.filter(
         (annonce) => annonce._id !== action.payload._id
       );
     },
+    removeAllAnnonce: (state) => {
+      state.value = [];
+    },
   },
 });
 
-export const { addAnnonce, removeAnnonce } = annoncesSlice.actions;
+export const { addAnnonce, removeAnnonce, removeAllAnnonce } =
+  annoncesSlice.actions;
 export default annoncesSlice.reducer;
