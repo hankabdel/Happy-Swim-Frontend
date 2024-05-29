@@ -12,14 +12,26 @@ const MesFavoris = () => {
       <div className={styles.container}>
         {favoris.length > 0 ? (
           favoris.map((heart, i) => (
-            <div className={styles.card} key={i}>
-              <h2>{heart.titre}</h2>
-              <p>Adresse: {heart.adresse}</p>
-              <p>Prix: {heart.prix}</p>
+            <div className={styles.annonceContainer} key={i}>
+              <div className={styles.card}>
+                <img
+                  className={styles.imageFond}
+                  src="image/image37.png"
+                  alt="image"
+                />
+                <div className={styles.info}>
+                  <h2>{heart.titre}</h2>
+                  <p>ville: {heart.ville}</p>
+                  <p>Prix: {heart.prix}</p>
+                </div>
+              </div>
+              <div className={styles.cardScroll}></div>
             </div>
           ))
         ) : (
-          <p>Aucun favori ajouté.</p>
+          <div className={styles.p}>
+            <p>Aucun favori trouvé</p>
+          </div>
         )}
       </div>
     </div>

@@ -9,7 +9,7 @@ export const annoncesSlice = createSlice({
   initialState,
   reducers: {
     addAnnonce: (state, action) => {
-      state.value.push(action.payload.data);
+      state.value.push(action.payload);
     },
     removeAnnonce: (state, action) => {
       state.value = state.value.filter(

@@ -16,14 +16,12 @@ export default function profileInfo() {
   const dispatch = useDispatch();
 
   const [isOpen, setIsOpen] = useState(false);
-  const [adresse, setAdresse] = useState("");
+  const [ville, setVille] = useState("");
   const [personne, setPersonne] = useState("");
   const [prix, setPrix] = useState("");
   const [titre, setTitre] = useState("");
   const [description, setDescription] = useState("");
   const [image, setImage] = useState(null);
-
-  // console.log("=======>reducer", annonceReducer);
 
   const customStyles = {
     overlay: {
@@ -57,19 +55,19 @@ export default function profileInfo() {
       body: JSON.stringify({
         titre: titre,
         description: description,
-        adresse: adresse,
+        ville: ville,
         personne: personne,
         prix: prix,
       }),
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log("DATA WHEN ADD BDD", data);
+        // console.log("DATA WHEN ADD BDD", data);
         if (data.result) {
           dispatch(addAnnonce(data.data));
-          console.log("-----data", data.data);
+          // console.log("-----data", data.data);
           setDescription("");
-          setAdresse("");
+          setVille("");
           setPersonne("");
           setPrix("");
           console.log("---->hello", annonceReducer);
@@ -79,22 +77,29 @@ export default function profileInfo() {
   };
 
   const handleRemove = () => {
-    fetch("http://localhost:3000/annonces/`${userId}`", {
+    console.log("hello front");
+    fetch(`http://localhost:3000/annonces/delete`, {
       method: "DELETE",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${user.token}`,
+      },
     })
       .then((response) => response.json())
       .then((data) => {
-        // console.log("------>sup", data);
+        console.log("------>sup", data);
         if (data.result) {
-          dispatch(removeAnnonce({ id: data._id }));
+          console.log("true", data.annonceId);
+          dispatch(removeAnnonce({ _id: data.annonceId }));
+          console.log("hello reducer------->", annonceReducer);
           setDescription("");
-          setAdresse("");
+          setVille("");
           setPersonne("");
           setPrix("");
         }
       });
     setIsOpen(false);
+    console.log(annonceReducer);
   };
 
   return (
@@ -106,12 +111,13 @@ export default function profileInfo() {
         <h3 className={styles.info}>Email: {user.email}</h3>
         <div className={styles.buttonAnnonce}>
           <button className={styles.button} onClick={() => setIsOpen(true)}>
-            Ajouter Annonce (0)
+            Ajouter Annonce
           </button>
           <Modal
             isOpen={isOpen}
             onRequestClose={() => setIsOpen(false)}
             style={customStyles}
+            ariaHideApp={false}
           >
             <div className={styles.container}>
               <h1 className={styles.h1}>Ajouter une annonce</h1>
@@ -134,17 +140,18 @@ export default function profileInfo() {
 
                 <input
                   type="text"
-                  placeholder="l'adresse de votre piscine ?
+                  placeholder="la ville de votre piscine ?
                   "
                   className={styles.in}
-                  onChange={(e) => setAdresse(e.target.value)}
-                  value={adresse}
+                  onChange={(e) => setVille(e.target.value)}
+                  value={ville}
                 ></input>
 
                 <input
                   type="number"
                   placeholder="Combien de personnes"
                   className={styles.in}
+                  min="1"
                   onChange={(e) => setPersonne(e.target.value)}
                   value={personne}
                 ></input>
@@ -152,6 +159,7 @@ export default function profileInfo() {
                 <input
                   type="number"
                   placeholder="prix"
+                  min="1"
                   className={styles.in}
                   onChange={(e) => setPrix(e.target.value)}
                   value={prix}
@@ -180,8 +188,25 @@ export default function profileInfo() {
           </Modal>
         </div>
         <div className={styles.supprimer} onClick={() => handleRemove()}>
-          <button className={styles.button}>supprimer Annonce</button>
+          <button className={styles.button}>Supprimer Annonce</button>
         </div>
+        <Link href="/mesReservation">
+          <div className={styles.buttonMesReservations}>
+            <button
+              className={styles.button}
+              // onClick={() => handleMesReservations()}
+            >
+              Mes réservation
+            </button>
+          </div>
+        </Link>
+
+        <div className={styles.buttonMesAnnonces}>
+          <button className={styles.button} onClick={() => handleMesAnnonces()}>
+            Mes annonces
+          </button>
+        </div>
+
         <div className={styles.deconnectezVous}>
           <Link href="/">
             <button

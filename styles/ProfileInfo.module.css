@@ -3,13 +3,13 @@
     width: 100vw;
     height: 92vh;
     background-image: url("../public/Image/image36.jpg");
-    padding-top: 8%;
+    padding-top: 4%;
 }
 
 
 .card {
-    width: 320px;
-    height: 450px;
+    width: 370px;
+    height: 570px;
     background: rgb(236, 236, 236);
     box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
     margin-left: 40%;
@@ -90,9 +90,7 @@ padding-top: 5%;  }
     transform: scale(1);
   }
 
-  .buttonAnnonce{
-    padding-left: 16%;
-  }
+
 
 
 
@@ -160,11 +158,6 @@ padding-top: 5%;  }
 }
 
 
-
-
-
-
-
 /* modal */
 
 .container{
@@ -228,9 +221,14 @@ padding-top: 5%;  }
 
 }
 
+.buttonAnnonce{
+  padding-left: 20%;
+}
+
+
 
 .buttonAjouter{
-  padding-left: 15%;
+  padding-left: 20%;
   padding-top: 4%;
   padding-bottom: 6%;
 }
@@ -241,6 +239,20 @@ padding-top: 5%;  }
 }
 
 .supprimer{
-  padding-left: 16%;
+  padding-left: 17%;
+  padding-top: 4%;
+}
+
+
+
+
+
+.buttonMesReservations{
+  padding-left: 21%;
+  padding-top: 4%;
+}
+
+.buttonMesAnnonces{
+  padding-left: 23%;
   padding-top: 4%;
 }
