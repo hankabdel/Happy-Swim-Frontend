@@ -14,7 +14,7 @@
 
 .card {
     width: 250px;
-    height: 330px;
+    height: 350px;
     background: rgb(17, 4, 134);
     border-radius: 15px;
     display: flex;
@@ -93,9 +93,45 @@ padding-bottom: 10px;}
 .heartIcon{
   height: 20px;
   width: 20px;
+  position: absolute;bottom: 16%;
+
+}
+
+.imageText{
+  display: flex;
+  flex-direction: row;
+  color: rgb(202, 202, 202);
+  gap: 5%;
 }
 
 
+.villePrix{
+  color: rgb(202, 202, 202);
+}
+
+.vP{
+font-size: 20px;
+padding-left: 4%;}
+
+.buttonModal{
+padding-right: 12%;
+padding-top: 6%;
+}
+
+.dateText{
+  padding-left: 30%;
+}
+.inAp{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 10%;
+}
+
+.buttonReserver{
+  padding-top: 15%;
+  padding-left: 37%;
+}
 
 /* Modal */
 
@@ -170,22 +206,23 @@ padding-bottom: 10px;}
 
   .input {
     border: 2px solid transparent;
-    width: 10em;
-    height: 2.5em;
+    width: 13em;
+    height: 3em;
     padding-left: 0.8em;
     outline: none;
     overflow: hidden;
     background-color: #F3F3F3;
     border-radius: 10px;
-    transition: all 0.5s;
+    transition: all 0.9s;
   }
   
   .input:hover,
   .input:focus {
-    border: 2px solid #4A9DEC;
-    box-shadow: 0px 0px 0px 7px rgb(74, 157, 236, 20%);
+    border: 2px solid #0c7ce5;
+    box-shadow: 0px 0px 0px 7px rgba(109, 178, 243, 0.2);
     background-color: white;
   }
+  
 .time{
   display: flex;
   flex-direction: row;

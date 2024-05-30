@@ -293,4 +293,49 @@ width: 43vw;
 .containerAnnonce{
   height: 100vh;
   width: 100vw;
+  -webkit-animation: color-change-2x 20s cubic-bezier(0.550, 0.085, 0.680, 0.530) infinite forwards;
+  animation: color-change-2x 20s cubic-bezier(0.550, 0.085, 0.680, 0.530) infinite forwards;
 }
+@-webkit-keyframes color-change-2x {
+        0% {
+          background: #59a4ff;
+        }
+        100% {
+          background: #9cbbfa;
+        }
+      }
+      @keyframes color-change-2x {
+        0% {
+          background: #77b0ff;
+        }
+        100% {
+          background: #8bdef0;
+        }
+      }
+
+
+
+
+
+
+
+
+
+.imageAnime{
+        position: absolute;bottom: 0%;
+        height: 40vh;
+        width: 100vw;
+        
+        
+}
+
+
+.textHappy{
+        color: white;
+        position: absolute;bottom:50%;right: 15%;
+        font-size: 23px;
+        font-family: Georgia,'Times New Roman', Times, serif;
+
+        
+}
+

@@ -22,13 +22,13 @@
     height: 16vh;
     width: 8vw;
 margin-left: 30%;
-padding-top: 5%;  }
+padding-top: 2%;  }
 
 
 
 .info{
-    padding-left: 15%;
-    font-family: 'Times New Roman', Times, serif;
+    padding-left: 13%;
+    font-family: Georgia,'Times New Roman', Times, serif;
     color:rgb(85, 85, 85)
 }
 
@@ -44,9 +44,10 @@ padding-top: 5%;  }
     padding: 0.7em 1em;
     border-radius: 0.5em;
     min-height: 2.4em;
-    min-width: 3em;
+    width: 13em;
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 0.5em;
   
     font-size: 18px;
@@ -153,7 +154,7 @@ padding-top: 5%;  }
 }
 
 .deconnectezVous{
-  padding-left: 18%;
+  padding-left: 20%;
   padding-top: 4%;
 }
 
@@ -239,7 +240,7 @@ padding-top: 5%;  }
 }
 
 .supprimer{
-  padding-left: 17%;
+  padding-left: 20%;
   padding-top: 4%;
 }
 
@@ -248,11 +249,12 @@ padding-top: 5%;  }
 
 
 .buttonMesReservations{
-  padding-left: 21%;
+  padding-left: 20%;
   padding-top: 4%;
 }
 
 .buttonMesAnnonces{
-  padding-left: 23%;
+  padding-left: 20%;
   padding-top: 4%;
 }
+

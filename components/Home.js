@@ -22,7 +22,6 @@ export default function Home() {
               Vous avez la possibilité de louer une piscine privée partout en
               France
             </h2>
-            {/* <p>Happy swim, Deux façons de rendre les gens heureux!</p> */}
           </div>
           <div className={styles.imgDsn}>
             <img
@@ -31,6 +30,11 @@ export default function Home() {
               alt="logo"
             />
           </div>
+        </div>
+        <div className={styles.imageAnime}>
+          <p className={styles.textHappy}>
+            Happy swim, Deux façons de rendre les gens heureux!
+          </p>
         </div>
       </div>
       <div className={styles.containerAnnonce}>

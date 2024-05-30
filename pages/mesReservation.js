@@ -8,7 +8,7 @@ export default function MesReservations() {
 
   useEffect(() => {
     if (user.token) {
-      fetch("http://localhost:3000/reservation", {
+      fetch("http://localhost:3000/reservations/", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -16,9 +16,9 @@ export default function MesReservations() {
         },
       })
         .then((response) => {
-          if (!response.ok) {
-            console.log(response);
-            throw new Error("Erreur pas ok");
+          if (!response) {
+            console.log("hello", response);
+            throw new Error("Erreur");
           }
           return response.json();
         })
@@ -35,9 +35,14 @@ export default function MesReservations() {
     }
   }, [user.token]);
 
+  const formatDate = (dateString) => {
+    const options = { day: "2-digit", month: "2-digit", year: "numeric" };
+    return new Date(dateString).toLocaleDateString("fr-FR", options);
+  };
+
   return (
     <div className={styles.main}>
-      <h1>Mes Reservation</h1>
+      <h1 className={styles.h1}>Mes Reservation</h1>
       <div className={styles.container}>
         {reservations.length > 0 ? (
           reservations.map((reservation, i) => (
@@ -49,13 +54,15 @@ export default function MesReservations() {
                   alt="image"
                 />
                 <div className={styles.info}>
-                  <h2>{reservation.titre}</h2>
-                  <p>Ville: {reservation.ville}</p>
-                  <p>Prix: {reservation.prix}</p>
-                  <p>Date: {reservation.date}</p>
-                  <p>Heure Debut: {reservation.heureDebut}</p>
-                  <p>Heure Fin: {reservation.heureFin}</p>
-                  <p>Personne: {reservation.personne}</p>
+                  <div className={styles.infoText}>
+                    <h2>{reservation.titre}</h2>
+                    <p>Ville: {reservation.ville}</p>
+                    <p>Heure Debut: {reservation.heureDebut}</p>
+                    <p>Heure Fin: {reservation.heureFin}</p>
+                    <p>Personne: {reservation.personne}</p>
+                    <p>Date: {formatDate(reservation.date)}</p>
+                    <p>Prix: {reservation.prix}</p>
+                  </div>
                 </div>
               </div>
               <div className={styles.cardScroll}></div>

@@ -1,0 +1,7 @@
+.main{
+    display: flex;
+    height: 92vh;
+    width: 100vw;
+    background-image: url("../public/Image/image36.jpg");
+    padding-top: 2%;
+  }

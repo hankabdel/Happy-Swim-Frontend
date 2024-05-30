@@ -1,0 +1,135 @@
+.main{
+      display: flex;
+      height: 92vh;
+      width: 100vw;
+      background-image: url("../public/Image/image36.jpg");
+      padding-top: 2%;
+    }
+    
+    
+    
+    
+    .annonceContainer{
+          display: flex;
+          flex-direction: row;
+          padding-top: 10%;
+          gap: 80px;   
+    }
+    
+    
+    
+    .card {
+          width: 250px;
+          height: 350px;
+          background: rgb(17, 4, 134);
+          border-radius: 15px;
+          display: flex;
+          color: white;
+          position: relative;
+          flex-direction: column;
+          background: linear-gradient(to right, rgb(20, 30, 48), rgb(36, 59, 85));
+          cursor: pointer;
+          transition: all 0.3s ease-in-out;
+          overflow: hidden;
+          cursor: pointer;
+    }
+    
+    
+    .card:hover > .moon {
+    font-size: 23px;
+    }
+    
+    
+    
+    .card:hover > .imageFond {
+    height: 51%;
+    overflow: hidden;
+    width: 100%; 
+    }
+    
+    
+    
+    
+    .imageFond{
+          height: 50%;
+          transition: all 0.3s ease-in-out;
+    }
+    
+    
+    
+    
+    .card:hover {
+          cursor: pointer;
+          transform: scale(1.05);
+    }
+    
+    
+    
+    
+    .container {
+          display: flex;
+          overflow-x: scroll;
+          width: 60vw;
+          height: 500px;
+          scroll-padding-top: 24px;
+          border-radius: 8px;
+          margin-left: 20%;
+          padding-left: 1%;
+    }
+    
+    
+    
+    
+    
+    .info{
+    padding-left: 6%;
+    background-color: rgb(46, 84, 117);
+    height: 50%;
+    }
+    
+    
+    
+    .infoText{
+          position: absolute;top:47%;
+          font-size: 15px;
+          
+    
+    }
+    
+
+    
+    .p{
+          display: flex;
+          position: absolute;left:60px;top: 170px;
+      }
+      .h1{
+            padding-left: 45px;
+      }
+
+
+
+
+      .icon1 {
+            outline: 0 !important;
+            border: 0 !important;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background-color: transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            transition: all ease-in-out 0.3s;
+            cursor: pointer;
+
+          }
+          
+          
+          .icon1:hover {
+            transform: translateY(-3px);
+          }
+          
+          .IconPl{
+            position: absolute;right: 23px;bottom: 23px;
+          }

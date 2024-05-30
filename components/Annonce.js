@@ -16,6 +16,7 @@ export default function Annonce() {
   const user = useSelector((state) => state.user.value);
 
   const [date, setDate] = useState("");
+
   const [personne, setPersonne] = useState(1);
   const [startTime, setStartTime] = useState("10:00");
   const [endTime, setEndTime] = useState("21:00");
@@ -51,11 +52,11 @@ export default function Annonce() {
     } else {
       dispatch(removeMesFavoris({ id: annonce._id, ...annonce })); //  ...annonce il vas vérifier dans toutes les annonces qui port un ID
     }
-    // console.log("aaaaaaa", selectedAnnonce._id);
+    // console.log("aaaaaaa", selectedAnnonce.titre);
   };
 
-  const handleRegisterResrvation = () => {
-    fetch("http://localhost:3000/reservations/add", {
+  const handleRegisterReservation = () => {
+    fetch("http://localhost:3000/reservations/addResa", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -63,16 +64,19 @@ export default function Annonce() {
       },
 
       body: JSON.stringify({
+        titre: selectedAnnonce.titre,
         date: date,
         heureDebut: startTime,
         heureFin: endTime,
         personne: personne,
+        ville: selectedAnnonce.ville,
         prix: price,
         annonceId: selectedAnnonce._id,
       }),
     })
       .then((response) => {
         if (!response.ok) {
+          console.log(response);
           throw new Error("Erreur lors de la réservation.");
         }
         return response.json();
@@ -157,22 +161,28 @@ export default function Annonce() {
                   onClick={() => setIsOpen(true)}
                 >
                   <div onClick={(e) => e.stopPropagation()}>
-                    <img
-                      className={styles.imageModal}
-                      src="image/image37.png"
-                      alt="image"
-                    />
-
-                    <h2>{annonce.titre}</h2>
-                    <p>ville: {annonce.ville}</p>
-                    <p>Prix: {annonce.prix}€</p>
+                    <div className={styles.imageText}>
+                      <img
+                        className={styles.imageModal}
+                        src="image/image37.png"
+                        alt="image"
+                      />
+                      <h2>{annonce.titre}</h2>
+                    </div>
+                    <div className={styles.villePrix}>
+                      <h3 className={styles.vP}>{annonce.description}</h3>
+                      <p className={styles.vP}>ville: {annonce.ville}</p>
+                      <p className={styles.vP}>Prix: {annonce.prix}€</p>
+                    </div>
                     <div className={styles.heart}>
-                      <button
-                        className={styles.button}
-                        onClick={() => setIsOpen(true)}
-                      >
-                        Réserver une annonce
-                      </button>
+                      <div className={styles.buttonModal}>
+                        <button
+                          className={styles.button}
+                          onClick={() => setIsOpen(true)}
+                        >
+                          Réserver une annonce
+                        </button>
+                      </div>
                       <div>
                         <FontAwesomeIcon
                           className={styles.heartIcon}
@@ -191,14 +201,16 @@ export default function Annonce() {
                           Ajoutez une date et un créneau
                         </h2>
                         <div className={styles.date}>
-                          <p className={styles.text}>Date</p>
-                          <input
-                            className={styles.input}
-                            type="date"
-                            value={date}
-                            onChange={(e) => setDate(e.target.value)}
-                            required
-                          />
+                          <div className={styles.dateText}>
+                            <p className={styles.text}>Date</p>
+                            <input
+                              className={styles.input}
+                              type="date"
+                              value={date}
+                              onChange={(e) => setDate(e.target.value)}
+                              required
+                            />
+                          </div>
                           <div className={styles.time}>
                             <div className={styles.startTime}>
                               <p className={styles.text}>Heure de début</p>
@@ -222,34 +234,36 @@ export default function Annonce() {
                             </div>
                           </div>
                         </div>
-                        <div className={styles.personne}>
-                          <p className={styles.text}>Adultes</p>
-                          <input
-                            className={styles.input}
-                            type="number"
-                            value={personne}
-                            min="1"
-                            onChange={handlePersonneChange}
-                            required
-                          />
+                        <div className={styles.inAp}>
+                          <div className={styles.personne}>
+                            <p className={styles.text}>Adultes</p>
+                            <input
+                              className={styles.input}
+                              type="number"
+                              value={personne}
+                              min="1"
+                              onChange={handlePersonneChange}
+                              required
+                            />
+                          </div>
+                          <div className={styles.totalPrice}>
+                            <p className={styles.text}>Total prix:</p>
+                            <input
+                              className={styles.input}
+                              type="text"
+                              value={`${totalPrice} €`}
+                              onChange={(e) => setPrice(e.target.value)}
+                            />
+                          </div>
                         </div>
-                        <div className={styles.totalPrice}>
-                          <p className={styles.text}>
-                            Total prix: {totalPrice} €
-                          </p>
-                          <input
-                            className={styles.input}
-                            type="text"
-                            value={`${totalPrice} €`}
-                            onChange={(e) => setPrice(e.target.value)}
-                          />
+                        <div className={styles.buttonReserver}>
+                          <button
+                            className={styles.button}
+                            onClick={() => handleRegisterReservation()}
+                          >
+                            Réserver
+                          </button>
                         </div>
-                        <button
-                          className={styles.button}
-                          onClick={() => handleRegisterResrvation()}
-                        >
-                          Réserver
-                        </button>
                       </Modal>
                     </div>
                   </div>

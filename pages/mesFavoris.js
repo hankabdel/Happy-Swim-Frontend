@@ -8,7 +8,7 @@ const MesFavoris = () => {
 
   return (
     <div className={styles.main}>
-      <h1>Mes Favoris</h1>
+      <h1 className={styles.h1}>Mes Favoris</h1>
       <div className={styles.container}>
         {favoris.length > 0 ? (
           favoris.map((heart, i) => (

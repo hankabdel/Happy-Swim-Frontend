@@ -98,8 +98,8 @@ export default function profileInfo() {
           setPrix("");
         }
       });
-    setIsOpen(false);
     console.log(annonceReducer);
+    setIsOpen(false);
   };
 
   return (
@@ -155,7 +155,6 @@ export default function profileInfo() {
                   onChange={(e) => setPersonne(e.target.value)}
                   value={personne}
                 ></input>
-
                 <input
                   type="number"
                   placeholder="prix"
@@ -192,27 +191,17 @@ export default function profileInfo() {
         </div>
         <Link href="/mesReservation">
           <div className={styles.buttonMesReservations}>
-            <button
-              className={styles.button}
-              // onClick={() => handleMesReservations()}
-            >
-              Mes réservation
-            </button>
+            <button className={styles.button}>Mes réservation</button>
           </div>
         </Link>
-
-        <div className={styles.buttonMesAnnonces}>
-          <button className={styles.button} onClick={() => handleMesAnnonces()}>
-            Mes annonces
-          </button>
-        </div>
-
+        <Link href="/mesAnnonce">
+          <div className={styles.buttonMesAnnonces}>
+            <button className={styles.button}>Mes annonces</button>
+          </div>
+        </Link>
         <div className={styles.deconnectezVous}>
           <Link href="/">
-            <button
-              className={styles.deconnectez}
-              onClick={() => handleLogout()}
-            >
+            <button className={styles.button} onClick={() => handleLogout()}>
               Déconnectez-vous
             </button>
           </Link>
