@@ -56,5 +56,10 @@
     font-size: 1rem;
     color: #000000;
     background-color: #d6d6d6;
+  }
 
+  .error{
+    font-size: 20px;
+    color: white;
+    padding-left: 7%;
   }

@@ -62,7 +62,6 @@ export default function profileInfo() {
     })
       .then((response) => response.json())
       .then((data) => {
-        // console.log("DATA WHEN ADD BDD", data);
         if (data.result) {
           dispatch(addAnnonce(data.data));
           // console.log("-----data", data.data);
@@ -70,14 +69,12 @@ export default function profileInfo() {
           setVille("");
           setPersonne("");
           setPrix("");
-          console.log("---->hello", annonceReducer);
         }
       });
     setIsOpen(false);
   };
 
   const handleRemove = () => {
-    console.log("hello front");
     fetch(`http://localhost:3000/annonces/delete`, {
       method: "DELETE",
       headers: {
@@ -87,11 +84,10 @@ export default function profileInfo() {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log("------>sup", data);
+        console.log(data);
         if (data.result) {
           console.log("true", data.annonceId);
           dispatch(removeAnnonce({ _id: data.annonceId }));
-          console.log("hello reducer------->", annonceReducer);
           setDescription("");
           setVille("");
           setPersonne("");
@@ -106,9 +102,11 @@ export default function profileInfo() {
     <div className={styles.main}>
       <div className={styles.card}>
         <img className={styles.icon} src="/profile.png" alt="iconProfile"></img>
-        <h3 className={styles.info}>Prénom: {user.prenom} </h3>
-        <h3 className={styles.info}>Nom: {user.nom} </h3>
-        <h3 className={styles.info}>Email: {user.email}</h3>
+        <div className={styles.textProfile}>
+          <h3 className={styles.info}>Prénom: {user.prenom} </h3>
+          <h3 className={styles.info}>Nom: {user.nom} </h3>
+          <h3 className={styles.info}>Email: {user.email}</h3>
+        </div>
         <div className={styles.buttonAnnonce}>
           <button className={styles.button} onClick={() => setIsOpen(true)}>
             Ajouter Annonce
@@ -140,7 +138,7 @@ export default function profileInfo() {
 
                 <input
                   type="text"
-                  placeholder="la ville de votre piscine ?
+                  placeholder="La ville de votre piscine ?
                   "
                   className={styles.in}
                   onChange={(e) => setVille(e.target.value)}

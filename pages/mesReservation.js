@@ -1,6 +1,8 @@
 import styles from "../styles/MesReservation.module.css";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
 
 export default function MesReservations() {
   const [reservations, setReservations] = useState([]);
@@ -40,6 +42,29 @@ export default function MesReservations() {
     return new Date(dateString).toLocaleDateString("fr-FR", options);
   };
 
+  // const handleRemoveMesAnnonce = () => {
+  //   fetch(`http://localhost:3000/reservation/delete`, {
+  //     method: "DELETE",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       Authorization: `Bearer ${user.token}`,
+  //     },
+  //   })
+  //     .then((response) => response.json())
+  //     .then((data) => {
+  //       // console.log("------>sup", data);
+  //       if (data.result) {
+  //         // console.log("true", data);
+  //         dispatch(removeAnnonce({ _id: data.annonceId }));
+  //         console.log(annonceReducer.length);
+  //         setMesAnnonce((prevData) =>
+  //           prevData.filter((annonce) => annonce._id !== data.annonceId)
+  //         );
+  //       }
+  //     });
+  //   console.log(annonceReducer);
+  // };
+
   return (
     <div className={styles.main}>
       <h1 className={styles.h1}>Mes Reservation</h1>
@@ -56,12 +81,25 @@ export default function MesReservations() {
                 <div className={styles.info}>
                   <div className={styles.infoText}>
                     <h2>{reservation.titre}</h2>
-                    <p>Ville: {reservation.ville}</p>
-                    <p>Heure Debut: {reservation.heureDebut}</p>
-                    <p>Heure Fin: {reservation.heureFin}</p>
-                    <p>Personne: {reservation.personne}</p>
-                    <p>Date: {formatDate(reservation.date)}</p>
-                    <p>Prix: {reservation.prix}</p>
+                    <div className={styles.heureDf}>
+                      <p>Ville: {reservation.ville}</p>
+                      <p>Date: {formatDate(reservation.date)}</p>
+                    </div>
+                    <div className={styles.heureDf}>
+                      <p>Heure Debut: {reservation.heureDebut}</p>
+                      <p>Heure Fin: {reservation.heureFin}</p>
+                    </div>
+                    <div className={styles.heureDf}>
+                      <p>Personne: {reservation.personne}</p>
+                      <p>Prix: {reservation.prix}</p>
+                    </div>
+                  </div>
+                  <div className={styles.IconPl}>
+                    <FontAwesomeIcon
+                      className={styles.icon1}
+                      icon={faTrash}
+                      onClick={() => handleRemoveMesAnnonce(reservation._id)}
+                    />
                   </div>
                 </div>
               </div>

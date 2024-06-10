@@ -1,8 +1,8 @@
 import styles from "../styles/MesAnnonce.module.css";
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-// import { faTrash } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { removeAnnonce } from "../reducers/annonce";
 
 export default function MesAnnonce() {
@@ -40,28 +40,28 @@ export default function MesAnnonce() {
     }
   }, [user.token]);
 
-  // const handleRemoveMesAnnonce = (annonceId) => {
-  //   fetch(`http://localhost:3000/annonces/delete`, {
-  //     method: "DELETE",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //       Authorization: `Bearer ${user.token}`,
-  //     },
-  //   })
-  //     .then((response) => response.json())
-  //     .then((data) => {
-  //       console.log("------>sup", data);
-  //       if (data.result) {
-  //         console.log("true", data);
-  //         dispatch(removeAnnonce({ _id: data.annonceId }));
-  //         console.log(annonceReducer.length);
-  //         setMesAnnonce((prevData) =>
-  //           prevData.filter((annonce) => annonce._id !== data.annonceId)
-  //         );
-  //       }
-  //     });
-  //   console.log(annonceReducer);
-  // };
+  const handleRemoveMesAnnonce = (annonceId) => {
+    fetch(`http://localhost:3000/annonces/delete`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${user.token}`,
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        // console.log("------>sup", data);
+        if (data.result) {
+          // console.log("true", data);
+          dispatch(removeAnnonce({ _id: data.annonceId }));
+          console.log(annonceReducer.length);
+          setMesAnnonce((prevData) =>
+            prevData.filter((annonce) => annonce._id !== data.annonceId)
+          );
+        }
+      });
+    console.log(annonceReducer);
+  };
 
   return (
     <div className={styles.main}>
@@ -83,13 +83,13 @@ export default function MesAnnonce() {
                     <p>Personne: {e.personne}</p>
                     <p>Prix: {e.prix}</p>
                   </div>
-                  {/* <div className={styles.IconPl}>
+                  <div className={styles.IconPl}>
                     <FontAwesomeIcon
                       className={styles.icon1}
                       icon={faTrash}
                       onClick={() => handleRemoveMesAnnonce(e._id)}
                     />
-                  </div> */}
+                  </div>
                 </div>
               </div>
               <div className={styles.cardScroll}></div>

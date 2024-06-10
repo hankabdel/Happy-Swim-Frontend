@@ -1,5 +1,5 @@
 import styles from "../styles/SignUp.module.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import Modal from "react-modal";
 import { login } from "../reducers/user";
@@ -14,13 +14,26 @@ export default function SignUp() {
   const [nomUp, setNomUp] = useState("");
   const [passwordUp, setPasswordUp] = useState("");
   const [emailUp, setEmailUp] = useState("");
+  const [error, setError] = useState("");
 
   const router = useRouter();
   if (user.token) {
     router.push("/");
   }
 
+  useEffect(() => {
+    Modal.setAppElement("#__next"); // Définit l'élément d'application pour react-modal
+  }, []);
+
+  const EMAIL_REGEX =
+    /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
   const handleRegister = () => {
+    if (!EMAIL_REGEX.test(emailUp)) {
+      setError("Veuillez entrer une adresse e-mail valide.");
+      return;
+    }
+
     fetch("http://localhost:3000/users/signup", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -35,11 +48,28 @@ export default function SignUp() {
       .then((data) => {
         console.log(data);
         if (data.result) {
-          dispatch(login({ nom: nomUp, token: data.token }));
+          dispatch(
+            login({
+              nom: nomUp,
+              prenom: prenomUp,
+              email: emailUp,
+              token: data.token,
+            })
+          );
           setPrenomUp("");
           setNomUp("");
           setPasswordUp("");
+          setEmailUp("");
+          setError("");
+          setIsOpen(false); // Fermer la modal après l'inscription réussie
+        } else {
+          setError(
+            data.message || "Une erreur s'est produite. Veuillez réessayer."
+          ); // Afficher un message d'erreur du serveur
         }
+      })
+      .catch((error) => {
+        setError("Une erreur s'est produite. Veuillez réessayer."); // Afficher un message d'erreur en cas d'échec de la requête
       });
   };
 
@@ -80,36 +110,36 @@ export default function SignUp() {
               className={styles.in}
               onChange={(e) => setPrenomUp(e.target.value)}
               value={prenomUp}
-            ></input>
+            />
             <input
               type="text"
               placeholder="Nom"
               className={styles.in}
               onChange={(e) => setNomUp(e.target.value)}
               value={nomUp}
-            ></input>
-
+            />
             <input
               type="email"
               placeholder="Email"
               className={styles.in}
               onChange={(e) => setEmailUp(e.target.value)}
               value={emailUp}
-            ></input>
+            />
             <input
               type="password"
               placeholder="Password"
               className={styles.in}
               onChange={(e) => setPasswordUp(e.target.value)}
               value={passwordUp}
-            ></input>
+            />
           </div>
         </div>
         <div className={styles.buttonUp3}>
-          <button className={styles.buttonUp2} onClick={() => handleRegister()}>
+          <button className={styles.buttonUp2} onClick={handleRegister}>
             s'inscrire
           </button>
         </div>
+        {error && <p className={styles.error}>{error}</p>}
       </Modal>
     </div>
   );

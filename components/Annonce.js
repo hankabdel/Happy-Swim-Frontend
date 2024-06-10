@@ -7,7 +7,8 @@ import { faHeart } from "@fortawesome/free-solid-svg-icons";
 import Modal from "react-modal";
 
 export default function Annonce() {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isMainModalOpen, setIsMainModalOpen] = useState(false);
+  const [isReservationModalOpen, setIsReservationModalOpen] = useState(false);
   const [selectedAnnonce, setSelectedAnnonce] = useState(null);
 
   const [annonceData, setAnnonceData] = useState([]);
@@ -16,12 +17,11 @@ export default function Annonce() {
   const user = useSelector((state) => state.user.value);
 
   const [date, setDate] = useState("");
-
   const [personne, setPersonne] = useState(1);
   const [startTime, setStartTime] = useState("10:00");
   const [endTime, setEndTime] = useState("21:00");
-  const [price, setPrice] = useState(0); // Add state for price per person
-  const [totalPrice, setTotalPrice] = useState(0); // Add state for total price
+  const [price, setPrice] = useState(0);
+  const [totalPrice, setTotalPrice] = useState(0);
 
   useEffect(() => {
     fetch("http://localhost:3000/annonces/recover", {
@@ -35,14 +35,12 @@ export default function Annonce() {
         return response.json();
       })
       .then((data) => {
-        // console.log("----->data", data);
         setAnnonceData(data.data);
-        // console.log("annonce--------->", annonceData);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
       });
-  }, []);
+  }, [user.token]);
 
   const handleToggleFavori = (annonce) => {
     const isFavori = favoris.some((e) => e._id === annonce._id);
@@ -50,9 +48,8 @@ export default function Annonce() {
       dispatch(addMesFavoris({ ...annonce }));
       console.log("Add favoris");
     } else {
-      dispatch(removeMesFavoris({ id: annonce._id, ...annonce })); //  ...annonce il vas vérifier dans toutes les annonces qui port un ID
+      dispatch(removeMesFavoris({ id: annonce._id, ...annonce }));
     }
-    // console.log("aaaaaaa", selectedAnnonce.titre);
   };
 
   const handleRegisterReservation = () => {
@@ -62,7 +59,6 @@ export default function Annonce() {
         "Content-Type": "application/json",
         Authorization: `Bearer ${user.token}`,
       },
-
       body: JSON.stringify({
         titre: selectedAnnonce.titre,
         date: date,
@@ -83,7 +79,10 @@ export default function Annonce() {
       })
       .then((data) => {
         console.log(data);
-        // Traitez la réponse ici
+        setIsReservationModalOpen(false); // Close the reservation modal on success
+      })
+      .catch((error) => {
+        console.error("Error during reservation:", error);
       });
   };
 
@@ -92,8 +91,8 @@ export default function Annonce() {
       backgroundColor: "rgba(0, 0, 0, 0.6)",
     },
     content: {
-      width: "450px",
-      height: "520px",
+      width: "470px",
+      height: "580px",
       top: "40%",
       left: "50%",
       right: "auto",
@@ -103,10 +102,21 @@ export default function Annonce() {
       backgroundColor: "rgb(32 54 73)",
     },
   };
-
-  const closeModal = (e) => {
-    e.preventDefault(); // Empêche tout comportement par défaut
-    setSelectedAnnonce(null); // Fermez le modal
+  const reservationModalStyles = {
+    overlay: {
+      backgroundColor: "rgba(0, 0, 0, 0.0)",
+    },
+    content: {
+      width: "470px",
+      height: "580px",
+      top: "40%",
+      left: "50%",
+      right: "auto",
+      bottom: "auto",
+      marginRight: "-50%",
+      transform: "translate(-50%, -50%)",
+      backgroundColor: "rgb(32 54 73)",
+    },
   };
 
   const handlePersonneChange = (e) => {
@@ -127,6 +137,24 @@ export default function Annonce() {
     }
   }, [selectedAnnonce]);
 
+  const handleOpenMainModal = (annonce) => {
+    setSelectedAnnonce(annonce);
+    setIsMainModalOpen(true);
+  };
+
+  const handleCloseMainModal = () => {
+    setSelectedAnnonce(null);
+    setIsMainModalOpen(false);
+  };
+
+  const handleOpenReservationModal = () => {
+    setIsReservationModalOpen(true);
+  };
+
+  const handleCloseReservationModal = () => {
+    setIsReservationModalOpen(false);
+  };
+
   return (
     <div className={styles.main}>
       <div className={styles.container}>
@@ -138,7 +166,7 @@ export default function Annonce() {
               <div
                 className={styles.card}
                 key={i}
-                onClick={() => setSelectedAnnonce(annonce)}
+                onClick={() => handleOpenMainModal(annonce)}
               >
                 <img
                   className={styles.imageFond}
@@ -152,15 +180,19 @@ export default function Annonce() {
                 </div>
                 <Modal
                   isOpen={
-                    selectedAnnonce && selectedAnnonce._id === annonce._id
+                    selectedAnnonce &&
+                    selectedAnnonce._id === annonce._id &&
+                    isMainModalOpen
                   }
-                  onRequestClose={closeModal}
+                  onRequestClose={handleCloseMainModal}
                   style={customStyles}
                   ariaHideApp={false}
                   shouldCloseOnOverlayClick={true}
-                  onClick={() => setIsOpen(true)}
                 >
-                  <div onClick={(e) => e.stopPropagation()}>
+                  <div
+                    className={isReservationModalOpen ? styles.hidden : ""}
+                    onClick={(e) => e.stopPropagation()}
+                  >
                     <div className={styles.imageText}>
                       <img
                         className={styles.imageModal}
@@ -178,9 +210,17 @@ export default function Annonce() {
                       <div className={styles.buttonModal}>
                         <button
                           className={styles.button}
-                          onClick={() => setIsOpen(true)}
+                          onClick={handleOpenReservationModal}
                         >
                           Réserver une annonce
+                        </button>
+                      </div>
+                      <div className={styles.buttonModal}>
+                        <button
+                          onClick={handleCloseMainModal}
+                          className={styles.button}
+                        >
+                          Fermer
                         </button>
                       </div>
                       <div>
@@ -191,81 +231,81 @@ export default function Annonce() {
                           icon={faHeart}
                         />
                       </div>
-                      <Modal
-                        isOpen={isOpen}
-                        onRequestClose={() => setIsOpen(false)}
-                        style={customStyles}
-                        ariaHideApp={false}
-                      >
-                        <h2 className={styles.textReservation}>
-                          Ajoutez une date et un créneau
-                        </h2>
-                        <div className={styles.date}>
-                          <div className={styles.dateText}>
-                            <p className={styles.text}>Date</p>
-                            <input
-                              className={styles.input}
-                              type="date"
-                              value={date}
-                              onChange={(e) => setDate(e.target.value)}
-                              required
-                            />
-                          </div>
-                          <div className={styles.time}>
-                            <div className={styles.startTime}>
-                              <p className={styles.text}>Heure de début</p>
-                              <input
-                                className={styles.input}
-                                type="time"
-                                value={startTime}
-                                onChange={(e) => setStartTime(e.target.value)}
-                                required
-                              />
-                            </div>
-                            <div className={styles.endTime}>
-                              <p className={styles.text}>Heure de fin</p>
-                              <input
-                                className={styles.input}
-                                type="time"
-                                value={endTime}
-                                onChange={(e) => setEndTime(e.target.value)}
-                                required
-                              />
-                            </div>
-                          </div>
-                        </div>
-                        <div className={styles.inAp}>
-                          <div className={styles.personne}>
-                            <p className={styles.text}>Adultes</p>
-                            <input
-                              className={styles.input}
-                              type="number"
-                              value={personne}
-                              min="1"
-                              onChange={handlePersonneChange}
-                              required
-                            />
-                          </div>
-                          <div className={styles.totalPrice}>
-                            <p className={styles.text}>Total prix:</p>
-                            <input
-                              className={styles.input}
-                              type="text"
-                              value={`${totalPrice} €`}
-                              onChange={(e) => setPrice(e.target.value)}
-                            />
-                          </div>
-                        </div>
-                        <div className={styles.buttonReserver}>
-                          <button
-                            className={styles.button}
-                            onClick={() => handleRegisterReservation()}
-                          >
-                            Réserver
-                          </button>
-                        </div>
-                      </Modal>
                     </div>
+                  </div>
+                </Modal>
+                <Modal
+                  isOpen={isReservationModalOpen}
+                  onRequestClose={handleCloseReservationModal}
+                  style={reservationModalStyles}
+                  ariaHideApp={false}
+                >
+                  <h2 className={styles.textReservation}>
+                    Ajoutez une date et un créneau
+                  </h2>
+                  <div className={styles.date}>
+                    <div className={styles.dateText}>
+                      <p className={styles.text}>Date</p>
+                      <input
+                        className={styles.input}
+                        type="date"
+                        value={date}
+                        onChange={(e) => setDate(e.target.value)}
+                        required
+                      />
+                    </div>
+                    <div className={styles.time}>
+                      <div className={styles.startTime}>
+                        <p className={styles.text}>Heure de début</p>
+                        <input
+                          className={styles.input}
+                          type="time"
+                          value={startTime}
+                          onChange={(e) => setStartTime(e.target.value)}
+                          required
+                        />
+                      </div>
+                      <div className={styles.endTime}>
+                        <p className={styles.text}>Heure de fin</p>
+                        <input
+                          className={styles.input}
+                          type="time"
+                          value={endTime}
+                          onChange={(e) => setEndTime(e.target.value)}
+                          required
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div className={styles.inAp}>
+                    <div className={styles.personne}>
+                      <p className={styles.text}>Adultes</p>
+                      <input
+                        className={styles.input}
+                        type="number"
+                        value={personne}
+                        min="1"
+                        onChange={handlePersonneChange}
+                        required
+                      />
+                    </div>
+                    <div className={styles.totalPrice}>
+                      <p className={styles.text}>Total prix:</p>
+                      <input
+                        className={styles.input}
+                        type="text"
+                        value={`${totalPrice} €`}
+                        onChange={(e) => setPrice(e.target.value)}
+                      />
+                    </div>
+                  </div>
+                  <div className={styles.buttonReserver}>
+                    <button
+                      className={styles.button}
+                      onClick={handleRegisterReservation}
+                    >
+                      Réserver
+                    </button>
                   </div>
                 </Modal>
               </div>
