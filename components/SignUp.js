@@ -34,7 +34,8 @@ export default function SignUp() {
       return;
     }
 
-    fetch("http://localhost:3000/users/signup", {
+    // fetch("http://localhost:3000/users/signup"
+    fetch("https://happy-swim-backend.vercel.app/api/users/signup", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
