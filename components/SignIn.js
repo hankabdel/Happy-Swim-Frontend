@@ -21,7 +21,7 @@ export default function SignIn() {
 
   const handleConnection = () => {
     // fetch("http://localhost:3000/users/signin"
-    fetch("https://happy-swim-backend.vercel.app/api/users/signup", {
+    fetch("https://happy-swim-backend.vercel.app/users/signup", {
       method: "POST",
       headers: { "content-Type": "application/json" },
       body: JSON.stringify({ email: emailIn, password: passwordIn }),
