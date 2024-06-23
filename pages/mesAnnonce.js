@@ -1,63 +1,67 @@
-import styles from "../styles/MesAnnonce.module.css";
-import React, { useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash } from "@fortawesome/free-solid-svg-icons";
-import { removeAnnonce } from "../reducers/annonce";
+import styles from "../styles/MesAnnonce.module.css"; // Importe les styles CSS spécifiques à ce composant
+import React, { useEffect, useState } from "react"; // Importe React et les hooks useEffect et useState
+import { useSelector, useDispatch } from "react-redux"; // Importe les hooks useSelector et useDispatch de react-redux
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"; // Importe FontAwesomeIcon pour utiliser des icônes
+import { faTrash } from "@fortawesome/free-solid-svg-icons"; // Importe l'icône faTrash de FontAwesome
+import { removeAnnonce } from "../reducers/annonce"; // Importe l'action removeAnnonce depuis le reducer annonce
 
+// Définit et exporte le composant fonctionnel MesAnnonce
 export default function MesAnnonce() {
-  const [mesAnnonce, setMesAnnonce] = useState([]);
-  const user = useSelector((state) => state.user.value);
-  const annonceReducer = useSelector((state) => state.annonce.value);
-  const dispatch = useDispatch();
+  const [mesAnnonce, setMesAnnonce] = useState([]); // Déclare et initialise l'état pour stocker les annonces
+  const user = useSelector((state) => state.user.value); // Récupère la valeur de l'utilisateur depuis le state Redux
+  const annonceReducer = useSelector((state) => state.annonce.value); // Récupère la valeur des annonces depuis le state Redux
+  const dispatch = useDispatch(); // Initialise useDispatch pour envoyer des actions Redux
 
+  // Utilise useEffect pour effectuer des effets de bord
   useEffect(() => {
+    // Si l'utilisateur est connecté (token présent)
     if (user.token) {
       fetch("http://localhost:3000/annonces/mesAnnonces", {
-        method: "GET",
+        method: "GET", // Méthode HTTP GET
         headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${user.token}`,
+          "Content-Type": "application/json", // En-tête pour indiquer le type de contenu
+          Authorization: `Bearer ${user.token}`, // En-tête d'autorisation avec le token de l'utilisateur
         },
       })
         .then((response) => {
+          // Vérifie si la réponse est invalide
           if (!response) {
-            console.log("hello", response);
-            throw new Error("Erreur");
+            throw new Error("Erreur"); // Lève une erreur
           }
-          return response.json();
+          return response.json(); // Convertit la réponse en JSON
         })
         .then((data) => {
+          // Si la récupération des annonces est réussie
           if (data.result) {
-            setMesAnnonce(data.data);
+            setMesAnnonce(data.data); // Met à jour l'état mesAnnonce avec les données récupérées
           } else {
-            console.error("Erreur de récupération des données:", data.error);
+            console.error("Erreur de récupération des données:", data.error); // Affiche une erreur si la récupération a échoué
           }
         })
         .catch((error) => {
-          console.error("Erreur lors de la récupération des données:", error);
+          console.error("Erreur lors de la récupération des données:", error); // Affiche une erreur en cas d'échec de la requête
         });
     }
-  }, [user.token]);
+  }, [user.token]); // Dépendance sur user.token pour exécuter l'effet lors de la connexion de l'utilisateur
 
+  // Fonction pour gérer la suppression d'une annonce
   const handleRemoveMesAnnonce = (annonceId) => {
     fetch(`http://localhost:3000/annonces/delete`, {
-      method: "DELETE",
+      method: "DELETE", // Méthode HTTP DELETE
       headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${user.token}`,
+        "Content-Type": "application/json", // En-tête pour indiquer le type de contenu
+        Authorization: `Bearer ${user.token}`, // En-tête d'autorisation avec le token de l'utilisateur
       },
     })
-      .then((response) => response.json())
+      .then((response) => response.json()) // Convertit la réponse en JSON
       .then((data) => {
-        // console.log("------>sup", data);
+        // Si la suppression est réussie
         if (data.result) {
-          // console.log("true", data);
-          dispatch(removeAnnonce({ _id: data.annonceId }));
+          dispatch(removeAnnonce({ _id: data.annonceId })); // Envoie l'action removeAnnonce avec l'ID de l'annonce supprimée
           console.log(annonceReducer.length);
           setMesAnnonce((prevData) =>
             prevData.filter((annonce) => annonce._id !== data.annonceId)
-          );
+          ); // Met à jour l'état mesAnnonce en filtrant l'annonce supprimée
         }
       });
     console.log(annonceReducer);
@@ -67,7 +71,8 @@ export default function MesAnnonce() {
     <div className={styles.main}>
       <h1 className={styles.h1}>Mes Annonces</h1>
       <div className={styles.container}>
-        {mesAnnonce.length > 0 ? (
+        {mesAnnonce.length > 0 ? ( // Si des annonces existent
+          // Map sur mesAnnonce pour afficher chaque annonce
           mesAnnonce.map((e, i) => (
             <div className={styles.annonceContainer} key={i}>
               <div className={styles.card}>
@@ -84,6 +89,7 @@ export default function MesAnnonce() {
                     <p>Prix: {e.prix}</p>
                   </div>
                   <div className={styles.IconPl}>
+                    {/* Icône de suppression pour supprimer l'annonce */}
                     <FontAwesomeIcon
                       className={styles.icon1}
                       icon={faTrash}

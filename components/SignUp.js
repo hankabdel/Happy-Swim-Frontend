@@ -1,39 +1,46 @@
-import styles from "../styles/SignUp.module.css";
-import { useState, useEffect } from "react";
-import { useRouter } from "next/router";
-import Modal from "react-modal";
-import { login } from "../reducers/user";
-import { useDispatch, useSelector } from "react-redux";
+import styles from "../styles/SignUp.module.css"; // Importe les styles CSS spécifiques à ce composant
+import { useState, useEffect } from "react"; // Importe les hooks useState et useEffect de React
+import { useRouter } from "next/router"; // Importe le hook useRouter de Next.js pour la navigation
+import Modal from "react-modal"; // Importe la bibliothèque react-modal pour les modales
+import { login } from "../reducers/user"; // Importe l'action login depuis le reducer user
+import { useDispatch, useSelector } from "react-redux"; // Importe les hooks useDispatch et useSelector de react-redux
 
 export default function SignUp() {
-  const dispatch = useDispatch();
-  const user = useSelector((state) => state.user.value);
+  // Définit et exporte le composant fonctionnel SignUp
+  const dispatch = useDispatch(); // Initialise useDispatch pour envoyer des actions Redux
+  const user = useSelector((state) => state.user.value); // Récupère la valeur de l'utilisateur depuis le state Redux
 
-  const [isOpen, setIsOpen] = useState(false);
-  const [prenomUp, setPrenomUp] = useState("");
-  const [nomUp, setNomUp] = useState("");
-  const [passwordUp, setPasswordUp] = useState("");
-  const [emailUp, setEmailUp] = useState("");
-  const [error, setError] = useState("");
+  // Déclare et initialise les états locaux avec useState
+  const [isOpen, setIsOpen] = useState(false); // État pour gérer l'ouverture de la modal
+  const [prenomUp, setPrenomUp] = useState(""); // État pour stocker le prénom de l'utilisateur
+  const [nomUp, setNomUp] = useState(""); // État pour stocker le nom de l'utilisateur
+  const [passwordUp, setPasswordUp] = useState(""); // État pour stocker le mot de passe de l'utilisateur
+  const [emailUp, setEmailUp] = useState(""); // État pour stocker l'email de l'utilisateur
+  const [error, setError] = useState(""); // État pour stocker les messages d'erreur
 
-  const router = useRouter();
+  const router = useRouter(); // Initialise useRouter pour la navigation
+  // Si l'utilisateur est déjà connecté (token présent)
   if (user.token) {
-    router.push("/");
+    router.push("/"); // Redirige vers la page d'accueil
   }
 
   useEffect(() => {
-    Modal.setAppElement("#__next"); // Définit l'élément d'application pour react-modal
+    Modal.setAppElement("#__next"); // Définit l'élément principal de l'application pour react-modal après le premier rendu
   }, []);
 
+  // Expression régulière pour valider les adresses email
   const EMAIL_REGEX =
     /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
+  // Fonction pour gérer l'inscription de l'utilisateur
   const handleRegister = () => {
+    // Vérifie si l'email est valide
     if (!EMAIL_REGEX.test(emailUp)) {
-      setError("Veuillez entrer une adresse e-mail valide.");
-      return;
+      setError("Veuillez entrer une adresse e-mail valide."); // Affiche un message d'erreur si l'email est invalide
+      return; // Arrête l'exécution de la fonction
     }
 
+    // Envoie une requête POST à l'API pour créer un nouvel utilisateur
     fetch("http://localhost:3000/users/signup", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -44,9 +51,10 @@ export default function SignUp() {
         password: passwordUp,
       }),
     })
-      .then((response) => response.json())
+      .then((response) => response.json()) // Convertit la réponse en JSON
       .then((data) => {
         console.log(data);
+        // Si l'inscription est réussie
         if (data.result) {
           dispatch(
             login({
@@ -55,12 +63,12 @@ export default function SignUp() {
               email: emailUp,
               token: data.token,
             })
-          );
-          setPrenomUp("");
-          setNomUp("");
-          setPasswordUp("");
-          setEmailUp("");
-          setError("");
+          ); // Envoie l'action login avec les informations de l'utilisateur et le token
+          setPrenomUp(""); // Réinitialise le prénom
+          setNomUp(""); // Réinitialise le nom
+          setPasswordUp(""); // Réinitialise le mot de passe
+          setEmailUp(""); // Réinitialise l'email
+          setError(""); // Réinitialise les erreurs
           setIsOpen(false); // Fermer la modal après l'inscription réussie
         } else {
           setError(
@@ -73,9 +81,10 @@ export default function SignUp() {
       });
   };
 
+  // Styles personnalisés pour la modal
   const customStyles = {
     overlay: {
-      backgroundColor: "rgba(0, 0, 0, 0.6)",
+      backgroundColor: "rgba(0, 0, 0, 0.6)", // Couleur de fond semi-transparente
     },
     content: {
       width: "450px",
@@ -85,20 +94,21 @@ export default function SignUp() {
       right: "auto",
       bottom: "auto",
       marginRight: "-50%",
-      transform: "translate(-50%, -50%)",
-      backgroundColor: " #06579D",
+      transform: "translate(-50%, -50%)", // Centrage de la modal
+      backgroundColor: " #06579D", // Couleur de fond de la modal
     },
   };
 
   return (
     <div>
+      {/* Bouton pour ouvrir la modal */}
       <button className={styles.buttonUp} onClick={() => setIsOpen(true)}>
         s'inscrire
       </button>
       <Modal
-        isOpen={isOpen}
-        onRequestClose={() => setIsOpen(false)}
-        style={customStyles}
+        isOpen={isOpen} // État de la modal (ouverte ou fermée)
+        onRequestClose={() => setIsOpen(false)} // Fonction pour fermer la modal
+        style={customStyles} // Applique les styles personnalisés
       >
         <div className={styles.container}>
           <div className={styles.logoContainer}></div>
@@ -108,37 +118,39 @@ export default function SignUp() {
               type="text"
               placeholder="Prénom"
               className={styles.in}
-              onChange={(e) => setPrenomUp(e.target.value)}
-              value={prenomUp}
+              onChange={(e) => setPrenomUp(e.target.value)} // Met à jour l'état prenomUp
+              value={prenomUp} // Valeur actuelle de prenomUp
             />
             <input
               type="text"
               placeholder="Nom"
               className={styles.in}
-              onChange={(e) => setNomUp(e.target.value)}
-              value={nomUp}
+              onChange={(e) => setNomUp(e.target.value)} // Met à jour l'état nomUp
+              value={nomUp} // Valeur actuelle de nomUp
             />
             <input
               type="email"
               placeholder="Email"
               className={styles.in}
-              onChange={(e) => setEmailUp(e.target.value)}
-              value={emailUp}
+              onChange={(e) => setEmailUp(e.target.value)} // Met à jour l'état emailUp
+              value={emailUp} // Valeur actuelle de emailUp
             />
             <input
               type="password"
               placeholder="Password"
               className={styles.in}
-              onChange={(e) => setPasswordUp(e.target.value)}
-              value={passwordUp}
+              onChange={(e) => setPasswordUp(e.target.value)} // Met à jour l'état passwordUp
+              value={passwordUp} // Valeur actuelle de passwordUp
             />
           </div>
         </div>
         <div className={styles.buttonUp3}>
+          {/* Bouton pour soumettre le formulaire d'inscription */}
           <button className={styles.buttonUp2} onClick={handleRegister}>
             s'inscrire
           </button>
         </div>
+        {/* Affiche un message d'erreur */}
         {error && <p className={styles.error}>{error}</p>}
       </Modal>
     </div>

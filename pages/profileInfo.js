@@ -1,20 +1,23 @@
-import styles from "../styles/ProfileInfo.module.css";
-import { useSelector, useDispatch } from "react-redux";
-import { useState } from "react";
-import Modal from "react-modal";
+import styles from "../styles/ProfileInfo.module.css"; // Importation des styles pour ce composant
+import { useSelector, useDispatch } from "react-redux"; // Importation des hooks Redux pour accéder à l'état et dispatcher des actions
+import { useState } from "react"; // Importation du hook useState pour gérer l'état local
+import Modal from "react-modal"; // Importation du composant Modal pour afficher des fenêtres modales
 import {
   addAnnonce,
   removeAnnonce,
   removeAllAnnonce,
-} from "../reducers/annonce";
-import { logout } from "../reducers/user";
-import Link from "next/link";
+} from "../reducers/annonce"; // Importation des actions Redux pour gérer les annonces
+import { logout } from "../reducers/user"; // Importation de l'action Redux pour déconnecter l'utilisateur
+import Link from "next/link"; // Importation du composant Link de Next.js pour la navigation entre les pages
 
+// Déclaration du composant ProfileInfo
 export default function profileInfo() {
+  // Accès aux valeurs de l'utilisateur et des annonces dans le store Redux
   const user = useSelector((state) => state.user.value);
   const annonceReducer = useSelector((state) => state.annonce.value);
-  const dispatch = useDispatch();
+  const dispatch = useDispatch(); // Hook pour dispatcher des actions
 
+  // Déclaration des états locaux pour gérer les champs du formulaire et l'état de la modal
   const [isOpen, setIsOpen] = useState(false);
   const [ville, setVille] = useState("");
   const [personne, setPersonne] = useState("");
@@ -23,6 +26,7 @@ export default function profileInfo() {
   const [description, setDescription] = useState("");
   const [image, setImage] = useState(null);
 
+  // Styles personnalisés pour la modal
   const customStyles = {
     overlay: {
       backgroundColor: "rgba(0, 0, 0, 0.6)",
@@ -40,11 +44,13 @@ export default function profileInfo() {
     },
   };
 
+  // Fonction pour gérer la déconnexion
   const handleLogout = () => {
     dispatch(logout());
     dispatch(removeAllAnnonce());
   };
 
+  // Fonction pour ajouter une annonce
   const handleAdd = () => {
     fetch("http://localhost:3000/annonces/add", {
       method: "POST",
@@ -63,17 +69,19 @@ export default function profileInfo() {
       .then((response) => response.json())
       .then((data) => {
         if (data.result) {
-          dispatch(addAnnonce(data.data));
+          dispatch(addAnnonce(data.data)); // Dispatch de l'action pour ajouter l'annonce au store
           // console.log("-----data", data.data);
+          // Réinitialisation des champs du formulaire
           setDescription("");
           setVille("");
           setPersonne("");
           setPrix("");
         }
       });
-    setIsOpen(false);
+    setIsOpen(false); // Fermeture de la modal
   };
 
+  // Fonction pour supprimer une annonce
   const handleRemove = () => {
     fetch(`http://localhost:3000/annonces/delete`, {
       method: "DELETE",
@@ -87,7 +95,8 @@ export default function profileInfo() {
         console.log(data);
         if (data.result) {
           console.log("true", data.annonceId);
-          dispatch(removeAnnonce({ _id: data.annonceId }));
+          dispatch(removeAnnonce({ _id: data.annonceId })); // Dispatch de l'action pour supprimer l'annonce du store
+          // Réinitialisation des champs du formulaire
           setDescription("");
           setVille("");
           setPersonne("");
@@ -95,7 +104,7 @@ export default function profileInfo() {
         }
       });
     console.log(annonceReducer);
-    setIsOpen(false);
+    setIsOpen(false); // Fermeture de la modal
   };
 
   return (

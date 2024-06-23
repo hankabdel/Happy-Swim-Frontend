@@ -1,75 +1,59 @@
-import styles from "../styles/MesReservation.module.css";
-import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash } from "@fortawesome/free-solid-svg-icons";
+import styles from "../styles/MesReservation.module.css"; // Importe les styles CSS spécifiques à ce composant
+import React, { useEffect, useState } from "react"; // Importe React et les hooks useEffect et useState
+import { useSelector } from "react-redux"; // Importe le hook useSelector de react-redux pour accéder au state Redux
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"; // Importe FontAwesomeIcon pour afficher les icônes
+import { faTrash } from "@fortawesome/free-solid-svg-icons"; // Importe l'icône de la corbeille de FontAwesome
 
+// Définit le composant fonctionnel MesReservations
 export default function MesReservations() {
-  const [reservations, setReservations] = useState([]);
-  const user = useSelector((state) => state.user.value);
+  const [reservations, setReservations] = useState([]); // Initialise l'état pour stocker les réservations
+  const user = useSelector((state) => state.user.value); // Récupère les informations de l'utilisateur depuis le state Redux
 
+  // Utilise useEffect pour effectuer une action après le rendu du composant
   useEffect(() => {
+    // Vérifie si l'utilisateur est authentifié
     if (user.token) {
+      // Fait une requête GET pour récupérer les réservations de l'utilisateur
       fetch("http://localhost:3000/reservations/", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${user.token}`,
+          Authorization: `Bearer ${user.token}`, // Ajoute le token d'authentification dans les headers
         },
       })
         .then((response) => {
+          // Vérifie si la réponse est valide
           if (!response) {
-            console.log("hello", response);
             throw new Error("Erreur");
           }
-          return response.json();
+          return response.json(); // Convertit la réponse en JSON
         })
         .then((data) => {
+          // Vérifie si la requête a réussi
           if (data.result) {
-            setReservations(data.data);
+            setReservations(data.data); // Met à jour l'état avec les données des réservations
           } else {
-            console.error("Erreur de récupération des données:", data.error);
+            console.error("Erreur de récupération des données:", data.error); // Affiche une erreur si la requête a échoué
           }
         })
         .catch((error) => {
-          console.error("Erreur lors de la récupération des données:", error);
+          console.error("Erreur lors de la récupération des données:", error); // Affiche une erreur en cas de problème lors de la requête
         });
     }
-  }, [user.token]);
+  }, [user.token]); // Déclenche useEffect lorsque le token de l'utilisateur change
 
+  // Fonction pour formater la date
   const formatDate = (dateString) => {
-    const options = { day: "2-digit", month: "2-digit", year: "numeric" };
-    return new Date(dateString).toLocaleDateString("fr-FR", options);
+    const options = { day: "2-digit", month: "2-digit", year: "numeric" }; // Options de formatage pour la date
+    return new Date(dateString).toLocaleDateString("fr-FR", options); // Convertit la date en chaîne de caractères formatée
   };
-
-  // const handleRemoveMesAnnonce = () => {
-  //   fetch(`http://localhost:3000/reservation/delete`, {
-  //     method: "DELETE",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //       Authorization: `Bearer ${user.token}`,
-  //     },
-  //   })
-  //     .then((response) => response.json())
-  //     .then((data) => {
-  //       // console.log("------>sup", data);
-  //       if (data.result) {
-  //         // console.log("true", data);
-  //         dispatch(removeAnnonce({ _id: data.annonceId }));
-  //         console.log(annonceReducer.length);
-  //         setMesAnnonce((prevData) =>
-  //           prevData.filter((annonce) => annonce._id !== data.annonceId)
-  //         );
-  //       }
-  //     });
-  //   console.log(annonceReducer);
-  // };
 
   return (
     <div className={styles.main}>
       <h1 className={styles.h1}>Mes Reservation</h1>
       <div className={styles.container}>
-        {reservations.length > 0 ? (
+        {reservations.length > 0 ? ( // Si des réservations existent
+          // Map sur les réservations pour afficher chaque réservation
           reservations.map((reservation, i) => (
             <div className={styles.annonceContainer} key={i}>
               <div className={styles.card}>
@@ -98,7 +82,7 @@ export default function MesReservations() {
                     <FontAwesomeIcon
                       className={styles.icon1}
                       icon={faTrash}
-                      onClick={() => handleRemoveMesAnnonce(reservation._id)}
+                      onClick={() => handleRemoveMesAnnonce(reservation._id)} // Fonction pour supprimer la réservation
                     />
                   </div>
                 </div>

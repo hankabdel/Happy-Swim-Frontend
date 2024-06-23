@@ -1,21 +1,35 @@
-import styles from "../styles/Annonce.module.css";
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { addMesFavoris, removeMesFavoris } from "../reducers/mesFavoris";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHeart } from "@fortawesome/free-solid-svg-icons";
-import Modal from "react-modal";
+// Importation des modules et des styles nécessaires
+import styles from "../styles/Annonce.module.css"; // Importation des styles CSS pour ce composant
+import React, { useEffect, useState } from "react"; // Importation de React et des hooks useEffect et useState
+import { useDispatch, useSelector } from "react-redux"; // Importation des hooks de Redux
+import { addMesFavoris, removeMesFavoris } from "../reducers/mesFavoris"; // Importation des actions Redux
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"; // Importation du composant FontAwesomeIcon pour les icônes
+import { faHeart } from "@fortawesome/free-solid-svg-icons"; // Importation de l'icône cœur de FontAwesome
+import Modal from "react-modal"; // Importation du composant Modal
 
+// function pour passer les test jest
+
+// export function calculateTotalPrice(pricePerPerson, numPeople) {
+//   const total = pricePerPerson * numPeople;
+//   return total;
+// }
+
+// Définition du composant fonctionnel Annonce
 export default function Annonce() {
+  // Déclaration des états pour les modales et l'annonce sélectionnée
   const [isMainModalOpen, setIsMainModalOpen] = useState(false);
   const [isReservationModalOpen, setIsReservationModalOpen] = useState(false);
   const [selectedAnnonce, setSelectedAnnonce] = useState(null);
 
+  // État pour stocker les données des annonces récupérées du backend
   const [annonceData, setAnnonceData] = useState([]);
+
+  // Récupération des fonctions dispatch et des états du store Redux
   const dispatch = useDispatch();
   const favoris = useSelector((state) => state.mesFavoris.value);
   const user = useSelector((state) => state.user.value);
 
+  // États pour les détails de la réservation
   const [date, setDate] = useState("");
   const [personne, setPersonne] = useState(1);
   const [startTime, setStartTime] = useState("10:00");
@@ -23,6 +37,7 @@ export default function Annonce() {
   const [price, setPrice] = useState(0);
   const [totalPrice, setTotalPrice] = useState(0);
 
+  // Utilisation de useEffect pour récupérer les annonces lorsque le composant est monté
   useEffect(() => {
     fetch("http://localhost:3000/annonces/recover", {
       method: "GET",
@@ -42,6 +57,7 @@ export default function Annonce() {
       });
   }, [user.token]);
 
+  // Gestion de l'ajout et de la suppression des favoris
   const handleToggleFavori = (annonce) => {
     const isFavori = favoris.some((e) => e._id === annonce._id);
     if (!isFavori) {
@@ -52,6 +68,7 @@ export default function Annonce() {
     }
   };
 
+  // Enregistrement d'une réservation
   const handleRegisterReservation = () => {
     fetch("http://localhost:3000/reservations/addResa", {
       method: "POST",
@@ -79,13 +96,14 @@ export default function Annonce() {
       })
       .then((data) => {
         console.log(data);
-        setIsReservationModalOpen(false); // Close the reservation modal on success
+        setIsReservationModalOpen(false); // Fermeture de la modal de réservation en cas de succès
       })
       .catch((error) => {
         console.error("Error during reservation:", error);
       });
   };
 
+  // Styles personnalisés pour les modales
   const customStyles = {
     overlay: {
       backgroundColor: "rgba(0, 0, 0, 0.6)",
@@ -119,17 +137,20 @@ export default function Annonce() {
     },
   };
 
+  // Gestion du changement du nombre de personnes
   const handlePersonneChange = (e) => {
     const value = parseInt(e.target.value, 10);
     setPersonne(value);
     calculateTotalPrice(price, value);
   };
 
+  // Calcul du prix total
   const calculateTotalPrice = (pricePerPerson, numPeople) => {
     const total = pricePerPerson * numPeople;
     setTotalPrice(total);
   };
 
+  // Mise à jour du prix total lors du changement de l'annonce sélectionnée
   useEffect(() => {
     if (selectedAnnonce) {
       setPrice(selectedAnnonce.prix);
@@ -137,24 +158,29 @@ export default function Annonce() {
     }
   }, [selectedAnnonce]);
 
+  // Gestion de l'ouverture de la modal principale
   const handleOpenMainModal = (annonce) => {
     setSelectedAnnonce(annonce);
     setIsMainModalOpen(true);
   };
 
+  // Gestion de la fermeture de la modal principale
   const handleCloseMainModal = () => {
     setSelectedAnnonce(null);
     setIsMainModalOpen(false);
   };
 
+  // Gestion de l'ouverture de la modal de réservation
   const handleOpenReservationModal = () => {
     setIsReservationModalOpen(true);
   };
 
+  // Gestion de la fermeture de la modal de réservation
   const handleCloseReservationModal = () => {
     setIsReservationModalOpen(false);
   };
 
+  // Rendu du composant
   return (
     <div className={styles.main}>
       <div className={styles.container}>
