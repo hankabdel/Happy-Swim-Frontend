@@ -42,6 +42,36 @@ export default function MesReservations() {
     }
   }, [user.token]); // Déclenche useEffect lorsque le token de l'utilisateur change
 
+  const handleRemoveMesAnnonce = (reservationId) => {
+    fetch(`http://localhost:3000/reservations/${reservationId}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${user.token}`,
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Erreur lors de la suppression");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        if (data.result) {
+          setReservations((prevReservations) =>
+            prevReservations.filter(
+              (reservation) => reservation._id !== reservationId
+            )
+          );
+        } else {
+          console.error("Erreur de suppression:", data.error);
+        }
+      })
+      .catch((error) => {
+        console.error("Erreur lors de la suppression:", error);
+      });
+  };
+
   // Fonction pour formater la date
   const formatDate = (dateString) => {
     const options = { day: "2-digit", month: "2-digit", year: "numeric" }; // Options de formatage pour la date
