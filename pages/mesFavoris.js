@@ -1,4 +1,4 @@
-import React from "react"; // Importe React
+import React from "react";
 import { useSelector } from "react-redux"; // Importe le hook useSelector de react-redux pour accéder au state Redux
 import styles from "../styles/MesFavoris.module.css"; // Importe les styles CSS spécifiques à ce composant
 

@@ -70,7 +70,7 @@ export default function Annonce() {
 
   // Enregistrement d'une réservation
   const handleRegisterReservation = () => {
-    fetch("http://localhost:3000/reservations/addResa", {
+    fetch("http://localhost:3000/reservations/addReservation", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

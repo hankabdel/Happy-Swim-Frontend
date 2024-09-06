@@ -43,30 +43,37 @@ export default function MesReservations() {
   }, [user.token]); // Déclenche useEffect lorsque le token de l'utilisateur change
 
   const handleRemoveMesAnnonce = (reservationId) => {
+    // Envoi d'une requête DELETE à l'API pour supprimer la réservation avec l'ID donné
     fetch(`http://localhost:3000/reservations/${reservationId}`, {
-      method: "DELETE",
+      method: "DELETE", // Spécifie la méthode HTTP DELETE pour supprimer la réservation
       headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${user.token}`,
+        "Content-Type": "application/json", // Indique que le contenu de la requête est en JSON
+        Authorization: `Bearer ${user.token}`, // Ajoute le token d'authentification dans les headers
       },
     })
+      // Traite la réponse de la requête
       .then((response) => {
+        // Vérifie si la réponse est valide (status HTTP 200-299)
         if (!response.ok) {
-          throw new Error("Erreur lors de la suppression");
+          throw new Error("Erreur lors de la suppression"); // Lance une erreur si la réponse n'est pas valide
         }
-        return response.json();
+        return response.json(); // Convertit la réponse en JSON
       })
+      // Traite les données JSON de la réponse
       .then((data) => {
+        // Vérifie si la suppression a été réussie
         if (data.result) {
+          // Met à jour l'état local des réservations en filtrant la réservation supprimée
           setReservations((prevReservations) =>
             prevReservations.filter(
-              (reservation) => reservation._id !== reservationId
+              (reservation) => reservation._id !== reservationId // Filtre la réservation supprimée par son ID
             )
           );
         } else {
           console.error("Erreur de suppression:", data.error);
         }
       })
+      // Capture et affiche les erreurs en cas de problème lors de la requête
       .catch((error) => {
         console.error("Erreur lors de la suppression:", error);
       });
