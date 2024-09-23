@@ -75,15 +75,13 @@ const Annonce = (props) => {
   // Enregistrement d'une réservation
   const handleRegisterReservation = async (reservationData) => {
     try {
-      console.log("Données de réservation:", reservationData); // Loguez l'objet pour voir ce qui est envoyé
-
       const response = await fetch(
         "http://localhost:3000/reservations/addReservation",
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${user.token}`, // Assurez-vous que le token est correct
+            Authorization: `Bearer ${user.token}`,
           },
           body: JSON.stringify(reservationData), // Conversion en JSON ici
         }

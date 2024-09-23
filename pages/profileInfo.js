@@ -103,7 +103,6 @@ export default function profileInfo() {
           setPrix("");
         }
       });
-    console.log(annonceReducer);
     setIsOpen(false); // Fermeture de la modal
   };
 

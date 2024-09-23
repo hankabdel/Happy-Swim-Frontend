@@ -38,7 +38,6 @@ export default function SignIn() {
       .then((response) => response.json())
       .then((data) => {
         if (data.result) {
-          console.log("Token reçu:", data.token); // Loguez le token reçu pour vérifier
           dispatch(
             login({
               email: data.email,

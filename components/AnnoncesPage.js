@@ -28,7 +28,7 @@ const AnnoncesPage = () => {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${user.token}`, // Envoi uniquement du token ici
+            Authorization: `Bearer ${user.token}`,
           },
 
           body: JSON.stringify(reservationData),
