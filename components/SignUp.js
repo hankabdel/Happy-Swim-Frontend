@@ -6,7 +6,6 @@ import { login } from "../reducers/user"; // Importe l'action login depuis le re
 import { useDispatch, useSelector } from "react-redux"; // Importe les hooks useDispatch et useSelector de react-redux
 
 export default function SignUp() {
-  // Définit et exporte le composant fonctionnel SignUp
   const dispatch = useDispatch(); // Initialise useDispatch pour envoyer des actions Redux
   const user = useSelector((state) => state.user.value); // Récupère la valeur de l'utilisateur depuis le state Redux
 
@@ -17,12 +16,16 @@ export default function SignUp() {
   const [passwordUp, setPasswordUp] = useState(""); // État pour stocker le mot de passe de l'utilisateur
   const [emailUp, setEmailUp] = useState(""); // État pour stocker l'email de l'utilisateur
   const [error, setError] = useState(""); // État pour stocker les messages d'erreur
+  const [loading, setLoading] = useState(false); // État pour afficher le loader pendant l'inscription
 
   const router = useRouter(); // Initialise useRouter pour la navigation
-  // Si l'utilisateur est déjà connecté (token présent)
-  if (user.token) {
-    router.push("/"); // Redirige vers la page d'accueil
-  }
+
+  // Redirection si l'utilisateur est déjà connecté (token présent)
+  useEffect(() => {
+    if (user.token) {
+      router.push("/"); // Redirige vers la page d'accueil
+    }
+  }, [user.token, router]);
 
   useEffect(() => {
     Modal.setAppElement("#__next"); // Définit l'élément principal de l'application pour react-modal après le premier rendu
@@ -34,10 +37,14 @@ export default function SignUp() {
 
   // Fonction pour gérer l'inscription de l'utilisateur
   const handleRegister = () => {
+    setLoading(true); // Active le loader pendant la requête
+    setError(""); // Réinitialise les erreurs avant la nouvelle tentative
+
     // Vérifie si l'email est valide
     if (!EMAIL_REGEX.test(emailUp)) {
       setError("Veuillez entrer une adresse e-mail valide."); // Affiche un message d'erreur si l'email est invalide
-      return; // Arrête l'exécution de la fonction
+      setLoading(false); // Désactive le loader
+      return;
     }
 
     // Envoie une requête POST à l'API pour créer un nouvel utilisateur
@@ -53,7 +60,8 @@ export default function SignUp() {
     })
       .then((response) => response.json()) // Convertit la réponse en JSON
       .then((data) => {
-        console.log(data);
+        setLoading(false); // Désactive le loader après la réponse
+
         // Si l'inscription est réussie
         if (data.result) {
           dispatch(
@@ -73,11 +81,12 @@ export default function SignUp() {
         } else {
           setError(
             data.message || "Une erreur s'est produite. Veuillez réessayer."
-          ); // Afficher un message d'erreur du serveur
+          ); // Affiche un message d'erreur si l'inscription échoue
         }
       })
       .catch((error) => {
-        setError("Une erreur s'est produite. Veuillez réessayer."); // Afficher un message d'erreur en cas d'échec de la requête
+        setLoading(false); // Désactive le loader en cas d'erreur
+        setError("Une erreur s'est produite. Veuillez réessayer."); // Affiche un message d'erreur en cas d'échec de la requête
       });
   };
 
@@ -105,6 +114,7 @@ export default function SignUp() {
       <button className={styles.buttonUp} onClick={() => setIsOpen(true)}>
         s'inscrire
       </button>
+
       <Modal
         isOpen={isOpen} // État de la modal (ouverte ou fermée)
         onRequestClose={() => setIsOpen(false)} // Fonction pour fermer la modal
@@ -144,12 +154,18 @@ export default function SignUp() {
             />
           </div>
         </div>
+
         <div className={styles.buttonUp3}>
           {/* Bouton pour soumettre le formulaire d'inscription */}
-          <button className={styles.buttonUp2} onClick={handleRegister}>
-            s'inscrire
+          <button
+            className={styles.buttonUp2}
+            onClick={handleRegister}
+            disabled={loading}
+          >
+            {loading ? "Inscription en cours..." : "S'inscrire"}
           </button>
         </div>
+
         {/* Affiche un message d'erreur */}
         {error && <p className={styles.error}>{error}</p>}
       </Modal>

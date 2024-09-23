@@ -1,35 +1,57 @@
 import React from "react";
-import { useSelector } from "react-redux"; // Importe le hook useSelector de react-redux pour accéder au state Redux
-import styles from "../styles/MesFavoris.module.css"; // Importe les styles CSS spécifiques à ce composant
+import { useDispatch, useSelector } from "react-redux";
+import styles from "../styles/MesFavoris.module.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faHeart } from "@fortawesome/free-solid-svg-icons";
+import { addMesFavoris, removeMesFavoris } from "../reducers/mesFavoris";
 
-// Définit le composant fonctionnel MesFavoris
 const MesFavoris = () => {
-  // Récupère les favoris depuis le state Redux
-  const favoris = useSelector((state) => state.mesFavoris.value);
+  const dispatch = useDispatch();
+  const favoris = useSelector((state) => state.mesFavoris.value); // Accès aux favoris via Redux
+
+  // Fonction pour gérer les favoris
+  const handleToggleFavori = (heart) => {
+    const isFavori = favoris.some((e) => e._id === heart._id);
+    if (!isFavori) {
+      dispatch(addMesFavoris(heart)); // Ajoute aux favoris
+    } else {
+      dispatch(removeMesFavoris(heart)); // Retire des favoris
+    }
+  };
 
   return (
     <div className={styles.main}>
       <h1 className={styles.h1}>Mes Favoris</h1>
       <div className={styles.container}>
-        {favoris.length > 0 ? ( // Si des favoris existent
-          // Map sur favoris pour afficher chaque favori
-          favoris.map((heart, i) => (
-            <div className={styles.annonceContainer} key={i}>
-              <div className={styles.card}>
-                <img
-                  className={styles.imageFond}
-                  src="image/image37.png"
-                  alt="image"
-                />
-                <div className={styles.info}>
-                  <h2>{heart.titre}</h2>
-                  <p>ville: {heart.ville}</p>
-                  <p>Prix: {heart.prix}</p>
+        {favoris.length > 0 ? (
+          favoris.map((heart, i) => {
+            const isFavori = favoris.some((e) => e._id === heart._id);
+            let iconStyle = isFavori ? { color: "red" } : { color: "white" };
+
+            return (
+              <div className={styles.annonceContainer} key={i}>
+                <div className={styles.card}>
+                  <img
+                    className={styles.imageFond}
+                    src="image/image37.png"
+                    alt="image"
+                  />
+                  <div className={styles.info}>
+                    <h2>{heart.titre}</h2>
+                    <p>Ville: {heart.ville}</p>
+                    <p>Prix: {heart.prix}€</p>
+                  </div>
+                  <div className={styles.heartIcon}>
+                    <FontAwesomeIcon
+                      icon={faHeart}
+                      style={iconStyle}
+                      onClick={() => handleToggleFavori(heart)} // Gestion des favoris via Redux
+                    />
+                  </div>
                 </div>
               </div>
-              <div className={styles.cardScroll}></div>
-            </div>
-          ))
+            );
+          })
         ) : (
           <div className={styles.p}>
             <p>Aucun favori trouvé</p>
@@ -39,4 +61,5 @@ const MesFavoris = () => {
     </div>
   );
 };
-export default MesFavoris; // Exporte le composant MesFavoris par défaut
+
+export default MesFavoris;

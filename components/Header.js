@@ -1,4 +1,3 @@
-// Importation des modules et des styles nécessaires
 import styles from "../styles/Header.module.css"; // Importation des styles CSS pour ce composant
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"; // Importation du composant FontAwesomeIcon pour les icônes
 import {
@@ -48,14 +47,3 @@ export default function Header() {
     </div>
   );
 }
-
-// useSelector est utilisé pour accéder à l'état global de Redux,
-// en particulier pour obtenir les informations sur l'utilisateur.
-
-// profileLink et textBienvenue sont conditionnels et changent en fonction
-// de la connexion de l'utilisateur (user.token).
-
-// Les icônes de FontAwesome sont utilisées pour les liens de navigation.
-
-// Link de Next.js est utilisé pour une navigation côté client,
-// ce qui permet de naviguer entre les pages sans recharger complètement la page.

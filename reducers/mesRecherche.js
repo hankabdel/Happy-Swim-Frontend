@@ -7,8 +7,11 @@ const mesRechercheSlice = createSlice({
     addMesRecherche: (state, action) => {
       state.value = [...state.value, ...action.payload];
     },
+    resetMesRecherche: (state) => {
+      state.value = []; // Réinitialise les recherches
+    },
   },
 });
 
-export const { addMesRecherche } = mesRechercheSlice.actions;
+export const { addMesRecherche, resetMesRecherche } = mesRechercheSlice.actions;
 export default mesRechercheSlice.reducer;

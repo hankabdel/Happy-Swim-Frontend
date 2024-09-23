@@ -1,5 +1,5 @@
 import styles from "../styles/Home.module.css";
-import Annonce from "../components/Annonce";
+import AnnoncesPage from "../components/AnnoncesPage";
 
 export default function Home() {
   return (
@@ -38,7 +38,7 @@ export default function Home() {
         </div>
       </div>
       <div className={styles.containerAnnonce}>
-        <Annonce />
+        <AnnoncesPage />
       </div>
     </div>
   );

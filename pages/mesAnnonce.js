@@ -46,7 +46,7 @@ export default function MesAnnonce() {
 
   // Fonction pour gérer la suppression d'une annonce
   const handleRemoveMesAnnonce = (annonceId) => {
-    fetch(`http://localhost:3000/annonces/delete`, {
+    fetch(`http://localhost:3000/annonces/deleteAnnonces/${annonceId}`, {
       method: "DELETE", // Méthode HTTP DELETE
       headers: {
         "Content-Type": "application/json", // En-tête pour indiquer le type de contenu
@@ -57,14 +57,15 @@ export default function MesAnnonce() {
       .then((data) => {
         // Si la suppression est réussie
         if (data.result) {
-          dispatch(removeAnnonce({ _id: data.annonceId })); // Envoie l'action removeAnnonce avec l'ID de l'annonce supprimée
-          console.log(annonceReducer.length);
+          dispatch(removeAnnonce({ _id: annonceId })); // Envoie l'action removeAnnonce avec l'ID de l'annonce supprimée
           setMesAnnonce((prevData) =>
-            prevData.filter((annonce) => annonce._id !== data.annonceId)
+            prevData.filter((annonce) => annonce._id !== annonceId)
           ); // Met à jour l'état mesAnnonce en filtrant l'annonce supprimée
         }
+      })
+      .catch((error) => {
+        console.error("Erreur lors de la suppression de l'annonce :", error);
       });
-    console.log(annonceReducer);
   };
 
   return (

@@ -52,7 +52,7 @@ export default function profileInfo() {
 
   // Fonction pour ajouter une annonce
   const handleAdd = () => {
-    fetch("http://localhost:3000/annonces/add", {
+    fetch("http://localhost:3000/annonces/addAnnonces", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -83,7 +83,7 @@ export default function profileInfo() {
 
   // Fonction pour supprimer une annonce
   const handleRemove = () => {
-    fetch(`http://localhost:3000/annonces/delete`, {
+    fetch(`http://localhost:3000/annonces/deleteAnnonces`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",

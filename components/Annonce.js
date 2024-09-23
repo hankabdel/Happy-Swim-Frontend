@@ -1,21 +1,14 @@
 // Importation des modules et des styles nécessaires
 import styles from "../styles/Annonce.module.css"; // Importation des styles CSS pour ce composant
 import React, { useEffect, useState } from "react"; // Importation de React et des hooks useEffect et useState
-import { useDispatch, useSelector } from "react-redux"; // Importation des hooks de Redux
-import { addMesFavoris, removeMesFavoris } from "../reducers/mesFavoris"; // Importation des actions Redux
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"; // Importation du composant FontAwesomeIcon pour les icônes
 import { faHeart } from "@fortawesome/free-solid-svg-icons"; // Importation de l'icône cœur de FontAwesome
 import Modal from "react-modal"; // Importation du composant Modal
-
-// function pour passer les test jest
-
-// export function calculateTotalPrice(pricePerPerson, numPeople) {
-//   const total = pricePerPerson * numPeople;
-//   return total;
-// }
+import { useDispatch, useSelector } from "react-redux"; // Importation des hooks Redux
+import { addMesFavoris, removeMesFavoris } from "../reducers/mesFavoris"; // Importation des actions Redux
 
 // Définition du composant fonctionnel Annonce
-export default function Annonce() {
+const Annonce = (props) => {
   // Déclaration des états pour les modales et l'annonce sélectionnée
   const [isMainModalOpen, setIsMainModalOpen] = useState(false);
   const [isReservationModalOpen, setIsReservationModalOpen] = useState(false);
@@ -24,10 +17,12 @@ export default function Annonce() {
   // État pour stocker les données des annonces récupérées du backend
   const [annonceData, setAnnonceData] = useState([]);
 
-  // Récupération des fonctions dispatch et des états du store Redux
+  // Récupération des données et actions via les props
+  const { user, onRegisterReservation } = props;
+
+  // Gestion des favoris avec Redux
   const dispatch = useDispatch();
-  const favoris = useSelector((state) => state.mesFavoris.value);
-  const user = useSelector((state) => state.user.value);
+  const favoris = useSelector((state) => state.mesFavoris.value); // Récupère les favoris depuis Redux
 
   // États pour les détails de la réservation
   const [date, setDate] = useState("");
@@ -39,68 +34,73 @@ export default function Annonce() {
 
   // Utilisation de useEffect pour récupérer les annonces lorsque le composant est monté
   useEffect(() => {
-    fetch("http://localhost:3000/annonces/recover", {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("error not ok");
-        }
-        return response.json();
-      })
-      .then((data) => {
-        setAnnonceData(data.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
-  }, [user.token]);
+    const fetchAnnonces = async () => {
+      if (user && user.token) {
+        try {
+          const response = await fetch(
+            "http://localhost:3000/annonces/recoverAnnonces",
+            {
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${user.token}`,
+              },
+            }
+          );
 
-  // Gestion de l'ajout et de la suppression des favoris
+          if (!response.ok) {
+            throw new Error("Erreur lors de la récupération des annonces");
+          }
+
+          const data = await response.json();
+          setAnnonceData(data.data);
+        } catch (error) {
+          console.error("Erreur lors de la récupération des annonces :", error);
+        }
+      }
+    };
+    fetchAnnonces();
+  }, [user]);
+
+  // Gestion de l'ajout et de la suppression des favoris via Redux
   const handleToggleFavori = (annonce) => {
     const isFavori = favoris.some((e) => e._id === annonce._id);
     if (!isFavori) {
-      dispatch(addMesFavoris({ ...annonce }));
-      console.log("Add favoris");
+      dispatch(addMesFavoris(annonce)); // Ajoute l'annonce aux favoris
     } else {
-      dispatch(removeMesFavoris({ id: annonce._id, ...annonce }));
+      dispatch(removeMesFavoris(annonce)); // Supprime l'annonce des favoris
     }
   };
 
   // Enregistrement d'une réservation
-  const handleRegisterReservation = () => {
-    fetch("http://localhost:3000/reservations/addReservation", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${user.token}`,
-      },
-      body: JSON.stringify({
-        titre: selectedAnnonce.titre,
-        date: date,
-        heureDebut: startTime,
-        heureFin: endTime,
-        personne: personne,
-        ville: selectedAnnonce.ville,
-        prix: price,
-        annonceId: selectedAnnonce._id,
-      }),
-    })
-      .then((response) => {
-        if (!response.ok) {
-          console.log(response);
-          throw new Error("Erreur lors de la réservation.");
+  const handleRegisterReservation = async (reservationData) => {
+    try {
+      console.log("Données de réservation:", reservationData); // Loguez l'objet pour voir ce qui est envoyé
+
+      const response = await fetch(
+        "http://localhost:3000/reservations/addReservation",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${user.token}`, // Assurez-vous que le token est correct
+          },
+          body: JSON.stringify(reservationData), // Conversion en JSON ici
         }
-        return response.json();
-      })
-      .then((data) => {
-        console.log(data);
-        setIsReservationModalOpen(false); // Fermeture de la modal de réservation en cas de succès
-      })
-      .catch((error) => {
-        console.error("Error during reservation:", error);
-      });
+      );
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error("Erreur lors de la réservation:", errorText);
+        throw new Error(`Erreur: ${response.status} - ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      console.log("Réservation réussie:", data);
+    } catch (error) {
+      console.error("Erreur lors de la réservation:", error.message);
+    }
+    setIsReservationModalOpen(false); // Fermeture de la modal de réservation
   };
 
   // Styles personnalisés pour les modales
@@ -120,6 +120,7 @@ export default function Annonce() {
       backgroundColor: "rgb(32 54 73)",
     },
   };
+
   const reservationModalStyles = {
     overlay: {
       backgroundColor: "rgba(0, 0, 0, 0.0)",
@@ -145,8 +146,8 @@ export default function Annonce() {
   };
 
   // Calcul du prix total
-  const calculateTotalPrice = (pricePerPerson, numPeople) => {
-    const total = pricePerPerson * numPeople;
+  const calculateTotalPrice = () => {
+    const total = price * personne;
     setTotalPrice(total);
   };
 
@@ -154,9 +155,9 @@ export default function Annonce() {
   useEffect(() => {
     if (selectedAnnonce) {
       setPrice(selectedAnnonce.prix);
-      calculateTotalPrice(selectedAnnonce.prix, personne);
     }
-  }, [selectedAnnonce]);
+    calculateTotalPrice(); // Recalcul du total
+  }, [selectedAnnonce, personne, price]);
 
   // Gestion de l'ouverture de la modal principale
   const handleOpenMainModal = (annonce) => {
@@ -166,8 +167,9 @@ export default function Annonce() {
 
   // Gestion de la fermeture de la modal principale
   const handleCloseMainModal = () => {
-    setSelectedAnnonce(null);
-    setIsMainModalOpen(false);
+    setSelectedAnnonce(null); // Réinitialiser l'annonce sélectionnée
+    setIsMainModalOpen(false); // Fermer la modal principale
+    setPersonne(1); // Réinitialiser le nombre de personnes à 1
   };
 
   // Gestion de l'ouverture de la modal de réservation
@@ -178,6 +180,7 @@ export default function Annonce() {
   // Gestion de la fermeture de la modal de réservation
   const handleCloseReservationModal = () => {
     setIsReservationModalOpen(false);
+    setPersonne(1); // Réinitialiser le nombre de personnes à 1 lorsqu'on ferme la modal de réservation
   };
 
   // Rendu du composant
@@ -201,7 +204,7 @@ export default function Annonce() {
                 />
                 <div className={styles.info}>
                   <h2>{annonce.titre}</h2>
-                  <p>ville: {annonce.ville}</p>
+                  <p>Ville: {annonce.ville}</p>
                   <p>Prix: {annonce.prix}€</p>
                 </div>
                 <Modal
@@ -215,50 +218,58 @@ export default function Annonce() {
                   ariaHideApp={false}
                   shouldCloseOnOverlayClick={true}
                 >
-                  <div
-                    className={isReservationModalOpen ? styles.hidden : ""}
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    <div className={styles.imageText}>
-                      <img
-                        className={styles.imageModal}
-                        src="image/image37.png"
-                        alt="image"
-                      />
-                      <h2>{annonce.titre}</h2>
-                    </div>
-                    <div className={styles.villePrix}>
-                      <h3 className={styles.vP}>{annonce.description}</h3>
-                      <p className={styles.vP}>ville: {annonce.ville}</p>
-                      <p className={styles.vP}>Prix: {annonce.prix}€</p>
-                    </div>
-                    <div className={styles.heart}>
-                      <div className={styles.buttonModal}>
-                        <button
-                          className={styles.button}
-                          onClick={handleOpenReservationModal}
-                        >
-                          Réserver une annonce
-                        </button>
-                      </div>
-                      <div className={styles.buttonModal}>
-                        <button
-                          onClick={handleCloseMainModal}
-                          className={styles.button}
-                        >
-                          Fermer
-                        </button>
-                      </div>
-                      <div>
-                        <FontAwesomeIcon
-                          className={styles.heartIcon}
-                          style={iconStyle}
-                          onClick={() => handleToggleFavori(annonce)}
-                          icon={faHeart}
+                  {selectedAnnonce && (
+                    <div
+                      className={isReservationModalOpen ? styles.hidden : ""}
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <div className={styles.imageText}>
+                        <img
+                          className={styles.imageModal}
+                          src="image/image37.png"
+                          alt="image"
                         />
+                        <h2>{selectedAnnonce.titre}</h2>{" "}
+                      </div>
+                      <div className={styles.villePrix}>
+                        <h3 className={styles.vP}>
+                          {selectedAnnonce.description}
+                        </h3>
+                        <p className={styles.vP}>
+                          Ville: {selectedAnnonce.ville}
+                        </p>
+                        <p className={styles.vP}>
+                          Prix: {selectedAnnonce.prix}€
+                        </p>
+                      </div>
+                      <div className={styles.heart}>
+                        <div className={styles.buttonModal}>
+                          <button
+                            className={styles.button}
+                            onClick={handleOpenReservationModal} // Ouvrir la modal de réservation
+                          >
+                            Réserver une annonce
+                          </button>
+                        </div>
+                        <div className={styles.buttonModal}>
+                          <button
+                            onClick={handleCloseMainModal} // Ferme la modal principale
+                            className={styles.button}
+                          >
+                            Fermer
+                          </button>
+                        </div>
+                        <div>
+                          <FontAwesomeIcon
+                            className={styles.heartIcon}
+                            style={iconStyle}
+                            onClick={() => handleToggleFavori(annonce)}
+                            icon={faHeart}
+                          />
+                        </div>
                       </div>
                     </div>
-                  </div>
+                  )}
                 </Modal>
                 <Modal
                   isOpen={isReservationModalOpen}
@@ -321,7 +332,7 @@ export default function Annonce() {
                         className={styles.input}
                         type="text"
                         value={`${totalPrice} €`}
-                        onChange={(e) => setPrice(e.target.value)}
+                        readOnly
                       />
                     </div>
                   </div>
@@ -342,4 +353,6 @@ export default function Annonce() {
       </div>
     </div>
   );
-}
+};
+
+export default Annonce;
