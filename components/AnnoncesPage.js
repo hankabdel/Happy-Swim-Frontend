@@ -4,7 +4,7 @@ import Annonce from "../components/Annonce";
 const AnnoncesPage = () => {
   // État pour les favoris et l'utilisateur
   const [favoris, setFavoris] = useState([]);
-  const [user, setUser] = useState({ token: "token" }); // Ici, vous devriez remplacer "token" par le token réel
+  const [user, setUser] = useState({ token: "token" });
 
   // Fonction pour gérer l'ajout et la suppression des favoris
   const handleToggleFavori = (annonce) => {
@@ -20,37 +20,32 @@ const AnnoncesPage = () => {
   };
 
   // Fonction pour gérer l'enregistrement des réservations
-  const handleRegisterReservation = async (reservationData) => {
-    try {
-      const response = await fetch(
-        "http://localhost:3000/reservations/addReservation",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${user.token}`,
-          },
-
-          body: JSON.stringify(reservationData),
+  const handleRegisterReservation = (reservationData) => {
+    fetch("http://localhost:3000/reservations/addReservation", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${user.token}`, // Passe le token utilisateur
+      },
+      body: JSON.stringify(reservationData),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Erreur lors de la réservation.");
         }
-      );
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        console.error("Erreur lors de la réservation:", errorData);
-        throw new Error("Erreur lors de la réservation.");
-      }
-
-      const data = await response.json();
-      console.log("Réservation réussie:", data);
-    } catch (error) {
-      console.error("Erreur lors de la réservation:", error.message);
-    }
+        return response.json();
+      })
+      .then((data) => {
+        console.log("Réservation réussie:", data);
+      })
+      .catch((error) => {
+        console.error("Erreur lors de la réservation:", error);
+      });
   };
 
   return (
     <div>
-      {/* Passer les favoris, l'utilisateur et les fonctions en props à Annonce */}
+      {/* Rendre le composant Annonce en passant les favoris, l'utilisateur et les fonctions */}
       <Annonce
         favoris={favoris}
         user={user}

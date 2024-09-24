@@ -7,38 +7,37 @@ import { faTrash } from "@fortawesome/free-solid-svg-icons"; // Importe l'icône
 // Définit le composant fonctionnel MesReservations
 export default function MesReservations() {
   const [reservations, setReservations] = useState([]); // Initialise l'état pour stocker les réservations
-  const [loading, setLoading] = useState(false); // Initialise un état pour gérer le chargement des données
   const user = useSelector((state) => state.user.value); // Récupère les informations de l'utilisateur depuis le state Redux
 
   // Utilise useEffect pour effectuer une action après le rendu du composant
   useEffect(() => {
     // Vérifie si l'utilisateur est authentifié
     if (user.token) {
-      setLoading(true); // Active le chargement
-
       // Fait une requête GET pour récupérer les réservations de l'utilisateur
-      fetch("http://localhost:3000/reservations/addReservation/", {
-        method: "POST",
+      fetch("http://localhost:3000/reservations/", {
+        method: "GET",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${user.token}`,
+          Authorization: `Bearer ${user.token}`, // Ajoute le token d'authentification dans les headers
         },
-        body: JSON.stringify(reservations),
       })
         .then((response) => {
-          if (!response.ok) {
-            // Si la réponse n'est pas "OK", on retourne une erreur
-            throw new Error(
-              `Erreur lors de la réservation: ${response.statusText}`
-            );
+          // Vérifie si la réponse est valide
+          if (!response) {
+            throw new Error("Erreur");
           }
-          return response.json(); // Analyser la réponse JSON si tout va bien
+          return response.json(); // Convertit la réponse en JSON
         })
         .then((data) => {
-          console.log("Réservation réussie:", data);
+          // Vérifie si la requête a réussi
+          if (data.result) {
+            setReservations(data.data); // Met à jour l'état avec les données des réservations
+          } else {
+            console.error("Erreur de récupération des données:", data.error); // Affiche une erreur si la requête a échoué
+          }
         })
         .catch((error) => {
-          console.error("Erreur lors de la réservation:", error.message);
+          console.error("Erreur lors de la récupération des données:", error); // Affiche une erreur en cas de problème lors de la requête
         });
     }
   }, [user.token]); // Déclenche useEffect lorsque le token de l'utilisateur change
@@ -52,13 +51,17 @@ export default function MesReservations() {
         Authorization: `Bearer ${user.token}`, // Ajoute le token d'authentification dans les headers
       },
     })
+      // Traite la réponse de la requête
       .then((response) => {
+        // Vérifie si la réponse est valide (status HTTP 200-299)
         if (!response.ok) {
           throw new Error("Erreur lors de la suppression"); // Lance une erreur si la réponse n'est pas valide
         }
         return response.json(); // Convertit la réponse en JSON
       })
+      // Traite les données JSON de la réponse
       .then((data) => {
+        // Vérifie si la suppression a été réussie
         if (data.result) {
           // Met à jour l'état local des réservations en filtrant la réservation supprimée
           setReservations((prevReservations) =>
@@ -70,8 +73,9 @@ export default function MesReservations() {
           console.error("Erreur de suppression:", data.error);
         }
       })
+      // Capture et affiche les erreurs en cas de problème lors de la requête
       .catch((error) => {
-        console.error("Erreur lors de la suppression:", error); // Affiche une erreur en cas de problème lors de la requête
+        console.error("Erreur lors de la suppression:", error);
       });
   };
 
@@ -84,57 +88,51 @@ export default function MesReservations() {
   return (
     <div className={styles.main}>
       <h1 className={styles.h1}>Mes Reservation</h1>
-
-      {/* Si les données sont en cours de chargement, affiche un message */}
-      {loading ? (
-        <p>Chargement des réservations...</p>
-      ) : (
-        <div className={styles.container}>
-          {reservations.length > 0 ? ( // Si des réservations existent
-            reservations.map((reservation, i) => (
-              <div className={styles.annonceContainer} key={i}>
-                <div className={styles.card}>
-                  <img
-                    className={styles.imageFond}
-                    src="image/image37.png"
-                    alt="image"
-                  />
-                  <div className={styles.info}>
-                    <div className={styles.infoText}>
-                      <h2>{reservation.titre}</h2>
-                      <div className={styles.heureDf}>
-                        <p>Ville: {reservation.ville}</p>
-                        <p>Date: {formatDate(reservation.date)}</p>
-                      </div>
-                      <div className={styles.heureDf}>
-                        <p>Heure Debut: {reservation.heureDebut}</p>
-                        <p>Heure Fin: {reservation.heureFin}</p>
-                      </div>
-                      <div className={styles.heureDf}>
-                        <p>Personne: {reservation.personne}</p>
-                        <p>Prix: {reservation.prix}</p>
-                      </div>
+      <div className={styles.container}>
+        {reservations.length > 0 ? ( // Si des réservations existent
+          // Map sur les réservations pour afficher chaque réservation
+          reservations.map((reservation, i) => (
+            <div className={styles.annonceContainer} key={i}>
+              <div className={styles.card}>
+                <img
+                  className={styles.imageFond}
+                  src="image/image37.png"
+                  alt="image"
+                />
+                <div className={styles.info}>
+                  <div className={styles.infoText}>
+                    <h2>{reservation.titre}</h2>
+                    <div className={styles.heureDf}>
+                      <p>Ville: {reservation.ville}</p>
+                      <p>Date: {formatDate(reservation.date)}</p>
                     </div>
-                    <div className={styles.IconPl}>
-                      <FontAwesomeIcon
-                        className={styles.icon1}
-                        icon={faTrash}
-                        aria-label="Supprimer la réservation"
-                        onClick={() => handleRemoveMesAnnonce(reservation._id)} // Fonction pour supprimer la réservation
-                      />
+                    <div className={styles.heureDf}>
+                      <p>Heure Debut: {reservation.heureDebut}</p>
+                      <p>Heure Fin: {reservation.heureFin}</p>
+                    </div>
+                    <div className={styles.heureDf}>
+                      <p>Personne: {reservation.personne}</p>
+                      <p>Prix: {reservation.prix}</p>
                     </div>
                   </div>
+                  <div className={styles.IconPl}>
+                    <FontAwesomeIcon
+                      className={styles.icon1}
+                      icon={faTrash}
+                      onClick={() => handleRemoveMesAnnonce(reservation._id)} // Fonction pour supprimer la réservation
+                    />
+                  </div>
                 </div>
-                <div className={styles.cardScroll}></div>
               </div>
-            ))
-          ) : (
-            <div className={styles.p}>
-              <p>Aucun reservation trouvé</p>
+              <div className={styles.cardScroll}></div>
             </div>
-          )}
-        </div>
-      )}
+          ))
+        ) : (
+          <div className={styles.p}>
+            <p>Aucun reservation trouvé</p>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

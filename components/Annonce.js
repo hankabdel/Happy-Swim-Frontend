@@ -59,6 +59,7 @@ const Annonce = (props) => {
         }
       }
     };
+
     fetchAnnonces();
   }, [user]);
 
@@ -73,31 +74,17 @@ const Annonce = (props) => {
   };
 
   // Enregistrement d'une réservation
-  const handleRegisterReservation = async (reservationData) => {
-    try {
-      const response = await fetch(
-        "http://localhost:3000/reservations/addReservation",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${user.token}`,
-          },
-          body: JSON.stringify(reservationData), // Conversion en JSON ici
-        }
-      );
-
-      if (!response.ok) {
-        const errorText = await response.text();
-        console.error("Erreur lors de la réservation:", errorText);
-        throw new Error(`Erreur: ${response.status} - ${response.statusText}`);
-      }
-
-      const data = await response.json();
-      console.log("Réservation réussie:", data);
-    } catch (error) {
-      console.error("Erreur lors de la réservation:", error.message);
-    }
+  const handleRegisterReservation = () => {
+    onRegisterReservation({
+      titre: selectedAnnonce.titre,
+      date: date,
+      heureDebut: startTime,
+      heureFin: endTime,
+      personne: personne,
+      ville: selectedAnnonce.ville,
+      prix: price,
+      annonceId: selectedAnnonce._id,
+    });
     setIsReservationModalOpen(false); // Fermeture de la modal de réservation
   };
 
@@ -144,8 +131,8 @@ const Annonce = (props) => {
   };
 
   // Calcul du prix total
-  const calculateTotalPrice = () => {
-    const total = price * personne;
+  const calculateTotalPrice = (pricePerPerson, numPeople) => {
+    const total = pricePerPerson * numPeople;
     setTotalPrice(total);
   };
 
@@ -153,9 +140,9 @@ const Annonce = (props) => {
   useEffect(() => {
     if (selectedAnnonce) {
       setPrice(selectedAnnonce.prix);
+      calculateTotalPrice(selectedAnnonce.prix, personne);
     }
-    calculateTotalPrice(); // Recalcul du total
-  }, [selectedAnnonce, personne, price]);
+  }, [selectedAnnonce]);
 
   // Gestion de l'ouverture de la modal principale
   const handleOpenMainModal = (annonce) => {
@@ -167,7 +154,6 @@ const Annonce = (props) => {
   const handleCloseMainModal = () => {
     setSelectedAnnonce(null); // Réinitialiser l'annonce sélectionnée
     setIsMainModalOpen(false); // Fermer la modal principale
-    setPersonne(1); // Réinitialiser le nombre de personnes à 1
   };
 
   // Gestion de l'ouverture de la modal de réservation
@@ -178,7 +164,6 @@ const Annonce = (props) => {
   // Gestion de la fermeture de la modal de réservation
   const handleCloseReservationModal = () => {
     setIsReservationModalOpen(false);
-    setPersonne(1); // Réinitialiser le nombre de personnes à 1 lorsqu'on ferme la modal de réservation
   };
 
   // Rendu du composant
