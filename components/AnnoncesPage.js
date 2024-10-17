@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import Annonce from "../components/Annonce";
-import { backendURL } from "../public/URLs";
 
 const AnnoncesPage = () => {
   // État pour les favoris et l'utilisateur
   const [favoris, setFavoris] = useState([]);
   const [user, setUser] = useState({ token: "token" });
+  const backendURL = process.env.REACT_APP_BACKEND_URL;
 
   // Fonction pour gérer l'ajout et la suppression des favoris
   const handleToggleFavori = (annonce) => {

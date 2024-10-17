@@ -4,7 +4,6 @@ import { useSelector, useDispatch } from "react-redux"; // Importe les hooks use
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"; // Importe FontAwesomeIcon pour utiliser des icônes
 import { faTrash } from "@fortawesome/free-solid-svg-icons"; // Importe l'icône faTrash de FontAwesome
 import { removeAnnonce } from "../reducers/annonce"; // Importe l'action removeAnnonce depuis le reducer annonce
-import { backendURL } from "../public/URLs";
 
 // Définit et exporte le composant fonctionnel MesAnnonce
 export default function MesAnnonce() {
@@ -12,6 +11,7 @@ export default function MesAnnonce() {
   const user = useSelector((state) => state.user.value); // Récupère la valeur de l'utilisateur depuis le state Redux
   const annonceReducer = useSelector((state) => state.annonce.value); // Récupère la valeur des annonces depuis le state Redux
   const dispatch = useDispatch(); // Initialise useDispatch pour envoyer des actions Redux
+  const backendURL = process.env.REACT_APP_BACKEND_URL;
 
   // Utilise useEffect pour effectuer des effets de bord
   useEffect(() => {

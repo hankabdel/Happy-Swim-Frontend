@@ -3,12 +3,12 @@ import React, { useEffect, useState } from "react"; // Importe React et les hook
 import { useSelector } from "react-redux"; // Importe le hook useSelector de react-redux pour accéder au state Redux
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"; // Importe FontAwesomeIcon pour afficher les icônes
 import { faTrash } from "@fortawesome/free-solid-svg-icons"; // Importe l'icône de la corbeille de FontAwesome
-import { backendURL } from "../public/URLs";
 
 // Définit le composant fonctionnel MesReservations
 export default function MesReservations() {
   const [reservations, setReservations] = useState([]); // Initialise l'état pour stocker les réservations
   const user = useSelector((state) => state.user.value); // Récupère les informations de l'utilisateur depuis le state Redux
+  const backendURL = process.env.REACT_APP_BACKEND_URL;
 
   // Utilise useEffect pour effectuer une action après le rendu du composant
   useEffect(() => {

@@ -6,7 +6,6 @@ import { faHeart } from "@fortawesome/free-solid-svg-icons"; // Importation de l
 import Modal from "react-modal"; // Importation du composant Modal
 import { useDispatch, useSelector } from "react-redux"; // Importation des hooks Redux
 import { addMesFavoris, removeMesFavoris } from "../reducers/mesFavoris"; // Importation des actions Redux
-import { backendURL } from "../public/URLs";
 
 // Définition du composant fonctionnel Annonce
 const Annonce = (props) => {
@@ -32,6 +31,7 @@ const Annonce = (props) => {
   const [endTime, setEndTime] = useState("21:00");
   const [price, setPrice] = useState(0);
   const [totalPrice, setTotalPrice] = useState(0);
+  const backendURL = process.env.REACT_APP_BACKEND_URL;
 
   // Utilisation de useEffect pour récupérer les annonces lorsque le composant est monté
   useEffect(() => {
@@ -39,7 +39,7 @@ const Annonce = (props) => {
       if (user && user.token) {
         try {
           const response = await fetch(
-            // ecoverAnnonces
+            // recoverAnnonces
             `${backendURL}/annonces`,
             {
               method: "GET",
