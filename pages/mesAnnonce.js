@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from "react-redux"; // Importe les hooks use
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"; // Importe FontAwesomeIcon pour utiliser des icônes
 import { faTrash } from "@fortawesome/free-solid-svg-icons"; // Importe l'icône faTrash de FontAwesome
 import { removeAnnonce } from "../reducers/annonce"; // Importe l'action removeAnnonce depuis le reducer annonce
+import { backendURL } from "../public/URLs";
 
 // Définit et exporte le composant fonctionnel MesAnnonce
 export default function MesAnnonce() {
@@ -16,7 +17,9 @@ export default function MesAnnonce() {
   useEffect(() => {
     // Si l'utilisateur est connecté (token présent)
     if (user.token) {
-      fetch("http://localhost:3000/annonces/mesAnnonces", {
+      // mesAnnonces
+
+      fetch(`${backendURL}/annonces`, {
         method: "GET", // Méthode HTTP GET
         headers: {
           "Content-Type": "application/json", // En-tête pour indiquer le type de contenu
@@ -46,7 +49,9 @@ export default function MesAnnonce() {
 
   // Fonction pour gérer la suppression d'une annonce
   const handleRemoveMesAnnonce = (annonceId) => {
-    fetch(`http://localhost:3000/annonces/deleteAnnonces/${annonceId}`, {
+    // `http://localhost:3000/annonces/deleteAnnonces/${annonceId}`
+
+    fetch(`${backendURL}/annonces/${annonceId}`, {
       method: "DELETE", // Méthode HTTP DELETE
       headers: {
         "Content-Type": "application/json", // En-tête pour indiquer le type de contenu

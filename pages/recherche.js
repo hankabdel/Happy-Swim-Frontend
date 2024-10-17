@@ -2,6 +2,7 @@ import styles from "../styles/Recherche.module.css";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addMesRecherche, resetMesRecherche } from "../reducers/mesRecherche";
+import { backendURL } from "../public/URLs";
 
 export default function Search() {
   const [ville, setVille] = useState("");
@@ -20,7 +21,8 @@ export default function Search() {
 
     try {
       const response = await fetch(
-        `http://localhost:3000/annonces/searchAnnonces?ville=${ville}`
+        // `http://localhost:3000/annonces/searchAnnonces?ville=${ville}`
+        `${backendURL}/annonces/searchAnnonces?ville=${ville}`
       );
 
       if (!response.ok) {

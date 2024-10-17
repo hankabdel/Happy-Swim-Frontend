@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Annonce from "../components/Annonce";
+import { backendURL } from "../public/URLs";
 
 const AnnoncesPage = () => {
   // État pour les favoris et l'utilisateur
@@ -21,7 +22,8 @@ const AnnoncesPage = () => {
 
   // Fonction pour gérer l'enregistrement des réservations
   const handleRegisterReservation = (reservationData) => {
-    fetch("http://localhost:3000/reservations/addReservation", {
+    // addReservation
+    fetch(`${backendURL}/reservations/`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

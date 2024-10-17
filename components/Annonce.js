@@ -6,6 +6,7 @@ import { faHeart } from "@fortawesome/free-solid-svg-icons"; // Importation de l
 import Modal from "react-modal"; // Importation du composant Modal
 import { useDispatch, useSelector } from "react-redux"; // Importation des hooks Redux
 import { addMesFavoris, removeMesFavoris } from "../reducers/mesFavoris"; // Importation des actions Redux
+import { backendURL } from "../public/URLs";
 
 // Définition du composant fonctionnel Annonce
 const Annonce = (props) => {
@@ -38,7 +39,8 @@ const Annonce = (props) => {
       if (user && user.token) {
         try {
           const response = await fetch(
-            "http://localhost:3000/annonces/recoverAnnonces",
+            // ecoverAnnonces
+            `${backendURL}/annonces`,
             {
               method: "GET",
               headers: {

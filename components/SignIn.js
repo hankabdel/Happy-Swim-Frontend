@@ -4,6 +4,7 @@ import { useRouter } from "next/router"; // Importe le hook useRouter de Next.js
 import Modal from "react-modal"; // Importe la bibliothèque react-modal pour les modales
 import { login } from "../reducers/user"; // Importe l'action login depuis le reducer user
 import { useDispatch, useSelector } from "react-redux"; // Importe les hooks useDispatch et useSelector de react-redux
+import { backendURL } from "../public/URLs";
 
 export default function SignIn() {
   const dispatch = useDispatch(); // Initialise useDispatch pour envoyer des actions Redux
@@ -30,7 +31,8 @@ export default function SignIn() {
     setLoading(true); // Active le loader pendant la connexion
     setError(null); // Réinitialise les erreurs avant la nouvelle tentative de connexion
 
-    fetch("http://localhost:3000/users/signin", {
+    // signin
+    fetch(`${backendURL}/users/signin`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email: emailIn, password: passwordIn }),

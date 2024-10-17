@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react"; // Importe React et les hook
 import { useSelector } from "react-redux"; // Importe le hook useSelector de react-redux pour accéder au state Redux
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"; // Importe FontAwesomeIcon pour afficher les icônes
 import { faTrash } from "@fortawesome/free-solid-svg-icons"; // Importe l'icône de la corbeille de FontAwesome
+import { backendURL } from "../public/URLs";
 
 // Définit le composant fonctionnel MesReservations
 export default function MesReservations() {
@@ -44,7 +45,8 @@ export default function MesReservations() {
 
   const handleRemoveMesAnnonce = (reservationId) => {
     // Envoi d'une requête DELETE à l'API pour supprimer la réservation avec l'ID donné
-    fetch(`http://localhost:3000/reservations/${reservationId}`, {
+    // `http://localhost:3000/reservations/${reservationId}`
+    fetch(`${backendURL}/annonces/${reservationId}`, {
       method: "DELETE", // Spécifie la méthode HTTP DELETE pour supprimer la réservation
       headers: {
         "Content-Type": "application/json", // Indique que le contenu de la requête est en JSON
