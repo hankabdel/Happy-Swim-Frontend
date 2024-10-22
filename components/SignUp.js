@@ -49,16 +49,21 @@ export default function SignUp() {
     }
 
     // Envoie une requête POST à l'API pour créer un nouvel utilisateur
-    fetch(`${backendURL}/users/signup`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        prenom: prenomUp,
-        nom: nomUp,
-        email: emailUp,
-        password: passwordUp,
-      }),
-    })
+    fetch(
+      "http://localhost:3000/users/signup",
+
+      // `${backendURL}/users/signup`
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          prenom: prenomUp,
+          nom: nomUp,
+          email: emailUp,
+          password: passwordUp,
+        }),
+      }
+    )
       .then((response) => response.json()) // Convertit la réponse en JSON
       .then((data) => {
         setLoading(false); // Désactive le loader après la réponse

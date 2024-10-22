@@ -31,7 +31,7 @@ const Annonce = (props) => {
   const [endTime, setEndTime] = useState("21:00");
   const [price, setPrice] = useState(0);
   const [totalPrice, setTotalPrice] = useState(0);
-  const backendURL = process.env.REACT_APP_BACKEND_URL;
+  // const backendURL = process.env.REACT_APP_BACKEND_URL;
 
   // Utilisation de useEffect pour récupérer les annonces lorsque le composant est monté
   useEffect(() => {
@@ -39,8 +39,8 @@ const Annonce = (props) => {
       if (user && user.token) {
         try {
           const response = await fetch(
-            // recoverAnnonces
-            `${backendURL}/annonces`,
+            "http://localhost:3000/annonces",
+            // `${backendURL}/annonces`,
             {
               method: "GET",
               headers: {
@@ -63,7 +63,7 @@ const Annonce = (props) => {
     };
 
     fetchAnnonces();
-  }, [user]);
+  }, [user.token]);
 
   // Gestion de l'ajout et de la suppression des favoris via Redux
   const handleToggleFavori = (annonce) => {
@@ -77,17 +77,21 @@ const Annonce = (props) => {
 
   // Enregistrement d'une réservation
   const handleRegisterReservation = () => {
-    onRegisterReservation({
-      titre: selectedAnnonce.titre,
-      date: date,
-      heureDebut: startTime,
-      heureFin: endTime,
-      personne: personne,
-      ville: selectedAnnonce.ville,
-      prix: price,
-      annonceId: selectedAnnonce._id,
-    });
-    setIsReservationModalOpen(false); // Fermeture de la modal de réservation
+    if (date && startTime && endTime) {
+      onRegisterReservation({
+        titre: selectedAnnonce.titre,
+        date: date,
+        heureDebut: startTime,
+        heureFin: endTime,
+        personne: personne,
+        ville: selectedAnnonce.ville,
+        prix: price,
+        annonceId: selectedAnnonce._id,
+      });
+      setIsReservationModalOpen(false);
+    } else {
+      console.error("Veuillez remplir tous les champs nécessaires.");
+    }
   };
 
   // Styles personnalisés pour les modales

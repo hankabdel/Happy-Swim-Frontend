@@ -8,24 +8,27 @@ import { removeAnnonce } from "../reducers/annonce"; // Importe l'action removeA
 // Définit et exporte le composant fonctionnel MesAnnonce
 export default function MesAnnonce() {
   const [mesAnnonce, setMesAnnonce] = useState([]); // Déclare et initialise l'état pour stocker les annonces
+  const [annonceIdToRemove, setAnnonceIdToRemove] = useState(null); // Nouvel état pour l'ID de l'annonce à supprimer
   const user = useSelector((state) => state.user.value); // Récupère la valeur de l'utilisateur depuis le state Redux
   const annonceReducer = useSelector((state) => state.annonce.value); // Récupère la valeur des annonces depuis le state Redux
   const dispatch = useDispatch(); // Initialise useDispatch pour envoyer des actions Redux
-  const backendURL = process.env.REACT_APP_BACKEND_URL;
+  // const backendURL = process.env.REACT_APP_BACKEND_URL;
 
   // Utilise useEffect pour effectuer des effets de bord
   useEffect(() => {
     // Si l'utilisateur est connecté (token présent)
     if (user.token) {
-      // mesAnnonces
-
-      fetch(`${backendURL}/annonces`, {
-        method: "GET", // Méthode HTTP GET
-        headers: {
-          "Content-Type": "application/json", // En-tête pour indiquer le type de contenu
-          Authorization: `Bearer ${user.token}`, // En-tête d'autorisation avec le token de l'utilisateur
-        },
-      })
+      fetch(
+        "http://localhost:3000/annonces/mesAnnonces",
+        // `${backendURL}/annonces`
+        {
+          method: "GET", // Méthode HTTP GET
+          headers: {
+            "Content-Type": "application/json", // En-tête pour indiquer le type de contenu
+            Authorization: `Bearer ${user.token}`, // En-tête d'autorisation avec le token de l'utilisateur
+          },
+        }
+      )
         .then((response) => {
           // Vérifie si la réponse est invalide
           if (!response) {
@@ -48,37 +51,47 @@ export default function MesAnnonce() {
   }, [user.token]); // Dépendance sur user.token pour exécuter l'effet lors de la connexion de l'utilisateur
 
   // Fonction pour gérer la suppression d'une annonce
-  const handleRemoveMesAnnonce = (annonceId) => {
-    // `http://localhost:3000/annonces/deleteAnnonces/${annonceId}`
-
-    fetch(`${backendURL}/annonces/${annonceId}`, {
-      method: "DELETE", // Méthode HTTP DELETE
-      headers: {
-        "Content-Type": "application/json", // En-tête pour indiquer le type de contenu
-        Authorization: `Bearer ${user.token}`, // En-tête d'autorisation avec le token de l'utilisateur
-      },
-    })
-      .then((response) => response.json()) // Convertit la réponse en JSON
-      .then((data) => {
-        // Si la suppression est réussie
-        if (data.result) {
-          dispatch(removeAnnonce({ _id: annonceId })); // Envoie l'action removeAnnonce avec l'ID de l'annonce supprimée
-          setMesAnnonce((prevData) =>
-            prevData.filter((annonce) => annonce._id !== annonceId)
-          ); // Met à jour l'état mesAnnonce en filtrant l'annonce supprimée
-        }
+  useEffect(() => {
+    if (annonceIdToRemove) {
+      fetch(`http://localhost:3000/annonces/`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user.token}`,
+        },
+        body: JSON.stringify({ annonceId: annonceIdToRemove }), // Envoie de l'ID de l'annonce à supprimer
       })
-      .catch((error) => {
-        console.error("Erreur lors de la suppression de l'annonce :", error);
-      });
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.result) {
+            dispatch(removeAnnonce({ _id: annonceIdToRemove })); // Supprime l'annonce dans le store Redux
+            setMesAnnonce((prevData) =>
+              prevData.filter((annonce) => annonce._id !== annonceIdToRemove)
+            ); // Met à jour l'état pour retirer l'annonce supprimée
+            setAnnonceIdToRemove(null); // Réinitialise l'ID après suppression
+          } else {
+            console.error(
+              "Erreur lors de la suppression de l'annonce:",
+              data.error
+            );
+          }
+        })
+        .catch((error) => {
+          console.error("Erreur lors de la suppression de l'annonce:", error);
+        });
+    }
+  }, [annonceIdToRemove, user.token, dispatch]);
+
+  // Fonction appelée lors du clic sur l'icône pour déclencher la suppression
+  const handleClickRemove = (annonceId) => {
+    setAnnonceIdToRemove(annonceId); // Met à jour l'état pour déclencher la suppression via useEffect
   };
 
   return (
     <div className={styles.main}>
       <h1 className={styles.h1}>Mes Annonces</h1>
       <div className={styles.container}>
-        {mesAnnonce.length > 0 ? ( // Si des annonces existent
-          // Map sur mesAnnonce pour afficher chaque annonce
+        {mesAnnonce.length > 0 ? (
           mesAnnonce.map((e, i) => (
             <div className={styles.annonceContainer} key={i}>
               <div className={styles.card}>
@@ -95,11 +108,10 @@ export default function MesAnnonce() {
                     <p>Prix: {e.prix}</p>
                   </div>
                   <div className={styles.IconPl}>
-                    {/* Icône de suppression pour supprimer l'annonce */}
                     <FontAwesomeIcon
                       className={styles.icon1}
                       icon={faTrash}
-                      onClick={() => handleRemoveMesAnnonce(e._id)}
+                      onClick={() => handleClickRemove(e._id)} // Déclenche la suppression lors du clic
                     />
                   </div>
                 </div>

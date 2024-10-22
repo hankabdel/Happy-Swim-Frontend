@@ -5,7 +5,7 @@ const AnnoncesPage = () => {
   // État pour les favoris et l'utilisateur
   const [favoris, setFavoris] = useState([]);
   const [user, setUser] = useState({ token: "token" });
-  const backendURL = process.env.REACT_APP_BACKEND_URL;
+  // const backendURL = process.env.REACT_APP_BACKEND_URL;
 
   // Fonction pour gérer l'ajout et la suppression des favoris
   const handleToggleFavori = (annonce) => {
@@ -21,33 +21,31 @@ const AnnoncesPage = () => {
   };
 
   // Fonction pour gérer l'enregistrement des réservations
-  const handleRegisterReservation = (reservationData) => {
-    // addReservation
-    fetch(`${backendURL}/reservations/`, {
+  const handleRegisterReservation = async (reservationData) => {
+    const token = localStorage.getItem("token"); // Récupération du token stocké
+
+    if (!token) {
+      console.error("Token manquant, veuillez vous connecter.");
+      return;
+    }
+
+    const response = await fetch("http://localhost:3000/reservations", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${user.token}`, // Passe le token utilisateur
+        Authorization: `Bearer ${token}`, // Utilisation du token pour l'authentification
       },
       body: JSON.stringify(reservationData),
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Erreur lors de la réservation.");
-        }
-        return response.json();
-      })
-      .then((data) => {
-        console.log("Réservation réussie:", data);
-      })
-      .catch((error) => {
-        console.error("Erreur lors de la réservation:", error);
-      });
+    });
+
+    const data = await response.json();
+    if (!data.result) {
+      console.error("Erreur lors de la réservation:", data.error);
+    }
   };
 
   return (
     <div>
-      {/* Rendre le composant Annonce en passant les favoris, l'utilisateur et les fonctions */}
       <Annonce
         favoris={favoris}
         user={user}

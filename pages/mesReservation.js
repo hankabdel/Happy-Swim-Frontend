@@ -8,7 +8,7 @@ import { faTrash } from "@fortawesome/free-solid-svg-icons"; // Importe l'icône
 export default function MesReservations() {
   const [reservations, setReservations] = useState([]); // Initialise l'état pour stocker les réservations
   const user = useSelector((state) => state.user.value); // Récupère les informations de l'utilisateur depuis le state Redux
-  const backendURL = process.env.REACT_APP_BACKEND_URL;
+  // const backendURL = process.env.REACT_APP_BACKEND_URL;
 
   // Utilise useEffect pour effectuer une action après le rendu du composant
   useEffect(() => {
@@ -45,14 +45,17 @@ export default function MesReservations() {
 
   const handleRemoveMesAnnonce = (reservationId) => {
     // Envoi d'une requête DELETE à l'API pour supprimer la réservation avec l'ID donné
-    // `http://localhost:3000/reservations/${reservationId}`
-    fetch(`${backendURL}/annonces/${reservationId}`, {
-      method: "DELETE", // Spécifie la méthode HTTP DELETE pour supprimer la réservation
-      headers: {
-        "Content-Type": "application/json", // Indique que le contenu de la requête est en JSON
-        Authorization: `Bearer ${user.token}`, // Ajoute le token d'authentification dans les headers
-      },
-    })
+    fetch(
+      `http://localhost:3000/reservations/${reservationId}`,
+      // `${backendURL}/annonces/${reservationId}`
+      {
+        method: "DELETE", // Spécifie la méthode HTTP DELETE pour supprimer la réservation
+        headers: {
+          "Content-Type": "application/json", // Indique que le contenu de la requête est en JSON
+          Authorization: `Bearer ${user.token}`, // Ajoute le token d'authentification dans les headers
+        },
+      }
+    )
       // Traite la réponse de la requête
       .then((response) => {
         // Vérifie si la réponse est valide (status HTTP 200-299)

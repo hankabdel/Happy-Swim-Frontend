@@ -15,7 +15,7 @@ export default function SignIn() {
   const [passwordIn, setPasswordIn] = useState(""); // État pour stocker le mot de passe de l'utilisateur
   const [error, setError] = useState(null); // État pour gérer les messages d'erreur
   const [loading, setLoading] = useState(false); // État pour gérer l'affichage d'un loader pendant la connexion
-  const backendURL = process.env.REACT_APP_BACKEND_URL;
+  // const backendURL = process.env.REACT_APP_BACKEND_URL;
 
   const router = useRouter(); // Initialise useRouter pour la navigation
 
@@ -32,11 +32,16 @@ export default function SignIn() {
     setError(null); // Réinitialise les erreurs avant la nouvelle tentative de connexion
 
     // signin
-    fetch(`${backendURL}/users/signin`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email: emailIn, password: passwordIn }),
-    })
+    fetch(
+      "http://localhost:3000/users/signin",
+
+      // `${backendURL}/users/signin`
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: emailIn, password: passwordIn }),
+      }
+    )
       .then((response) => response.json())
       .then((data) => {
         if (data.result) {

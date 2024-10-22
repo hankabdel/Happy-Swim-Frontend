@@ -53,28 +53,29 @@ export default function profileInfo() {
 
   // Fonction pour ajouter une annonce
   const handleAdd = () => {
-    // "http://localhost:3000/annonces/addAnnonces"
+    fetch(
+      "http://localhost:3000/annonces",
 
-    fetch(`${backendURL}/annonces`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${user.token}`,
-      },
-      body: JSON.stringify({
-        titre: titre,
-        description: description,
-        ville: ville,
-        personne: personne,
-        prix: prix,
-      }),
-    })
+      // `${backendURL}/annonces`
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user.token}`,
+        },
+        body: JSON.stringify({
+          titre: titre,
+          description: description,
+          ville: ville,
+          personne: personne,
+          prix: prix,
+        }),
+      }
+    )
       .then((response) => response.json())
       .then((data) => {
         if (data.result) {
           dispatch(addAnnonce(data.data)); // Dispatch de l'action pour ajouter l'annonce au store
-          // console.log("-----data", data.data);
-          // Réinitialisation des champs du formulaire
           setDescription("");
           setVille("");
           setPersonne("");
@@ -86,14 +87,18 @@ export default function profileInfo() {
 
   // Fonction pour supprimer une annonce
   const handleRemove = () => {
-    // `http://localhost:3000/annonces/deleteAnnonces`
-    fetch(`${backendURL}/annonces`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${user.token}`,
-      },
-    })
+    fetch(
+      `http://localhost:3000/annonces`,
+
+      // `${backendURL}/annonces`
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user.token}`,
+        },
+      }
+    )
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
