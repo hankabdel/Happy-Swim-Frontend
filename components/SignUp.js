@@ -17,7 +17,7 @@ export default function SignUp() {
   const [emailUp, setEmailUp] = useState(""); // État pour stocker l'email de l'utilisateur
   const [error, setError] = useState(""); // État pour stocker les messages d'erreur
   const [loading, setLoading] = useState(false); // État pour afficher le loader pendant l'inscription
-  const backendURL = process.env.REACT_APP_BACKEND_URL;
+  // const backendURL = process.env.REACT_APP_BACKEND_URL;
 
   const router = useRouter(); // Initialise useRouter pour la navigation
 
@@ -116,7 +116,6 @@ export default function SignUp() {
 
   return (
     <div>
-      {/* Bouton pour ouvrir la modal */}
       <button className={styles.buttonUp} onClick={() => setIsOpen(true)}>
         s'inscrire
       </button>

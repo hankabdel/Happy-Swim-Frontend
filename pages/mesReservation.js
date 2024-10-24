@@ -6,7 +6,8 @@ import { faTrash } from "@fortawesome/free-solid-svg-icons"; // Importe l'icône
 
 // Définit le composant fonctionnel MesReservations
 export default function MesReservations() {
-  const [reservations, setReservations] = useState([]); // Initialise l'état pour stocker les réservations
+  const [reservations, setReservations] = useState([]);
+  const [deletingReservationId, setDeletingReservationId] = useState(null);
   const user = useSelector((state) => state.user.value); // Récupère les informations de l'utilisateur depuis le state Redux
   // const backendURL = process.env.REACT_APP_BACKEND_URL;
 
@@ -43,47 +44,45 @@ export default function MesReservations() {
     }
   }, [user.token]); // Déclenche useEffect lorsque le token de l'utilisateur change
 
-  const handleRemoveMesAnnonce = (reservationId) => {
-    // Envoi d'une requête DELETE à l'API pour supprimer la réservation avec l'ID donné
-    fetch(
-      `http://localhost:3000/reservations/${reservationId}`,
-      // `${backendURL}/annonces/${reservationId}`
-      {
+  useEffect(() => {
+    if (deletingReservationId) {
+      // Envoi d'une requête DELETE à l'API pour supprimer la réservation avec l'ID donné
+      fetch(`http://localhost:3000/reservations/${deletingReservationId}`, {
         method: "DELETE", // Spécifie la méthode HTTP DELETE pour supprimer la réservation
         headers: {
           "Content-Type": "application/json", // Indique que le contenu de la requête est en JSON
           Authorization: `Bearer ${user.token}`, // Ajoute le token d'authentification dans les headers
         },
-      }
-    )
-      // Traite la réponse de la requête
-      .then((response) => {
-        // Vérifie si la réponse est valide (status HTTP 200-299)
-        if (!response.ok) {
-          throw new Error("Erreur lors de la suppression"); // Lance une erreur si la réponse n'est pas valide
-        }
-        return response.json(); // Convertit la réponse en JSON
       })
-      // Traite les données JSON de la réponse
-      .then((data) => {
-        // Vérifie si la suppression a été réussie
-        if (data.result) {
-          // Met à jour l'état local des réservations en filtrant la réservation supprimée
-          setReservations((prevReservations) =>
-            prevReservations.filter(
-              (reservation) => reservation._id !== reservationId // Filtre la réservation supprimée par son ID
-            )
-          );
-        } else {
-          console.error("Erreur de suppression:", data.error);
-        }
-      })
-      // Capture et affiche les erreurs en cas de problème lors de la requête
-      .catch((error) => {
-        console.error("Erreur lors de la suppression:", error);
-      });
-  };
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Erreur lors de la suppression");
+          }
+          return response.json();
+        })
+        .then((data) => {
+          if (data.result) {
+            // Met à jour l'état local des réservations en filtrant la réservation supprimée
+            setReservations((prevReservations) =>
+              prevReservations.filter(
+                (reservation) => reservation._id !== deletingReservationId
+              )
+            );
+            setDeletingReservationId(null); // Réinitialiser l'ID de la réservation en cours de suppression
+            setIsDeleting(false); // Réinitialiser l'état de suppression
+          } else {
+            console.error("Erreur de suppression:", data.error);
+          }
+        })
+        .catch((error) => {
+          console.error("Erreur lors de la suppression:", error);
+        });
+    }
+  }, [deletingReservationId, user.token]);
 
+  const handleRemoveMesAnnonce = (reservationId) => {
+    setDeletingReservationId(reservationId); // Définir l'ID de la réservation en cours de suppression
+  };
   // Fonction pour formater la date
   const formatDate = (dateString) => {
     const options = { day: "2-digit", month: "2-digit", year: "numeric" }; // Options de formatage pour la date
@@ -97,7 +96,11 @@ export default function MesReservations() {
         {reservations.length > 0 ? ( // Si des réservations existent
           // Map sur les réservations pour afficher chaque réservation
           reservations.map((reservation, i) => (
-            <div className={styles.annonceContainer} key={i}>
+            <div
+              className={styles.annonceContainer} // Suppression de la classe flip-out
+              key={i}
+            >
+              {" "}
               <div className={styles.card}>
                 <img
                   className={styles.imageFond}
@@ -124,7 +127,7 @@ export default function MesReservations() {
                     <FontAwesomeIcon
                       className={styles.icon1}
                       icon={faTrash}
-                      onClick={() => handleRemoveMesAnnonce(reservation._id)} // Fonction pour supprimer la réservation
+                      onClick={() => handleRemoveMesAnnonce(reservation._id)} // Gestion de la suppression de la réservation
                     />
                   </div>
                 </div>

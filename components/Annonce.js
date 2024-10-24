@@ -13,17 +13,13 @@ const Annonce = (props) => {
   const [isMainModalOpen, setIsMainModalOpen] = useState(false);
   const [isReservationModalOpen, setIsReservationModalOpen] = useState(false);
   const [selectedAnnonce, setSelectedAnnonce] = useState(null);
-
   // État pour stocker les données des annonces récupérées du backend
   const [annonceData, setAnnonceData] = useState([]);
-
   // Récupération des données et actions via les props
   const { user, onRegisterReservation } = props;
-
   // Gestion des favoris avec Redux
   const dispatch = useDispatch();
   const favoris = useSelector((state) => state.mesFavoris.value); // Récupère les favoris depuis Redux
-
   // États pour les détails de la réservation
   const [date, setDate] = useState("");
   const [personne, setPersonne] = useState(1);
