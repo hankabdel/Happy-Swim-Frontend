@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Annonce from "../components/Annonce";
+import { backendURL } from "../public/URLs";
 
 const AnnoncesPage = () => {
   // État pour les favoris et l'utilisateur
@@ -30,14 +31,18 @@ const AnnoncesPage = () => {
     }
 
     try {
-      const response = await fetch("http://localhost:3000/reservations", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`, // Utilisation du token pour l'authentification
-        },
-        body: JSON.stringify(reservationData),
-      });
+      const response = await fetch(
+        `${backendURL}/reservations/`,
+        // "http://localhost:3000/reservations",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`, // Utilisation du token pour l'authentification
+          },
+          body: JSON.stringify(reservationData),
+        }
+      );
 
       const data = await response.json();
       if (!data.result) {

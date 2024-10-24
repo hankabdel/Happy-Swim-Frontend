@@ -9,6 +9,7 @@ import {
 } from "../reducers/annonce"; // Importation des actions Redux pour gérer les annonces
 import { logout } from "../reducers/user"; // Importation de l'action Redux pour déconnecter l'utilisateur
 import Link from "next/link"; // Importation du composant Link de Next.js pour la navigation entre les pages
+import { backendURL } from "../public/URLs";
 
 // Déclaration du composant ProfileInfo
 export default function profileInfo() {
@@ -25,7 +26,6 @@ export default function profileInfo() {
   const [titre, setTitre] = useState("");
   const [description, setDescription] = useState("");
   const [image, setImage] = useState(null);
-  const backendURL = process.env.REACT_APP_BACKEND_URL;
 
   // Styles personnalisés pour la modal
   const customStyles = {
@@ -54,9 +54,8 @@ export default function profileInfo() {
   // Fonction pour ajouter une annonce
   const handleAdd = () => {
     fetch(
-      "http://localhost:3000/annonces",
-
-      // `${backendURL}/annonces`
+      `${backendURL}/annonces/`,
+      // "http://localhost:3000/annonces",
       {
         method: "POST",
         headers: {
@@ -88,9 +87,8 @@ export default function profileInfo() {
   // Fonction pour supprimer une annonce
   const handleRemove = () => {
     fetch(
-      `http://localhost:3000/annonces`,
-
-      // `${backendURL}/annonces`
+      `${backendURL}/annonces`,
+      // `http://localhost:3000/annonces`,
       {
         method: "DELETE",
         headers: {

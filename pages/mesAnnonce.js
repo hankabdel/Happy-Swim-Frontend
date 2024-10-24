@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from "react-redux"; // Importe les hooks use
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"; // Importe FontAwesomeIcon pour utiliser des icônes
 import { faTrash } from "@fortawesome/free-solid-svg-icons"; // Importe l'icône faTrash de FontAwesome
 import { removeAnnonce } from "../reducers/annonce"; // Importe l'action removeAnnonce depuis le reducer annonce
+import { backendURL } from "../public/URLs";
 
 // Définit et exporte le composant fonctionnel MesAnnonce
 export default function MesAnnonce() {
@@ -12,15 +13,13 @@ export default function MesAnnonce() {
   const user = useSelector((state) => state.user.value); // Récupère la valeur de l'utilisateur depuis le state Redux
   const annonceReducer = useSelector((state) => state.annonce.value); // Récupère la valeur des annonces depuis le state Redux
   const dispatch = useDispatch(); // Initialise useDispatch pour envoyer des actions Redux
-  // const backendURL = process.env.REACT_APP_BACKEND_URL;
-
   // Utilise useEffect pour effectuer des effets de bord
   useEffect(() => {
     // Si l'utilisateur est connecté (token présent)
     if (user.token) {
       fetch(
-        "http://localhost:3000/annonces/mesAnnonces",
-        // `${backendURL}/annonces`
+        `${backendURL}/annonces/mesAnnonces`,
+        // "http://localhost:3000/annonces/mesAnnonces",
         {
           method: "GET", // Méthode HTTP GET
           headers: {
@@ -53,14 +52,18 @@ export default function MesAnnonce() {
   // Fonction pour gérer la suppression d'une annonce
   useEffect(() => {
     if (annonceIdToRemove) {
-      fetch(`http://localhost:3000/annonces/`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${user.token}`,
-        },
-        body: JSON.stringify({ annonceId: annonceIdToRemove }), // Envoie de l'ID de l'annonce à supprimer
-      })
+      fetch(
+        `${backendURL}/annonces`,
+        // `http://localhost:3000/annonces/`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${user.token}`,
+          },
+          body: JSON.stringify({ annonceId: annonceIdToRemove }), // Envoie de l'ID de l'annonce à supprimer
+        }
+      )
         .then((response) => response.json())
         .then((data) => {
           if (data.result) {

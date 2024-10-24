@@ -3,26 +3,30 @@ import React, { useEffect, useState } from "react"; // Importe React et les hook
 import { useSelector } from "react-redux"; // Importe le hook useSelector de react-redux pour accéder au state Redux
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"; // Importe FontAwesomeIcon pour afficher les icônes
 import { faTrash } from "@fortawesome/free-solid-svg-icons"; // Importe l'icône de la corbeille de FontAwesome
+import { backendURL } from "../public/URLs";
 
 // Définit le composant fonctionnel MesReservations
 export default function MesReservations() {
   const [reservations, setReservations] = useState([]);
   const [deletingReservationId, setDeletingReservationId] = useState(null);
   const user = useSelector((state) => state.user.value); // Récupère les informations de l'utilisateur depuis le state Redux
-  // const backendURL = process.env.REACT_APP_BACKEND_URL;
 
   // Utilise useEffect pour effectuer une action après le rendu du composant
   useEffect(() => {
     // Vérifie si l'utilisateur est authentifié
     if (user.token) {
       // Fait une requête GET pour récupérer les réservations de l'utilisateur
-      fetch("http://localhost:3000/reservations/", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${user.token}`, // Ajoute le token d'authentification dans les headers
-        },
-      })
+      fetch(
+        `${backendURL}/annonces/reservations/`,
+        // "http://localhost:3000/reservations/",
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${user.token}`, // Ajoute le token d'authentification dans les headers
+          },
+        }
+      )
         .then((response) => {
           // Vérifie si la réponse est valide
           if (!response) {
@@ -47,13 +51,17 @@ export default function MesReservations() {
   useEffect(() => {
     if (deletingReservationId) {
       // Envoi d'une requête DELETE à l'API pour supprimer la réservation avec l'ID donné
-      fetch(`http://localhost:3000/reservations/${deletingReservationId}`, {
-        method: "DELETE", // Spécifie la méthode HTTP DELETE pour supprimer la réservation
-        headers: {
-          "Content-Type": "application/json", // Indique que le contenu de la requête est en JSON
-          Authorization: `Bearer ${user.token}`, // Ajoute le token d'authentification dans les headers
-        },
-      })
+      fetch(
+        `${backendURL}/annonces/reservations/${deletingReservationId}`,
+        // `http://localhost:3000/reservations/${deletingReservationId}`,
+        {
+          method: "DELETE", // Spécifie la méthode HTTP DELETE pour supprimer la réservation
+          headers: {
+            "Content-Type": "application/json", // Indique que le contenu de la requête est en JSON
+            Authorization: `Bearer ${user.token}`, // Ajoute le token d'authentification dans les headers
+          },
+        }
+      )
         .then((response) => {
           if (!response.ok) {
             throw new Error("Erreur lors de la suppression");

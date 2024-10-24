@@ -4,6 +4,7 @@ import { useRouter } from "next/router"; // Importe le hook useRouter de Next.js
 import Modal from "react-modal"; // Importe la bibliothèque react-modal pour les modales
 import { login } from "../reducers/user"; // Importe l'action login depuis le reducer user
 import { useDispatch, useSelector } from "react-redux"; // Importe les hooks useDispatch et useSelector de react-redux
+import { backendURL } from "../public/URLs";
 
 export default function SignUp() {
   const dispatch = useDispatch(); // Initialise useDispatch pour envoyer des actions Redux
@@ -17,7 +18,6 @@ export default function SignUp() {
   const [emailUp, setEmailUp] = useState(""); // État pour stocker l'email de l'utilisateur
   const [error, setError] = useState(""); // État pour stocker les messages d'erreur
   const [loading, setLoading] = useState(false); // État pour afficher le loader pendant l'inscription
-  // const backendURL = process.env.REACT_APP_BACKEND_URL;
 
   const router = useRouter(); // Initialise useRouter pour la navigation
 
@@ -50,9 +50,8 @@ export default function SignUp() {
 
     // Envoie une requête POST à l'API pour créer un nouvel utilisateur
     fetch(
-      "http://localhost:3000/users/signup",
-
-      // `${backendURL}/users/signup`
+      `${backendURL}/users/signup`,
+      // "http://localhost:3000/users/signup",
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },

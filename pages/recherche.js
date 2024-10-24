@@ -2,6 +2,7 @@ import styles from "../styles/Recherche.module.css";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addMesRecherche, resetMesRecherche } from "../reducers/mesRecherche";
+import { backendURL } from "../public/URLs";
 
 export default function Search() {
   const [ville, setVille] = useState("");
@@ -9,7 +10,6 @@ export default function Search() {
 
   const dispatch = useDispatch();
   const search = useSelector((state) => state.mesRecherche.value);
-  const backendURL = process.env.REACT_APP_BACKEND_URL;
 
   const handleSearch = async () => {
     // Vérification si la ville est vide
