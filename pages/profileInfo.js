@@ -52,45 +52,36 @@ export default function profileInfo() {
   };
 
   // Fonction pour ajouter une annonce
-  const handleAdd = async () => {
-    try {
-      const formData = new FormData();
-      formData.append("image", image);
-      formData.append("ville", ville);
-      formData.append("personne", personne);
-      formData.append("prix", prix);
-      formData.append("titre", titre);
-      formData.append("description", description);
-
-      const response = await fetch(`${backendURL}/annonces`, {
+  const handleAdd = () => {
+    fetch(
+      `${backendURL}/annonces/`,
+      // "http://localhost:3000/annonces",
+      {
         method: "POST",
-        body: formData,
         headers: {
+          "Content-Type": "application/json",
           Authorization: `Bearer ${user.token}`,
         },
-      });
-
-      const data = await response.json();
-      if (data.result) {
-        dispatch(addAnnonce(data.data)); // Dispatch de l'action pour ajouter l'annonce au store
-        setDescription("");
-        setVille("");
-        setPersonne("");
-        setPrix("");
-        setTitre("");
-        setImage(null);
-        setIsOpen(false);
-      } else {
-        console.error("Erreur lors de l'ajout de l'annonce:", data.error);
+        body: JSON.stringify({
+          titre: titre,
+          description: description,
+          ville: ville,
+          personne: personne,
+          prix: prix,
+        }),
       }
-    } catch (error) {
-      console.error("Erreur lors de l'ajout de l'annonce:", error);
-    }
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.result) {
+          dispatch(addAnnonce(data.data)); // Dispatch de l'action pour ajouter l'annonce au store
+          setDescription("");
+          setVille("");
+          setPersonne("");
+          setPrix("");
+        }
+      });
     setIsOpen(false); // Fermeture de la modal
-  };
-
-  const handleImageChange = (e) => {
-    setImage(e.target.files[0]);
   };
 
   // Fonction pour supprimer une annonce
@@ -187,7 +178,13 @@ export default function profileInfo() {
                 ></input>
                 <div className={styles.file}>
                   <label className={styles.button} for="avatar">
-                    <input type="file" onChange={handleImageChange} />
+                    <input
+                      type="file"
+                      id="avatar"
+                      name="avatar"
+                      accept="image/png, image/jpeg"
+                      onChange={(e) => setImage(e.target.files[0])}
+                    />
                   </label>
                 </div>
                 <div className={styles.buttonAjouter}>
