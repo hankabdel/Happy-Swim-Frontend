@@ -62,7 +62,7 @@ export default function profileInfo() {
       formData.append("titre", titre);
       formData.append("description", description);
 
-      const response = await fetch(`${backendURL}/api/annonces`, {
+      const response = await fetch(`${backendURL}/annonces`, {
         method: "POST",
         body: formData,
         headers: {
@@ -87,6 +87,10 @@ export default function profileInfo() {
       console.error("Erreur lors de l'ajout de l'annonce:", error);
     }
     setIsOpen(false); // Fermeture de la modal
+  };
+
+  const handleImageChange = (e) => {
+    setImage(e.target.files[0]);
   };
 
   // Fonction pour supprimer une annonce
@@ -183,13 +187,7 @@ export default function profileInfo() {
                 ></input>
                 <div className={styles.file}>
                   <label className={styles.button} for="avatar">
-                    <input
-                      type="file"
-                      name="avatar"
-                      accept="image/png, image/jpeg"
-                      value={image}
-                      onChange={(e) => setImage(e.target.files[0])}
-                    />
+                    <input type="file" onChange={handleImageChange} />
                   </label>
                 </div>
                 <div className={styles.buttonAjouter}>
