@@ -52,35 +52,40 @@ export default function profileInfo() {
   };
 
   // Fonction pour ajouter une annonce
-  const handleAdd = () => {
-    fetch(
-      `${backendURL}/annonces/`,
-      // "http://localhost:3000/annonces",
-      {
+  const handleAdd = async () => {
+    try {
+      const formData = new FormData();
+      formData.append("image", image);
+      formData.append("ville", ville);
+      formData.append("personne", personne);
+      formData.append("prix", prix);
+      formData.append("titre", titre);
+      formData.append("description", description);
+
+      const response = await fetch(`${backendURL}/api/annonces`, {
         method: "POST",
+        body: formData,
         headers: {
-          "Content-Type": "application/json",
           Authorization: `Bearer ${user.token}`,
         },
-        body: JSON.stringify({
-          titre: titre,
-          description: description,
-          ville: ville,
-          personne: personne,
-          prix: prix,
-        }),
-      }
-    )
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.result) {
-          dispatch(addAnnonce(data.data)); // Dispatch de l'action pour ajouter l'annonce au store
-          setDescription("");
-          setVille("");
-          setPersonne("");
-          setPrix("");
-        }
       });
+
+      const data = await response.json();
+      if (data.result) {
+        dispatch(addAnnonce(data.data)); // Dispatch de l'action pour ajouter l'annonce au store
+        setDescription("");
+        setVille("");
+        setPersonne("");
+        setPrix("");
+        setTitre("");
+        setImage(null);
+        setIsOpen(false);
+      } else {
+        console.error("Erreur lors de l'ajout de l'annonce:", data.error);
+      }
+    } catch (error) {
+      console.error("Erreur lors de l'ajout de l'annonce:", error);
+    }
     setIsOpen(false); // Fermeture de la modal
   };
 
@@ -180,9 +185,9 @@ export default function profileInfo() {
                   <label className={styles.button} for="avatar">
                     <input
                       type="file"
-                      id="avatar"
                       name="avatar"
                       accept="image/png, image/jpeg"
+                      value={image}
                       onChange={(e) => setImage(e.target.files[0])}
                     />
                   </label>

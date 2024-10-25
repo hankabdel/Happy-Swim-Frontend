@@ -8,7 +8,7 @@ export default function Home() {
         <div className={styles.image}>
           <img
             className={styles.imageFond}
-            src="image/image37.png"
+            src="https://res.cloudinary.com/dnr5cehaa/image/upload/v1729874685/image37_xi5sfs.png"
             alt="image"
           />
         </div>
@@ -26,7 +26,7 @@ export default function Home() {
           <div className={styles.imgDsn}>
             <img
               className={styles.imageDsn}
-              src="image/image22.jpg"
+              src="https://res.cloudinary.com/dnr5cehaa/image/upload/v1729874724/image22_elokz1.jpg"
               alt="logo"
             />
           </div>
