@@ -44,9 +44,7 @@ export default function SignIn() {
       .then((response) => response.json())
       .then((data) => {
         if (data.result) {
-          console.log("Token récupéré", data.token); // Vérifiez ici
           localStorage.setItem("token", data.token); // Stockage du token après connexion.
-          console.log("Token stocké:", localStorage.getItem("token")); // Vérifiez ici
           dispatch(
             login({
               email: data.email,
