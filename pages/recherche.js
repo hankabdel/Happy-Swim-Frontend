@@ -77,7 +77,7 @@ export default function Search() {
               <div className={styles.card}>
                 <img
                   className={styles.imageFond}
-                  src="image/image37.png"
+                  src="https://res.cloudinary.com/dnr5cehaa/image/upload/v1729874685/image37_xi5sfs.png"
                   alt="image"
                 />
                 <div className={styles.info}>
