@@ -211,7 +211,7 @@ const Annonce = (props) => {
                       <div className={styles.imageText}>
                         <img
                           className={styles.imageModal}
-                          src="image/image37.png"
+                          src="https://res.cloudinary.com/dnr5cehaa/image/upload/v1729874685/image37_xi5sfs.png"
                           alt="image"
                         />
                         <h2>{selectedAnnonce.titre}</h2>{" "}
