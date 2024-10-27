@@ -12,7 +12,7 @@ import Link from "next/link"; // Importation du composant Link de Next.js pour l
 import { backendURL } from "../public/URLs";
 
 // Déclaration du composant ProfileInfo
-export default function profileInfo() {
+export default function ProfileInfo() {
   // Accès aux valeurs de l'utilisateur et des annonces dans le store Redux
   const user = useSelector((state) => state.user.value);
   const annonceReducer = useSelector((state) => state.annonce.value);

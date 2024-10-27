@@ -9,7 +9,7 @@ import { addMesFavoris, removeMesFavoris } from "../reducers/mesFavoris"; // Imp
 import { backendURL } from "../public/URLs";
 
 // Définition du composant fonctionnel Annonce
-const Annonce = (props) => {
+const AnnonceCard = (props) => {
   // Déclaration des états pour les modales et l'annonce sélectionnée
   const [isMainModalOpen, setIsMainModalOpen] = useState(false);
   const [isReservationModalOpen, setIsReservationModalOpen] = useState(false);
@@ -340,4 +340,4 @@ const Annonce = (props) => {
   );
 };
 
-export default Annonce;
+export default AnnonceCard;
