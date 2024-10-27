@@ -1,5 +1,5 @@
 import styles from "../styles/Home.module.css";
-import AnnoncesPage from "../components/AnnoncesPage";
+import AnnoncesPage from "../pages/AnnoncesPage";
 
 export default function Home() {
   return (

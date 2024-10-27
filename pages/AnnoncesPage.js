@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Annonce from "../components/Annonce";
+import AnnonceCard from "../components/AnnonceCard";
 import { backendURL } from "../public/URLs";
 
 const AnnoncesPage = () => {
@@ -57,7 +57,7 @@ const AnnoncesPage = () => {
 
   return (
     <div>
-      <Annonce
+      <AnnonceCard
         favoris={favoris}
         user={user}
         onToggleFavori={handleToggleFavori}
