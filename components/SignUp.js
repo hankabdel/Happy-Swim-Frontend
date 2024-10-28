@@ -47,6 +47,18 @@ export default function SignUp() {
       setLoading(false); // Désactive le loader
       return;
     }
+    // Vérifie si le mot de passe est valide
+    if (
+      !String(passwordUp)
+        .toLowerCase()
+        .match(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/)
+    ) {
+      setError(
+        "Le mot de passe doit contenir au moins un numéro et un caractère spécial"
+      );
+      setLoading(false); // Désactive le loader
+      return;
+    }
 
     // Envoie une requête POST à l'API pour créer un nouvel utilisateur
     fetch(
