@@ -1,5 +1,5 @@
 // Importez la fonction à tester
-import { calculateTotalPrice } from "./components/Annonce";
+import { calculateTotalPrice } from "../components/AnnonceCard";
 
 // Test
 describe("calculateTotalPrice", () => {
