@@ -51,7 +51,7 @@ export default function SignUp() {
     if (
       !String(passwordUp)
         .toLowerCase()
-        .match(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/)
+        .match(/^(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/)
     ) {
       setError(
         "Le mot de passe doit contenir au moins un numéro et un caractère spécial"
@@ -78,15 +78,13 @@ export default function SignUp() {
       .then((response) => response.json()) // Convertit la réponse en JSON
       .then((data) => {
         setLoading(false); // Désactive le loader après la réponse
-
-        // Si l'inscription est réussie
         if (data.result) {
           dispatch(
             login({
               nom: nomUp,
               prenom: prenomUp,
               email: emailUp,
-              token: data.token,
+              token: data.user.token,
             })
           ); // Envoie l'action login avec les informations de l'utilisateur et le token
           setPrenomUp(""); // Réinitialise le prénom
@@ -95,6 +93,7 @@ export default function SignUp() {
           setEmailUp(""); // Réinitialise l'email
           setError(""); // Réinitialise les erreurs
           setIsOpen(false); // Fermer la modal après l'inscription réussie
+          router.push("/"); // Redirige vers la page d'accueil
         } else {
           setError(
             data.message || "Une erreur s'est produite. Veuillez réessayer."

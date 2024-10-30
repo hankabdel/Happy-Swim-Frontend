@@ -4,7 +4,7 @@ import React from "react";
 import SignUp from "./SignUp";
 import SignIn from "./SignIn";
 
-function Profile() {
+function AccountProfile() {
   return (
     <div className={styles.container}>
       <div className={styles.image}></div>
@@ -27,4 +27,4 @@ function Profile() {
   );
 }
 
-export default Profile;
+export default AccountProfile;

@@ -15,10 +15,9 @@ export default function Header() {
   const user = useSelector((state) => state.user.value);
 
   // Définition des liens et du texte de bienvenue en fonction de la connexion de l'utilisateur
-  const profileLink = user.token ? "/profileInfo" : "/profile";
+  const profileLink = user.token ? "/profileInfo" : "/accountProfile";
   const textBienvenue = user.token ? `Bienvenue ${user.prenom}` : "";
 
-  // Rendu du composant
   return (
     <div className={styles.main}>
       <div className={styles.header}>
