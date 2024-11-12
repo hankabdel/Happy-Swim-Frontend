@@ -34,7 +34,7 @@ const AnnonceCard = (props) => {
   // Utilisation de useEffect pour récupérer les annonces lorsque le composant est monté
   useEffect(() => {
     const fetchAnnonces = async () => {
-      if (user && user.token) {
+      if (user.token) {
         try {
           const response = await fetch(
             `${backendURL}/annonces`,
