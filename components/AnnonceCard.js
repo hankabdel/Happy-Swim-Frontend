@@ -38,9 +38,8 @@ const AnnonceCard = (props) => {
         const headers = {
           "Content-Type": "application/json",
         };
-        const token = localStorage.getItem("token"); // Récupère le token depuis localStorage
-        if (token) {
-          headers["Authorization"] = `Bearer ${token}`;
+        if (user && user.token) {
+          headers["Authorization"] = `Bearer ${user.token}`;
         }
         const response = await fetch(`${backendURL}/annonces`, {
           method: "GET",
@@ -70,7 +69,7 @@ const AnnonceCard = (props) => {
 
   // Enregistrement d'une réservation
   const handleRegisterReservation = () => {
-    if (!user || !user.token) {
+    if (!user.token) {
       alert("Vous devez être connecté pour réserver une annonce.");
       return;
     }
