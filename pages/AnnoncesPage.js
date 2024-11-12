@@ -6,14 +6,16 @@ const AnnoncesPage = () => {
   // État pour les favoris et l'utilisateur
   const [favoris, setFavoris] = useState([]);
   const [user, setUser] = useState(null); // Initialisé à null
+  const [isClient, setIsClient] = useState(false); // Vérifie si on est côté client
 
-  // Récupère le token utilisateur après le chargement côté client
+  // Vérifie si le composant est monté côté client
   useEffect(() => {
-    const token = localStorage.getItem("token"); // Récupération du token
+    setIsClient(true); // Indique qu'on est maintenant côté client
+    const token = localStorage.getItem("token"); // Récupère le token côté client
     if (token) {
-      setUser({ token }); // Mise à jour de l'état avec le token
+      setUser({ token });
     }
-  }, []); // Exécuté uniquement au premier rendu
+  }, []); // Exécuté une seule fois au montage
 
   // Fonction pour gérer l'ajout et la suppression des favoris
   const handleToggleFavori = (annonce) => {
@@ -36,18 +38,14 @@ const AnnoncesPage = () => {
     }
 
     try {
-      const response = await fetch(
-        `${backendURL}/reservations/`,
-        // "http://localhost:3000/reservations",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${user.token}`, // Utilisation du token pour l'authentification
-          },
-          body: JSON.stringify(reservationData),
-        }
-      );
+      const response = await fetch(`${backendURL}/reservations/`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user.token}`, // Utilisation du token pour l'authentification
+        },
+        body: JSON.stringify(reservationData),
+      });
 
       const data = await response.json();
       if (!data.result) {
@@ -60,18 +58,19 @@ const AnnoncesPage = () => {
     }
   };
 
+  // Empêche le rendu côté serveur en attendant l'accès au client
+  if (!isClient) {
+    return <p>Chargement...</p>;
+  }
+
   return (
     <div>
-      {user ? (
-        <AnnonceCard
-          favoris={favoris}
-          user={user}
-          onToggleFavori={handleToggleFavori}
-          onRegisterReservation={handleRegisterReservation}
-        />
-      ) : (
-        <p>Chargement des données utilisateur...</p>
-      )}
+      <AnnonceCard
+        favoris={favoris}
+        user={user}
+        onToggleFavori={handleToggleFavori}
+        onRegisterReservation={handleRegisterReservation}
+      />
     </div>
   );
 };
