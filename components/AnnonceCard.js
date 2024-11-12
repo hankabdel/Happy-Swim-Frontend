@@ -34,7 +34,7 @@ const AnnonceCard = (props) => {
   // Utilisation de useEffect pour récupérer les annonces lorsque le composant est monté
   useEffect(() => {
     const fetchAnnonces = async () => {
-      if (user && user.token) {
+      if (user || user.token) {
         try {
           const response = await fetch(
             `${backendURL}/annonces`,
@@ -59,7 +59,7 @@ const AnnonceCard = (props) => {
       }
     };
     fetchAnnonces();
-  }, [user && user.token]);
+  }, [user.token]);
 
   // Gestion de l'ajout et de la suppression des favoris via Redux
   const handleToggleFavori = (annonce) => {
