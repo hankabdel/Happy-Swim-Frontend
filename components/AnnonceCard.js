@@ -34,28 +34,24 @@ const AnnonceCard = (props) => {
   // Utilisation de useEffect pour récupérer les annonces lorsque le composant est monté
   useEffect(() => {
     const fetchAnnonces = async () => {
-      if (user || user.token) {
-        try {
-          const response = await fetch(
-            `${backendURL}/annonces`,
-            // "http://localhost:3000/annonces",
-            {
-              method: "GET",
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${user.token}`,
-              },
-            }
-          );
-          if (!response.ok) {
-            throw new Error("Erreur lors de la récupération des annonces");
-          }
-
-          const data = await response.json();
-          setAnnonceData(data.data);
-        } catch (error) {
-          console.error("Erreur lors de la récupération des annonces :", error);
+      try {
+        const headers = {
+          "Content-Type": "application/json",
+        };
+        if (user && user.token) {
+          headers["Authorization"] = `Bearer ${user.token}`;
         }
+        const response = await fetch(`${backendURL}/annonces`, {
+          method: "GET",
+          headers,
+        });
+        if (!response.ok) {
+          throw new Error("Erreur lors de la récupération des annonces");
+        }
+        const data = await response.json();
+        setAnnonceData(data.data);
+      } catch (error) {
+        console.error("Erreur lors de la récupération des annonces :", error);
       }
     };
     fetchAnnonces();
