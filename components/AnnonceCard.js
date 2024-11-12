@@ -59,7 +59,7 @@ const AnnonceCard = (props) => {
       }
     };
     fetchAnnonces();
-  }, [user && user.token]);
+  }, [user.token]);
 
   // Gestion de l'ajout et de la suppression des favoris via Redux
   const handleToggleFavori = (annonce) => {
