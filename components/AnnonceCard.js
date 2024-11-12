@@ -38,8 +38,9 @@ const AnnonceCard = (props) => {
         const headers = {
           "Content-Type": "application/json",
         };
-        if (user && user.token) {
-          headers["Authorization"] = `Bearer ${user.token}`;
+        const token = localStorage.getItem("token"); // Récupère le token depuis localStorage
+        if (token) {
+          headers["Authorization"] = `Bearer ${token}`;
         }
         const response = await fetch(`${backendURL}/annonces`, {
           method: "GET",
@@ -55,7 +56,7 @@ const AnnonceCard = (props) => {
       }
     };
     fetchAnnonces();
-  }, [user]);
+  }, [user.token]);
 
   // Gestion de l'ajout et de la suppression des favoris via Redux
   const handleToggleFavori = (annonce) => {
