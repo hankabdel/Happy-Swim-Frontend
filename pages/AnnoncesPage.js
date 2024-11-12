@@ -3,65 +3,93 @@ import AnnonceCard from "../components/AnnonceCard";
 import { backendURL } from "../public/URLs";
 
 const AnnoncesPage = () => {
-  const [favoris, setFavoris] = useState([]);
-  const [user, setUser] = useState(null); // Initialisé à null
-  const [isClient, setIsClient] = useState(false); // Vérifie si le composant est monté côté client
+  const [favoris, setFavoris] = useState([]); // Gérer les favoris localement
+  const [user, setUser] = useState(null); // Informations utilisateur
+  const [annonceData, setAnnonceData] = useState([]); // Données des annonces
 
-  // Vérifie si le composant est monté côté client et récupère le token
+  // Charger les annonces au montage du composant
   useEffect(() => {
-    setIsClient(true);
-    if (typeof window !== "undefined") {
-      const token = localStorage.getItem("token");
-      if (token) {
-        setUser({ token });
+    const fetchAnnonces = async () => {
+      try {
+        const response = await fetch(`${backendURL}/annonces`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        if (!response.ok) {
+          throw new Error("Erreur lors de la récupération des annonces");
+        }
+        const data = await response.json();
+        setAnnonceData(data.data); // Stocker les annonces dans l'état
+      } catch (error) {
+        console.error("Erreur lors de la récupération des annonces :", error);
       }
+    };
+    fetchAnnonces();
+  }, []);
+
+  // Récupérer l'utilisateur (s'il est connecté) après le montage
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      setUser({ token });
     }
   }, []);
 
+  // Gestion des favoris
   const handleToggleFavori = (annonce) => {
     const isFavori = favoris.some((e) => e._id === annonce._id);
+
     if (!isFavori) {
-      setFavoris([...favoris, annonce]);
+      setFavoris([...favoris, annonce]); // Ajouter aux favoris
     } else {
-      setFavoris(favoris.filter((e) => e._id !== annonce._id));
+      setFavoris(favoris.filter((e) => e._id !== annonce._id)); // Supprimer des favoris
     }
   };
 
-  const handleRegisterReservation = async (reservationData) => {
+  // Gestion de la réservation
+  const handleRegisterReservation = (reservationData) => {
     if (!user || !user.token) {
-      console.error("Token manquant. Veuillez vous connecter.");
-      return;
+      alert("Vous devez être connecté pour réserver une annonce !");
+      return; // Arrêter si l'utilisateur n'est pas connecté
     }
-    try {
-      const response = await fetch(`${backendURL}/reservations/`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${user.token}`,
-        },
-        body: JSON.stringify(reservationData),
-      });
 
-      const data = await response.json();
-      if (!data.result) {
-        console.error("Erreur de réservation :", data.error);
-      } else {
-        console.log("Réservation réussie :", data);
+    const registerReservation = async () => {
+      try {
+        const response = await fetch(
+          `${backendURL}/reservations/`,
+          // "http://localhost:3000/reservations",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${user.token}`,
+            },
+            body: JSON.stringify(reservationData),
+          }
+        );
+
+        const data = await response.json();
+        if (!data.result) {
+          console.error("Erreur de réservation :", data.error);
+        } else {
+          alert("Réservation réussie !");
+        }
+      } catch (error) {
+        console.error("Erreur lors de la réservation :", error);
       }
-    } catch (error) {
-      console.error("Erreur réseau ou autre :", error);
-    }
-  };
+    };
 
-  if (!isClient) {
-    return <p>Chargement...</p>;
-  }
+    registerReservation();
+  };
 
   return (
     <div>
       <AnnonceCard
+        annonces={annonceData} // Passer les annonces récupérées
         favoris={favoris}
-        user={user || { token: null }}
+        user={user}
         onToggleFavori={handleToggleFavori}
         onRegisterReservation={handleRegisterReservation}
       />
