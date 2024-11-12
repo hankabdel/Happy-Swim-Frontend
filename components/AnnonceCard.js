@@ -55,7 +55,7 @@ const AnnonceCard = (props) => {
       }
     };
     fetchAnnonces();
-  }, [user.token]);
+  }, [user]);
 
   // Gestion de l'ajout et de la suppression des favoris via Redux
   const handleToggleFavori = (annonce) => {
@@ -69,6 +69,10 @@ const AnnonceCard = (props) => {
 
   // Enregistrement d'une réservation
   const handleRegisterReservation = () => {
+    if (!user || !user.token) {
+      alert("Vous devez être connecté pour réserver une annonce.");
+      return;
+    }
     if (date && startTime && endTime) {
       onRegisterReservation({
         titre: reservationAnnonce.titre,
