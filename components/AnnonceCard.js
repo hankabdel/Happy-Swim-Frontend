@@ -69,7 +69,7 @@ const AnnonceCard = (props) => {
 
   // Enregistrement d'une réservation
   const handleRegisterReservation = () => {
-    if (!user.token) {
+    if (!user && !user.token) {
       alert("Vous devez être connecté pour réserver une annonce.");
       return;
     }
