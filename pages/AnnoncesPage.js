@@ -11,7 +11,8 @@ const AnnoncesPage = () => {
   // Vérifie si le composant est monté côté client
   useEffect(() => {
     setIsClient(true); // Indique qu'on est maintenant côté client
-    const token = localStorage.getItem("token"); // Récupère le token côté client
+    const token =
+      typeof window !== "undefined" ? localStorage.getItem("token") : null; // Récupère le token côté client
     if (token) {
       setUser({ token });
     }
@@ -67,7 +68,7 @@ const AnnoncesPage = () => {
     <div>
       <AnnonceCard
         favoris={favoris}
-        user={user}
+        user={user || { token: null }} // Fournit un user par défaut si nécessaire
         onToggleFavori={handleToggleFavori}
         onRegisterReservation={handleRegisterReservation}
       />
