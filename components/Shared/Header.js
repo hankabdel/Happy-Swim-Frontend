@@ -1,4 +1,4 @@
-import styles from "../styles/Header.module.css"; // Importation des styles CSS pour ce composant
+import styles from "/styles/Header.module.css"; // Importation des styles CSS pour ce composant
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"; // Importation du composant FontAwesomeIcon pour les icônes
 import {
   faUser,

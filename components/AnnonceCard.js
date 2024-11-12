@@ -14,8 +14,10 @@ const AnnonceCard = (props) => {
   const [isMainModalOpen, setIsMainModalOpen] = useState(false);
   const [isReservationModalOpen, setIsReservationModalOpen] = useState(false);
   const [selectedAnnonce, setSelectedAnnonce] = useState(null);
+  const [reservationAnnonce, setReservationAnnonce] = useState([]);
   // État pour stocker les données des annonces récupérées du backend
   const [annonceData, setAnnonceData] = useState([]);
+
   // Récupération des données et actions via les props
   const { user, onRegisterReservation } = props;
   // Gestion des favoris avec Redux
@@ -45,7 +47,6 @@ const AnnonceCard = (props) => {
               },
             }
           );
-
           if (!response.ok) {
             throw new Error("Erreur lors de la récupération des annonces");
           }
@@ -57,7 +58,6 @@ const AnnonceCard = (props) => {
         }
       }
     };
-
     fetchAnnonces();
   }, [user.token]);
 
@@ -75,16 +75,17 @@ const AnnonceCard = (props) => {
   const handleRegisterReservation = () => {
     if (date && startTime && endTime) {
       onRegisterReservation({
-        titre: selectedAnnonce.titre,
+        titre: reservationAnnonce.titre,
         date: date,
         heureDebut: startTime,
         heureFin: endTime,
         personne: personne,
-        ville: selectedAnnonce.ville,
-        prix: price,
-        annonceId: selectedAnnonce._id,
+        ville: reservationAnnonce.ville,
+        prix: totalPrice,
+        annonceId: reservationAnnonce._id,
       });
-      setIsReservationModalOpen(false);
+      handleCloseMainModal();
+      handleCloseReservationModal();
     } else {
       console.error("Veuillez remplir tous les champs nécessaires.");
     }
@@ -144,7 +145,7 @@ const AnnonceCard = (props) => {
       setPrice(selectedAnnonce.prix);
       calculateTotalPrice(selectedAnnonce.prix, personne);
     }
-  }, [selectedAnnonce]);
+  }, [selectedAnnonce, personne]);
 
   // Gestion de l'ouverture de la modal principale
   const handleOpenMainModal = (annonce) => {
@@ -160,11 +161,13 @@ const AnnonceCard = (props) => {
 
   // Gestion de l'ouverture de la modal de réservation
   const handleOpenReservationModal = () => {
+    setReservationAnnonce(selectedAnnonce); // Fixe l'annonce pour la réservation
     setIsReservationModalOpen(true);
   };
 
   // Gestion de la fermeture de la modal de réservation
   const handleCloseReservationModal = () => {
+    setReservationAnnonce(null); // Réinitialise l'annonce de réservation
     setIsReservationModalOpen(false);
   };
 
@@ -194,9 +197,9 @@ const AnnonceCard = (props) => {
                 </div>
                 <Modal
                   isOpen={
+                    isMainModalOpen &&
                     selectedAnnonce &&
-                    selectedAnnonce._id === annonce._id &&
-                    isMainModalOpen
+                    selectedAnnonce._id === annonce._id
                   }
                   onRequestClose={handleCloseMainModal}
                   style={customStyles}
@@ -257,7 +260,7 @@ const AnnonceCard = (props) => {
                   )}
                 </Modal>
                 <Modal
-                  isOpen={isReservationModalOpen}
+                  isOpen={reservationAnnonce && isReservationModalOpen}
                   onRequestClose={handleCloseReservationModal}
                   style={reservationModalStyles}
                   ariaHideApp={false}
@@ -339,5 +342,4 @@ const AnnonceCard = (props) => {
     </div>
   );
 };
-
 export default AnnonceCard;

@@ -5,7 +5,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import user from "../reducers/user";
 import annonce from "../reducers/annonce";
 import mesFavoris from "../reducers/mesFavoris";
-import Header from "../components/Header";
+import Header from "../components/Shared/Header";
 import mesRecherche from "../reducers/mesRecherche";
 
 const store = configureStore({
