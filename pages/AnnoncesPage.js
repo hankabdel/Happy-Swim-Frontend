@@ -1,11 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import AnnonceCard from "../components/AnnonceCard";
 import { backendURL } from "../public/URLs";
 
 const AnnoncesPage = () => {
   // État pour les favoris et l'utilisateur
   const [favoris, setFavoris] = useState([]);
-  const [user, setUser] = useState({ token: "token" });
+  const [user, setUser] = useState(null); // Initialisé à null
+
+  // Récupère le token utilisateur après le chargement côté client
+  useEffect(() => {
+    const token = localStorage.getItem("token"); // Récupération du token
+    if (token) {
+      setUser({ token }); // Mise à jour de l'état avec le token
+    }
+  }, []); // Exécuté uniquement au premier rendu
 
   // Fonction pour gérer l'ajout et la suppression des favoris
   const handleToggleFavori = (annonce) => {
@@ -22,10 +30,7 @@ const AnnoncesPage = () => {
 
   // Fonction pour gérer l'enregistrement des réservations
   const handleRegisterReservation = async (reservationData) => {
-    const token = localStorage.getItem("token"); // Récupération du token stocké
-    // console.log("----->Token récupéré", token); // Vérifie que le token est bien récupéré
-
-    if (!token) {
+    if (!user || !user.token) {
       console.error("Token manquant, veuillez vous connecter.");
       return;
     }
@@ -38,7 +43,7 @@ const AnnoncesPage = () => {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`, // Utilisation du token pour l'authentification
+            Authorization: `Bearer ${user.token}`, // Utilisation du token pour l'authentification
           },
           body: JSON.stringify(reservationData),
         }
@@ -57,12 +62,16 @@ const AnnoncesPage = () => {
 
   return (
     <div>
-      <AnnonceCard
-        favoris={favoris}
-        user={user}
-        onToggleFavori={handleToggleFavori}
-        onRegisterReservation={handleRegisterReservation}
-      />
+      {user ? (
+        <AnnonceCard
+          favoris={favoris}
+          user={user}
+          onToggleFavori={handleToggleFavori}
+          onRegisterReservation={handleRegisterReservation}
+        />
+      ) : (
+        <p>Chargement des données utilisateur...</p>
+      )}
     </div>
   );
 };
