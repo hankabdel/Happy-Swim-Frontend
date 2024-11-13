@@ -13,16 +13,12 @@ export const userSlice = createSlice({
       state.value.nom = action.payload.nom;
       state.value.prenom = action.payload.prenom;
       state.value.email = action.payload.email;
-      // Sauvegarde dans localStorage
-      localStorage.setItem("user", JSON.stringify(state.value));
     },
     logout: (state) => {
       state.value.token = null;
       state.value.nom = null;
       state.value.prenom = null;
       state.value.email = null;
-      // Supprime les données du localStorage
-      localStorage.removeItem("user");
     },
   },
 });
