@@ -19,21 +19,13 @@ export default function SignIn() {
 
   const router = useRouter(); // Initialise useRouter pour la navigation
 
-  // Redirection si l'utilisateur est déjà connecté (token présent)
-  useEffect(() => {
-    if (user.token) {
-      router.push("/"); // Redirige vers la page d'accueil
-    }
-  }, [user.token, router]);
-
-  // Fonction pour gérer la connexion de l'utilisateur
   const handleConnection = () => {
-    setLoading(true); // Active le loader pendant la connexion
-    setError(null); // Réinitialise les erreurs avant la nouvelle tentative de connexion
+    setLoading(true); // Active le loader
+    setError(null); // Réinitialise l'erreur précédente
 
-    // signin
     fetch(
-      `${backendURL}/users/signin`,
+      `
+      ${backendURL}/users/signin`,
       // "http://localhost:3000/users/signin",
       {
         method: "POST",
@@ -44,7 +36,10 @@ export default function SignIn() {
       .then((response) => response.json())
       .then((data) => {
         if (data.result) {
-          localStorage.setItem("token", data.token); // Stockage du token après connexion.
+          // Stockez le token dans localStorage
+          localStorage.setItem("token", data.token);
+
+          // Mettre à jour Redux
           dispatch(
             login({
               email: data.email,
@@ -53,12 +48,20 @@ export default function SignIn() {
               prenom: data.prenom,
             })
           );
+
+          // Rediriger vers la page d'accueil après la connexion
+          router.push("/");
         } else {
-          console.error("Erreur de connexion:", data.error);
+          // Gérer les erreurs renvoyées par le backend
+          setError(data.error || "Erreur de connexion.");
         }
       })
       .catch((error) => {
-        console.error("Erreur lors de la connexion:", error);
+        console.error("Erreur réseau :", error);
+        setError("Impossible de se connecter pour le moment.");
+      })
+      .finally(() => {
+        setLoading(false); // Désactive le loader
       });
   };
 
