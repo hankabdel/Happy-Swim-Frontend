@@ -36,9 +36,6 @@ export default function SignIn() {
       .then((response) => response.json())
       .then((data) => {
         if (data.result) {
-          // Stockez le token dans localStorage
-          localStorage.setItem("token", data.token);
-
           // Mettre à jour Redux
           dispatch(
             login({
