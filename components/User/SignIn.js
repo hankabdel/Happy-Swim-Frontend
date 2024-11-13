@@ -1,4 +1,4 @@
-import styles from "../styles/SignIn.module.css"; // Importe les styles CSS spécifiques à ce composant
+import styles from "/styles/SignIn.module.css"; // Importe les styles CSS spécifiques à ce composant
 import React, { useState, useEffect } from "react"; // Importe React et les hooks nécessaires
 import { useRouter } from "next/router"; // Importe le hook useRouter de Next.js pour la navigation
 import Modal from "react-modal"; // Importe la bibliothèque react-modal pour les modales
