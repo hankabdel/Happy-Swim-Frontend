@@ -57,18 +57,20 @@ const AnnoncesPage = () => {
 
     const registerReservation = async () => {
       try {
-        const response = await fetch(
-          `${backendURL}/reservations/`,
-          // "http://localhost:3000/reservations",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${user.token}`,
-            },
-            body: JSON.stringify(reservationData),
-          }
-        );
+        // Ajout de userId aux données de réservation
+        const reservationPayload = {
+          ...reservationData,
+          userId: user._id, // Ajouter l'ID utilisateur
+        };
+
+        const response = await fetch(`${backendURL}/reservations/`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${user.token}`,
+          },
+          body: JSON.stringify(reservationPayload),
+        });
 
         const data = await response.json();
         if (!data.result) {

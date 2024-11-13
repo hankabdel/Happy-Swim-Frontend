@@ -83,6 +83,7 @@ const AnnonceCard = (props) => {
         ville: reservationAnnonce.ville,
         prix: totalPrice,
         annonceId: reservationAnnonce._id,
+        userId: user._id,
       });
       handleCloseMainModal();
       handleCloseReservationModal();
