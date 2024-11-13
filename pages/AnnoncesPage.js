@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import AnnonceCard from "../components/AnnonceCard";
 import { backendURL } from "../public/URLs";
+import { useSelector } from "react-redux";
 
 const AnnoncesPage = () => {
   // État pour les favoris et l'utilisateur
+  const user = useSelector((state) => state.user.value); // Récupère le user depuis Redux
+
   const [favoris, setFavoris] = useState([]);
-  const [user, setUser] = useState({ token: "token" });
 
   // Fonction pour gérer l'ajout et la suppression des favoris
   const handleToggleFavori = (annonce) => {
@@ -29,8 +31,8 @@ const AnnoncesPage = () => {
 
     try {
       const response = await fetch(
-        // `${backendURL}/reservations/`,
-        "http://localhost:3000/reservations",
+        `${backendURL}/reservations/`,
+        // "http://localhost:3000/reservations",
         {
           method: "POST",
           headers: {

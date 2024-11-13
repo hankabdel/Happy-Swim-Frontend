@@ -31,6 +31,7 @@ const AnnonceCard = (props) => {
   const [endTime, setEndTime] = useState("21:00");
   const [price, setPrice] = useState(0);
   const [totalPrice, setTotalPrice] = useState(0);
+  const token = useSelector((state) => state.user.value.token); // Récupère le token depuis Redux
 
   // Utilisation de useEffect pour récupérer les annonces lorsque le composant est monté
   useEffect(() => {

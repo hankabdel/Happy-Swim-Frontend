@@ -44,7 +44,6 @@ export default function SignIn() {
       .then((response) => response.json())
       .then((data) => {
         if (data.result) {
-          localStorage.setItem("token", data.token); // Stockage du token après connexion.
           dispatch(
             login({
               email: data.email,
