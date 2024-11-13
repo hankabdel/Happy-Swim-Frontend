@@ -1,10 +1,10 @@
-import styles from "/styles/SignIn.module.css"; // Importe les styles CSS spécifiques à ce composant
+import styles from "../styles/SignIn.module.css"; // Importe les styles CSS spécifiques à ce composant
 import React, { useState, useEffect } from "react"; // Importe React et les hooks nécessaires
 import { useRouter } from "next/router"; // Importe le hook useRouter de Next.js pour la navigation
 import Modal from "react-modal"; // Importe la bibliothèque react-modal pour les modales
-import { login } from "../../reducers/user"; // Importe l'action login depuis le reducer user
+import { login } from "../reducers/user"; // Importe l'action login depuis le reducer user
 import { useDispatch, useSelector } from "react-redux"; // Importe les hooks useDispatch et useSelector de react-redux
-import { backendURL } from "../../public/URLs";
+import { backendURL } from "../public/URLs";
 
 export default function SignIn() {
   const dispatch = useDispatch(); // Initialise useDispatch pour envoyer des actions Redux
@@ -19,13 +19,21 @@ export default function SignIn() {
 
   const router = useRouter(); // Initialise useRouter pour la navigation
 
-  const handleConnection = () => {
-    setLoading(true); // Active le loader
-    setError(null); // Réinitialise l'erreur précédente
+  // Redirection si l'utilisateur est déjà connecté (token présent)
+  useEffect(() => {
+    if (user.token) {
+      router.push("/"); // Redirige vers la page d'accueil
+    }
+  }, [user.token, router]);
 
+  // Fonction pour gérer la connexion de l'utilisateur
+  const handleConnection = () => {
+    setLoading(true); // Active le loader pendant la connexion
+    setError(null); // Réinitialise les erreurs avant la nouvelle tentative de connexion
+
+    // signin
     fetch(
-      `
-      ${backendURL}/users/signin`,
+      `${backendURL}/users/signin`,
       // "http://localhost:3000/users/signin",
       {
         method: "POST",
@@ -36,7 +44,7 @@ export default function SignIn() {
       .then((response) => response.json())
       .then((data) => {
         if (data.result) {
-          // Mettre à jour Redux
+          localStorage.setItem("token", data.token); // Stockage du token après connexion.
           dispatch(
             login({
               email: data.email,
@@ -45,20 +53,12 @@ export default function SignIn() {
               prenom: data.prenom,
             })
           );
-
-          // Rediriger vers la page d'accueil après la connexion
-          router.push("/");
         } else {
-          // Gérer les erreurs renvoyées par le backend
-          setError(data.error || "Erreur de connexion.");
+          console.error("Erreur de connexion:", data.error);
         }
       })
       .catch((error) => {
-        console.error("Erreur réseau :", error);
-        setError("Impossible de se connecter pour le moment.");
-      })
-      .finally(() => {
-        setLoading(false); // Désactive le loader
+        console.error("Erreur lors de la connexion:", error);
       });
   };
 
