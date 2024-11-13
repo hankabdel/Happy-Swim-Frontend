@@ -40,7 +40,7 @@ const AnnonceCard = (props) => {
         const headers = {
           "Content-Type": "application/json",
         };
-        if (user && user.token) {
+        if (token) {
           headers["Authorization"] = `Bearer ${user.token}`;
         }
         const response = await fetch(`${backendURL}/annonces`, {
@@ -57,7 +57,7 @@ const AnnonceCard = (props) => {
       }
     };
     fetchAnnonces();
-  }, [user]);
+  }, [token]);
 
   // Gestion de l'ajout et de la suppression des favoris via Redux
   const handleToggleFavori = (annonce) => {
