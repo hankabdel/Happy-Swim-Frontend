@@ -2,9 +2,9 @@ import styles from "/styles/SignIn.module.css"; // Importe les styles CSS spéci
 import React, { useState, useEffect } from "react"; // Importe React et les hooks nécessaires
 import { useRouter } from "next/router"; // Importe le hook useRouter de Next.js pour la navigation
 import Modal from "react-modal"; // Importe la bibliothèque react-modal pour les modales
-import { login } from "../reducers/user"; // Importe l'action login depuis le reducer user
+import { login } from "../../reducers/user"; // Importe l'action login depuis le reducer user
 import { useDispatch, useSelector } from "react-redux"; // Importe les hooks useDispatch et useSelector de react-redux
-import { backendURL } from "../public/URLs";
+import { backendURL } from "../../public/URLs";
 
 export default function SignIn() {
   const dispatch = useDispatch(); // Initialise useDispatch pour envoyer des actions Redux
