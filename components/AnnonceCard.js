@@ -31,7 +31,6 @@ const AnnonceCard = (props) => {
   const [endTime, setEndTime] = useState("21:00");
   const [price, setPrice] = useState(0);
   const [totalPrice, setTotalPrice] = useState(0);
-  const token = useSelector((state) => state.user.value.token); // Récupère le token depuis Redux
 
   // Utilisation de useEffect pour récupérer les annonces lorsque le composant est monté
   useEffect(() => {
@@ -40,7 +39,7 @@ const AnnonceCard = (props) => {
         const headers = {
           "Content-Type": "application/json",
         };
-        if (token) {
+        if (user) {
           headers["Authorization"] = `Bearer ${user.token}`;
         }
         const response = await fetch(`${backendURL}/annonces`, {
@@ -57,7 +56,7 @@ const AnnonceCard = (props) => {
       }
     };
     fetchAnnonces();
-  }, [token]);
+  }, [user]);
 
   // Gestion de l'ajout et de la suppression des favoris via Redux
   const handleToggleFavori = (annonce) => {
