@@ -20,6 +20,12 @@ const AnnonceCard = (props) => {
 
   // Récupération des données et actions via les props
   const { user, onRegisterReservation } = props;
+
+  // Si l'utilisateur n'est pas encore disponible, afficher un message de chargement
+  if (!user) {
+    return <p>Chargement des données utilisateur...</p>;
+  }
+
   // Gestion des favoris avec Redux
   const dispatch = useDispatch();
   const favoris = useSelector((state) => state.mesFavoris.value); // Récupère les favoris depuis Redux
@@ -69,6 +75,7 @@ const AnnonceCard = (props) => {
 
   // Enregistrement d'une réservation
   const handleRegisterReservation = () => {
+    console.log("User Object: ", user); // Débogage
     if (!user || !user.token) {
       alert("Vous devez être connecté pour réserver une annonce.");
       return;
