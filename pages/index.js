@@ -14,7 +14,7 @@ export default function Home() {
     const fetchAnnonces = async () => {
       try {
         const response = await fetch(
-          `${backendURL}/users/annonces`,
+          `${backendURL}/annonces`,
           // "http://localhost:3000/annonces",
           {
             method: "GET",
