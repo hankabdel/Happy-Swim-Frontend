@@ -21,8 +21,8 @@ export default function Search() {
 
     try {
       const response = await fetch(
-        // `http://localhost:3000/annonces/searchAnnonces?ville=${ville}`
-        `${backendURL}/annonces/searchAnnonces?ville=${ville}`
+        `http://localhost:3000/annonces/searchAnnonces?ville=${ville}`
+        // `${backendURL}/annonces/searchAnnonces?ville=${ville}`
       );
 
       if (!response.ok) {

@@ -54,8 +54,8 @@ export default function ProfileInfo() {
   // Fonction pour ajouter une annonce
   const handleAdd = () => {
     fetch(
-      `${backendURL}/annonces/`,
-      // "http://localhost:3000/annonces",
+      // `${backendURL}/annonces/`,
+      "http://localhost:3000/annonces",
       {
         method: "POST",
         headers: {
@@ -87,8 +87,8 @@ export default function ProfileInfo() {
   // Fonction pour supprimer une annonce
   const handleRemove = () => {
     fetch(
-      `${backendURL}/annonces`,
-      // `http://localhost:3000/annonces`,
+      // `${backendURL}/annonces`,
+      `http://localhost:3000/annonces`,
       {
         method: "DELETE",
         headers: {

@@ -17,8 +17,8 @@ export default function MesReservations() {
     if (user.token) {
       // Fait une requête GET pour récupérer les réservations de l'utilisateur
       fetch(
-        `${backendURL}/reservations/`,
-        // "http://localhost:3000/reservations/",
+        // `${backendURL}/reservations/`,
+        "http://localhost:3000/reservations/",
         {
           method: "GET",
           headers: {
@@ -52,8 +52,8 @@ export default function MesReservations() {
     if (deletingReservationId) {
       // Envoi d'une requête DELETE à l'API pour supprimer la réservation avec l'ID donné
       fetch(
-        `${backendURL}/reservations/${deletingReservationId}`,
-        // `http://localhost:3000/reservations/${deletingReservationId}`,
+        // `${backendURL}/reservations/${deletingReservationId}`,
+        `http://localhost:3000/reservations/${deletingReservationId}`,
         {
           method: "DELETE", // Spécifie la méthode HTTP DELETE pour supprimer la réservation
           headers: {

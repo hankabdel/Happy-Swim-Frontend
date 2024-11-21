@@ -3,15 +3,15 @@ import Head from "next/head";
 import { Provider } from "react-redux";
 import user from "../reducers/user";
 import annonce from "../reducers/annonce";
-import mesFavoris from "../reducers/mesFavoris";
 import Header from "../components/Shared/Header";
 import mesRecherche from "../reducers/mesRecherche";
+
 import { persistStore, persistReducer } from "redux-persist";
 import { PersistGate } from "redux-persist/integration/react";
 import storage from "redux-persist/lib/storage";
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 
-const reducers = combineReducers({ annonce, user, mesFavoris, mesRecherche });
+const reducers = combineReducers({ annonce, user, mesRecherche });
 const persistConfig = { key: "root", storage };
 
 const store = configureStore({

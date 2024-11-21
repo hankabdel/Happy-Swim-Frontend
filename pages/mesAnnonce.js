@@ -18,8 +18,8 @@ export default function MesAnnonce() {
     // Si l'utilisateur est connecté (token présent)
     if (user.token) {
       fetch(
-        `${backendURL}/annonces/mesAnnonces`,
-        // "http://localhost:3000/annonces/mesAnnonces",
+        // `${backendURL}/annonces/mesAnnonces`,
+        "http://localhost:3000/annonces/mesAnnonces",
         {
           method: "GET", // Méthode HTTP GET
           headers: {
@@ -53,8 +53,8 @@ export default function MesAnnonce() {
   useEffect(() => {
     if (annonceIdToRemove) {
       fetch(
-        `${backendURL}/annonces`,
-        // `http://localhost:3000/annonces/`,
+        // `${backendURL}/annonces`,
+        `http://localhost:3000/annonces/`,
         {
           method: "DELETE",
           headers: {

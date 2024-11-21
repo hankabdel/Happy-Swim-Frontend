@@ -24,7 +24,6 @@ export default function Header() {
         <div className={styles.text}>
           <h2 className={styles.textColor}>{textBienvenue}</h2>
         </div>
-
         <div className={styles.icon}>
           <Link href="/recherche">
             <FontAwesomeIcon

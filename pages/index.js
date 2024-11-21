@@ -1,7 +1,48 @@
 import styles from "../styles/Home.module.css";
+import React, { useEffect, useState } from "react"; // Importation de React et des hooks useEffect et useState
 import AnnonceCard from "../components/AnnonceCard";
+import MesFavoris from "./mesFavoris";
+import { useSelector } from "react-redux"; // Importation des hooks Redux
 
 export default function Home() {
+  const [likedAnnonce, setLikedAnnonce] = useState([]);
+  const [annonceData, setAnnonceData] = useState([]); // Liste des annonces récupérées
+  const user = useSelector((state) => state.user.value); // Récupère le user depuis Redux
+
+  // Fonction pour récupérer les annonces depuis le backend
+  useEffect(() => {
+    const fetchAnnonces = async () => {
+      try {
+        const response = await fetch("http://localhost:3000/annonces", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        if (!response.ok) {
+          throw new Error("Erreur lors de la récupération des annonces");
+        }
+        const data = await response.json();
+        setAnnonceData(data.data);
+      } catch (error) {
+        console.error("Erreur lors de la récupération des annonces :", error);
+      }
+    };
+    fetchAnnonces();
+  }, [user]);
+
+  // Ajouter une annonce aux favoris
+  const addToFavorites = (annonce) => {
+    if (!likedAnnonce.some((fav) => fav._id === annonce._id)) {
+      setLikedAnnonce((prev) => [...prev, annonce]);
+    }
+  };
+
+  // Retirer une annonce des favoris
+  const removeFromFavorites = (annonce) => {
+    setLikedAnnonce((prev) => prev.filter((fav) => fav._id !== annonce._id));
+  };
+
   return (
     <div className={styles.main}>
       <div className={styles.container}>
@@ -37,8 +78,19 @@ export default function Home() {
           </p>
         </div>
       </div>
+      {/* //AnnonceCard */}
       <div className={styles.containerAnnonce}>
-        <AnnonceCard />
+        <AnnonceCard
+          annonces={annonceData} // Transmet les annonces
+          likedAnnonce={likedAnnonce} // Transmet la liste des favoris
+          addToFavorites={addToFavorites} // Transmet la fonction d'ajout
+          removeFromFavorites={removeFromFavorites} // Transmet la fonction de retrait
+        />
+        {/* mesFavoris */}
+        <MesFavoris
+          annonces={likedAnnonce} // Transmet uniquement les favoris
+          removeFromFavorites={removeFromFavorites} // Transmet la fonction de retrait
+        />
       </div>
     </div>
   );
