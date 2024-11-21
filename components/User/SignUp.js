@@ -62,8 +62,8 @@ export default function SignUp() {
 
     // Envoie une requête POST à l'API pour créer un nouvel utilisateur
     fetch(
-      // `${backendURL}/users/signup`,
-      "http://localhost:3000/users/signup",
+      `${backendURL}/users/signup`,
+      // "http://localhost:3000/users/signup",
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },

@@ -15,7 +15,6 @@ import { backendURL } from "../public/URLs";
 export default function ProfileInfo() {
   // Accès aux valeurs de l'utilisateur et des annonces dans le store Redux
   const user = useSelector((state) => state.user.value);
-  const annonceReducer = useSelector((state) => state.annonce.value);
   const dispatch = useDispatch(); // Hook pour dispatcher des actions
 
   // Déclaration des états locaux pour gérer les champs du formulaire et l'état de la modal
@@ -54,8 +53,8 @@ export default function ProfileInfo() {
   // Fonction pour ajouter une annonce
   const handleAdd = () => {
     fetch(
-      // `${backendURL}/annonces/`,
-      "http://localhost:3000/annonces",
+      `${backendURL}/annonces/`,
+      // "http://localhost:3000/annonces",
       {
         method: "POST",
         headers: {
@@ -87,8 +86,8 @@ export default function ProfileInfo() {
   // Fonction pour supprimer une annonce
   const handleRemove = () => {
     fetch(
-      // `${backendURL}/annonces`,
-      `http://localhost:3000/annonces`,
+      `${backendURL}/annonces`,
+      // `http://localhost:3000/annonces`,
       {
         method: "DELETE",
         headers: {

@@ -5,8 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"; // Importation
 import { faHeart } from "@fortawesome/free-solid-svg-icons"; // Importation de l'icône cœur de FontAwesome
 import Modal from "react-modal"; // Importation du composant Modal
 import { useSelector } from "react-redux"; // Importation des hooks Redux
-import MesFavoris from "../pages/mesFavoris";
-import { backendURL } from "../public/URLs";
+import { backendURL } from "../../public/URLs";
 
 // Définition du composant fonctionnel Annonce
 const AnnonceCard = ({
@@ -34,23 +33,27 @@ const AnnonceCard = ({
   const handleRegisterReservation = async () => {
     if (date && startTime && endTime) {
       try {
-        const response = await fetch("http://localhost:3000/reservations", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${user.token}`,
-          },
-          body: JSON.stringify({
-            titre: reservationAnnonce.titre,
-            date: date,
-            heureDebut: startTime,
-            heureFin: endTime,
-            personne: personne,
-            ville: reservationAnnonce.ville,
-            prix: price,
-            annonceId: reservationAnnonce._id,
-          }),
-        });
+        const response = await fetch(
+          `${backendURL}/users/reservations`,
+          // "http://localhost:3000/reservations",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${user.token}`,
+            },
+            body: JSON.stringify({
+              titre: reservationAnnonce.titre,
+              date: date,
+              heureDebut: startTime,
+              heureFin: endTime,
+              personne: personne,
+              ville: reservationAnnonce.ville,
+              prix: price,
+              annonceId: reservationAnnonce._id,
+            }),
+          }
+        );
 
         if (!response.ok) {
           console.log(response);

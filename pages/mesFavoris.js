@@ -1,18 +1,34 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
+import { useEffect, useState } from "react"; // Importation de React et des hooks useEffect et useState
 import styles from "../styles/MesFavoris.module.css";
 
-const MesFavoris = ({ annonces, removeFromFavorites }) => {
-  console.log("Props reçues dans MesFavoris :", annonces);
+export default function MesFavoris() {
+  const [likedAnnonce, setLikedAnnonce] = useState([]);
 
-  if (!annonces || annonces.length === 0) {
+  useEffect(() => {
+    const storedFavorites = localStorage.getItem("likedAnnonce");
+    if (storedFavorites) {
+      setLikedAnnonce(JSON.parse(storedFavorites));
+    }
+  }, []);
+
+  const removeFromFavorites = (annonce) => {
+    const updatedFavorites = likedAnnonce.filter(
+      (fav) => fav._id !== annonce._id
+    );
+    setLikedAnnonce(updatedFavorites);
+    localStorage.setItem("likedAnnonce", JSON.stringify(updatedFavorites));
+  };
+
+  if (!likedAnnonce || likedAnnonce.length === 0) {
     return <p>Aucun favori trouvé</p>;
   }
 
   return (
     <div className={styles.annonceContainer}>
-      {annonces.map((annonce) => (
+      {likedAnnonce.map((annonce) => (
         <div className={styles.card} key={annonce._id}>
           <img
             className={styles.imageFond}
@@ -28,13 +44,11 @@ const MesFavoris = ({ annonces, removeFromFavorites }) => {
             <FontAwesomeIcon
               icon={faHeart}
               style={{ color: "red", cursor: "pointer" }}
-              onClick={() => removeFromFavorites(annonce)} // Retire le favori
+              onClick={() => removeFromFavorites(annonce)}
             />
           </div>
         </div>
       ))}
     </div>
   );
-};
-
-export default MesFavoris;
+}
