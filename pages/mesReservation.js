@@ -75,8 +75,7 @@ export default function MesReservations() {
               )
             );
             setDeletingReservationId(null); // Réinitialiser l'ID de la réservation en cours de suppression
-            setIsDeleting(false); // Réinitialiser l'état de suppression
-            alert("Réservation Supprimer !");
+            alert("Réservation supprimée !");
           } else {
             console.error("Erreur de suppression:", data.error);
           }
