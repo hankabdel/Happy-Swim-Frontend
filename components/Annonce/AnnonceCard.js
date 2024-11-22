@@ -29,16 +29,12 @@ const AnnonceCard = ({
   const [price, setPrice] = useState(0);
   const [totalPrice, setTotalPrice] = useState(0);
 
-  console.log("annonces", annonces);
-  console.log("selectedAnnonce:", selectedAnnonce);
-  console.log("reservationAnnonce:", reservationAnnonce);
-
   // Gestion de l'ajout et de la suppression des favoris via Redux
   const handleRegisterReservation = async () => {
     if (date && startTime && endTime) {
       try {
         const response = await fetch(
-          `${backendURL}/users/reservations`,
+          `${backendURL}/reservations`,
           // "http://localhost:3000/reservations",
           {
             method: "POST",
