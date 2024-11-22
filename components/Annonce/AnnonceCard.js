@@ -29,6 +29,10 @@ const AnnonceCard = ({
   const [price, setPrice] = useState(0);
   const [totalPrice, setTotalPrice] = useState(0);
 
+  console.log("annonces", annonces);
+  console.log("selectedAnnonce:", selectedAnnonce);
+  console.log("reservationAnnonce:", reservationAnnonce);
+
   // Gestion de l'ajout et de la suppression des favoris via Redux
   const handleRegisterReservation = async () => {
     if (date && startTime && endTime) {
@@ -56,7 +60,6 @@ const AnnonceCard = ({
         );
 
         if (!response.ok) {
-          console.log(response);
           throw new Error("Erreur lors de la réservation.");
         }
         // Si la réponse JSON n'est pas nécessaire, ne l'assignez pas

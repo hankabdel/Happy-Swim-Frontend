@@ -13,9 +13,7 @@ export default function MesReservations() {
 
   // useEffect pour effectuer une action après le rendu du composant
   useEffect(() => {
-    // Vérifie si l'utilisateur est authentifié
     if (user.token) {
-      // Fait une requête GET pour récupérer les réservations de l'utilisateur
       fetch(
         `${backendURL}/reservations/`,
         // "http://localhost:3000/reservations/",
