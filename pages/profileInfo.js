@@ -80,6 +80,7 @@ export default function ProfileInfo() {
           setPrix("");
         }
       });
+    alert("Annonce Ajouter Avec Succès");
     setIsOpen(false); // Fermeture de la modal
   };
 
@@ -109,6 +110,7 @@ export default function ProfileInfo() {
           setPrix("");
         }
       });
+    alert("Annonce Supprimer");
     setIsOpen(false); // Fermeture de la modal
   };
 
