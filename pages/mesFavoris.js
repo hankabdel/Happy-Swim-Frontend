@@ -23,32 +23,43 @@ export default function MesFavoris() {
   };
 
   if (!likedAnnonce || likedAnnonce.length === 0) {
-    return <p>Aucun favori trouvé</p>;
+    return (
+      <div className={styles.main}>
+        <div className={styles.p}>
+          <p>Aucun favori trouvé</p>
+        </div>
+      </div>
+    );
   }
 
   return (
-    <div className={styles.annonceContainer}>
-      {likedAnnonce.map((annonce) => (
-        <div className={styles.card} key={annonce._id}>
-          <img
-            className={styles.imageFond}
-            src="https://res.cloudinary.com/dnr5cehaa/image/upload/v1729874685/image37_xi5sfs.png"
-            alt={annonce.titre}
-          />
-          <div className={styles.info}>
-            <h2>{annonce.titre}</h2>
-            <p>Ville : {annonce.ville}</p>
-            <p>Prix : {annonce.prix} €</p>
-          </div>
-          <div className={styles.heartIcon}>
-            <FontAwesomeIcon
-              icon={faHeart}
-              style={{ color: "red", cursor: "pointer" }}
-              onClick={() => removeFromFavorites(annonce)}
-            />
-          </div>
+    <div className={styles.main}>
+      <h1 className={styles.h1}>Mes Favoris</h1>
+      <div className={styles.container}>
+        <div className={styles.annonceContainer}>
+          {likedAnnonce.map((annonce) => (
+            <div className={styles.card} key={annonce._id}>
+              <img
+                className={styles.imageFond}
+                src="https://res.cloudinary.com/dnr5cehaa/image/upload/v1729874685/image37_xi5sfs.png"
+                alt={annonce.titre}
+              />
+              <div className={styles.info}>
+                <h2>{annonce.titre}</h2>
+                <p>Ville : {annonce.ville}</p>
+                <p>Prix : {annonce.prix} €</p>
+              </div>
+              <div className={styles.heartIcon}>
+                <FontAwesomeIcon
+                  icon={faHeart}
+                  style={{ color: "red", cursor: "pointer" }}
+                  onClick={() => removeFromFavorites(annonce)}
+                />
+              </div>
+            </div>
+          ))}
         </div>
-      ))}
+      </div>
     </div>
   );
 }
