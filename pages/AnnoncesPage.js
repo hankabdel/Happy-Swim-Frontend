@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import AnnonceCard from "../components/AnnonceCard";
+import AnnonceCard from "../components/Annonce/AnnonceCard";
 import { backendURL } from "../public/URLs";
 
 const AnnoncesPage = () => {
@@ -57,10 +57,10 @@ const AnnoncesPage = () => {
   return (
     <div>
       <AnnonceCard
-        favoris={favoris}
-        user={user}
-        onToggleFavori={handleToggleFavori}
-        onRegisterReservation={handleRegisterReservation}
+        annonces={[]}
+        likedAnnonce={favoris}
+        addToFavorites={(annonce) => handleToggleFavori(annonce)}
+        removeFromFavorites={(annonce) => handleToggleFavori(annonce)}
       />
     </div>
   );
