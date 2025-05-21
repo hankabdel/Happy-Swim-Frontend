@@ -11,11 +11,9 @@ export default function MesReservations() {
   const [deletingReservationId, setDeletingReservationId] = useState(null);
   const user = useSelector((state) => state.user.value); // Récupère les informations de l'utilisateur depuis le state Redux
 
-  // Utilise useEffect pour effectuer une action après le rendu du composant
+  // useEffect pour effectuer une action après le rendu du composant
   useEffect(() => {
-    // Vérifie si l'utilisateur est authentifié
     if (user.token) {
-      // Fait une requête GET pour récupérer les réservations de l'utilisateur
       fetch(
         `${backendURL}/reservations/`,
         // "http://localhost:3000/reservations/",
@@ -77,7 +75,7 @@ export default function MesReservations() {
               )
             );
             setDeletingReservationId(null); // Réinitialiser l'ID de la réservation en cours de suppression
-            setIsDeleting(false); // Réinitialiser l'état de suppression
+            alert("Réservation supprimée !");
           } else {
             console.error("Erreur de suppression:", data.error);
           }

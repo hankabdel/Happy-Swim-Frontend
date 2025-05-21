@@ -11,7 +11,6 @@ export default function MesAnnonce() {
   const [mesAnnonce, setMesAnnonce] = useState([]); // Déclare et initialise l'état pour stocker les annonces
   const [annonceIdToRemove, setAnnonceIdToRemove] = useState(null); // Nouvel état pour l'ID de l'annonce à supprimer
   const user = useSelector((state) => state.user.value); // Récupère la valeur de l'utilisateur depuis le state Redux
-  const annonceReducer = useSelector((state) => state.annonce.value); // Récupère la valeur des annonces depuis le state Redux
   const dispatch = useDispatch(); // Initialise useDispatch pour envoyer des actions Redux
   // Utilise useEffect pour effectuer des effets de bord
   useEffect(() => {

@@ -20,7 +20,6 @@ const CLOUDINARY_CLOUD_NAME = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
 export default function ProfileInfo() {
   // Accès aux valeurs de l'utilisateur et des annonces dans le store Redux
   const user = useSelector((state) => state.user.value);
-  const annonceReducer = useSelector((state) => state.annonce.value);
   const dispatch = useDispatch(); // Hook pour dispatcher des actions
 
   // Déclaration des états locaux pour gérer les champs du formulaire et l'état de la modal
@@ -119,7 +118,12 @@ export default function ProfileInfo() {
           setImage(null);
         }
       });
+<<<<<<< HEAD
     setIsOpen(false);
+=======
+    alert("Annonce Ajouter Avec Succès");
+    setIsOpen(false); // Fermeture de la modal
+>>>>>>> ad9ed9568c0e10b943f6a4e8febc0e74b7ebd8fc
   };
 
   // Fonction pour supprimer une annonce
@@ -148,6 +152,7 @@ export default function ProfileInfo() {
           setPrix("");
         }
       });
+    alert("Annonce Supprimer");
     setIsOpen(false); // Fermeture de la modal
   };
 

@@ -1,4 +1,4 @@
-import styles from "../styles/Header.module.css"; // Importation des styles CSS pour ce composant
+import styles from "/styles/Header.module.css"; // Importation des styles CSS pour ce composant
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"; // Importation du composant FontAwesomeIcon pour les icônes
 import {
   faUser,
@@ -24,7 +24,6 @@ export default function Header() {
         <div className={styles.text}>
           <h2 className={styles.textColor}>{textBienvenue}</h2>
         </div>
-
         <div className={styles.icon}>
           <Link href="/recherche">
             <FontAwesomeIcon
