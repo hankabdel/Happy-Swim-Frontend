@@ -1,5 +1,5 @@
 // Importation des modules et des styles nécessaires
-import styles from "../styles/AnnonceCard.module.css";
+import styles from "/styles/AnnonceCard.module.css"; // Importation des styles CSS pour ce composant
 import React, { useEffect, useState } from "react"; // Importation de React et des hooks useEffect et useState
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"; // Importation du composant FontAwesomeIcon pour les icônes
 import { faHeart } from "@fortawesome/free-solid-svg-icons"; // Importation de l'icône cœur de FontAwesome
@@ -18,7 +18,6 @@ const AnnonceCard = ({
   const [isReservationModalOpen, setIsReservationModalOpen] = useState(false);
   const [selectedAnnonce, setSelectedAnnonce] = useState(null);
   const [reservationAnnonce, setReservationAnnonce] = useState([]);
-  const [annonceData, setAnnonceData] = useState([]); // Ajout de l'état manquant
   // État pour stocker les données des annonces récupérées du backend
   const user = useSelector((state) => state.user.value); // Récupère le user depuis Redux
 
@@ -30,65 +29,41 @@ const AnnonceCard = ({
   const [price, setPrice] = useState(0);
   const [totalPrice, setTotalPrice] = useState(0);
 
-  // Utilisation de useEffect pour récupérer les annonces lorsque le composant est monté
-  useEffect(() => {
-    const fetchAnnonces = async () => {
-      if (user && user.token) {
-        try {
-          const response = await fetch(
-            `${backendURL}/annonces`,
-            // "http://localhost:3000/annonces",
-            {
-              method: "GET",
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${user.token}`,
-              },
-            }
-          );
-          if (!response.ok) {
-            throw new Error("Erreur lors de la récupération des annonces");
-          }
-
-          const data = await response.json();
-          setAnnonceData(data.data);
-        } catch (error) {
-          console.error("Erreur lors de la récupération des annonces :", error);
-        }
-      }
-    };
-    fetchAnnonces();
-  }, [user.token]);
-
   // Gestion de l'ajout et de la suppression des favoris via Redux
   const handleRegisterReservation = async () => {
     if (date && startTime && endTime) {
       try {
-        const response = await fetch(`${backendURL}/reservations`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${user.token}`,
-          },
-          body: JSON.stringify({
-            titre: selectedAnnonce.titre,
-            date: date,
-            heureDebut: startTime,
-            heureFin: endTime,
-            personne: personne,
-            ville: selectedAnnonce.ville,
-            prix: totalPrice,
-            annonceId: selectedAnnonce._id,
-          }),
-        });
+        const response = await fetch(
+          `${backendURL}/reservations`,
+          // "http://localhost:3000/reservations",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${user.token}`,
+            },
+            body: JSON.stringify({
+              titre: reservationAnnonce.titre,
+              date: date,
+              heureDebut: startTime,
+              heureFin: endTime,
+              personne: personne,
+              ville: reservationAnnonce.ville,
+              prix: price,
+              annonceId: reservationAnnonce._id,
+            }),
+          }
+        );
 
         if (!response.ok) {
           throw new Error("Erreur lors de la réservation.");
         }
-
+        // Si la réponse JSON n'est pas nécessaire, ne l'assignez pas
         await response.json();
+        // Fermez les modales après le succès
         handleCloseMainModal();
         handleCloseReservationModal();
+        // Affichez un message de succès
         alert("Réservation réussie !");
       } catch (error) {
         console.error("Une erreur s'est produite :", error.message);
@@ -148,11 +123,11 @@ const AnnonceCard = ({
 
   // Mise à jour du prix total lors du changement de l'annonce sélectionnée
   useEffect(() => {
-    if (selectedAnnonce) {
-      setPrice(selectedAnnonce.prix);
-      calculateTotalPrice(selectedAnnonce.prix, personne);
+    if (reservationAnnonce) {
+      setPrice(reservationAnnonce.prix);
+      calculateTotalPrice(reservationAnnonce.prix, personne);
     }
-  }, [selectedAnnonce, personne]);
+  }, [reservationAnnonce, personne]);
 
   // Gestion de l'ouverture de la modal principale
   const handleOpenMainModal = (annonce) => {
@@ -168,16 +143,20 @@ const AnnonceCard = ({
 
   // Gestion de l'ouverture de la modal de réservation
   const handleOpenReservationModal = () => {
+    setReservationAnnonce(selectedAnnonce); // Fixe l'annonce pour la réservation
     setIsReservationModalOpen(true);
   };
 
   // Gestion de la fermeture de la modal de réservation
   const handleCloseReservationModal = () => {
-    setDate("");
-    setPersonne(1);
-    setStartTime("10:00");
-    setEndTime("21:00");
-    setTotalPrice(selectedAnnonce?.prix || 0);
+    setReservationAnnonce(reservationAnnonce); // Fixe l'annonce pour la réservation
+    // Réinitialiser les états liés à la réservation
+    setDate(""); // Réinitialise la date
+    setPersonne(1); // Réinitialise le nombre de personnes à 1
+    setStartTime("10:00"); // Réinitialise l'heure de début
+    setEndTime("21:00"); // Réinitialise l'heure de fin
+    setTotalPrice(selectedAnnonce.prix); // Réinitialise le prix total
+    setReservationAnnonce(null); // Réinitialise l'annonce de réservation
     setIsReservationModalOpen(false);
   };
 
