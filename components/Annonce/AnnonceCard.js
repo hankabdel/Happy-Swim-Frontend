@@ -1,5 +1,5 @@
 // Importation des modules et des styles nécessaires
-import styles from "../../styles/AnnonceCard.module.css"; // Correction du chemin d'importation
+import styles from "/styles/AnnonceCard.module.css"; // Correction du chemin d'importation
 import React, { useEffect, useState } from "react"; // Importation de React et des hooks useEffect et useState
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"; // Importation du composant FontAwesomeIcon pour les icônes
 import { faHeart } from "@fortawesome/free-solid-svg-icons"; // Importation de l'icône cœur de FontAwesome
