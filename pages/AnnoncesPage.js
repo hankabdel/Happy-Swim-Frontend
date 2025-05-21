@@ -23,7 +23,6 @@ const AnnoncesPage = () => {
   // Fonction pour gérer l'enregistrement des réservations
   const handleRegisterReservation = async (reservationData) => {
     const token = localStorage.getItem("token"); // Récupération du token stocké
-    console.log("----->Token récupéré", token); // Vérifie que le token est bien récupéré
 
     if (!token) {
       console.error("Token manquant, veuillez vous connecter.");

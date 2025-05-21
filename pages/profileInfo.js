@@ -11,6 +11,11 @@ import { logout } from "../reducers/user"; // Importation de l'action Redux pour
 import Link from "next/link"; // Importation du composant Link de Next.js pour la navigation entre les pages
 import { backendURL } from "../public/URLs";
 
+// Configuration de Cloudinary avec les variables d'environnement
+const CLOUDINARY_UPLOAD_PRESET =
+  process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET;
+const CLOUDINARY_CLOUD_NAME = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
+
 // Déclaration du composant ProfileInfo
 export default function ProfileInfo() {
   // Accès aux valeurs de l'utilisateur et des annonces dans le store Redux
@@ -51,37 +56,70 @@ export default function ProfileInfo() {
     dispatch(removeAllAnnonce());
   };
 
+  // Fonction pour uploader l'image sur Cloudinary
+  const uploadImage = async (file) => {
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", CLOUDINARY_UPLOAD_PRESET);
+    formData.append("folder", "HappySwim"); // Spécification du dossier
+
+    try {
+      console.log("Tentative d'upload vers Cloudinary avec :", {
+        cloudName: CLOUDINARY_CLOUD_NAME,
+        uploadPreset: CLOUDINARY_UPLOAD_PRESET,
+        folder: "HappySwim",
+      });
+
+      const response = await fetch(
+        `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`,
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+      const data = await response.json();
+      console.log("Réponse de Cloudinary :", data);
+      return data.secure_url;
+    } catch (error) {
+      console.error("Erreur lors de l'upload de l'image:", error);
+      return null;
+    }
+  };
+
   // Fonction pour ajouter une annonce
-  const handleAdd = () => {
-    fetch(
-      `${backendURL}/annonces/`,
-      // "http://localhost:3000/annonces",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${user.token}`,
-        },
-        body: JSON.stringify({
-          titre: titre,
-          description: description,
-          ville: ville,
-          personne: personne,
-          prix: prix,
-        }),
-      }
-    )
+  const handleAdd = async () => {
+    let imageUrl = null;
+    if (image) {
+      imageUrl = await uploadImage(image);
+    }
+
+    fetch(`${backendURL}/annonces/`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${user.token}`,
+      },
+      body: JSON.stringify({
+        titre: titre,
+        description: description,
+        ville: ville,
+        personne: personne,
+        prix: prix,
+        image: imageUrl, // Ajout de l'URL de l'image
+      }),
+    })
       .then((response) => response.json())
       .then((data) => {
         if (data.result) {
-          dispatch(addAnnonce(data.data)); // Dispatch de l'action pour ajouter l'annonce au store
+          dispatch(addAnnonce(data.data));
           setDescription("");
           setVille("");
           setPersonne("");
           setPrix("");
+          setImage(null);
         }
       });
-    setIsOpen(false); // Fermeture de la modal
+    setIsOpen(false);
   };
 
   // Fonction pour supprimer une annonce

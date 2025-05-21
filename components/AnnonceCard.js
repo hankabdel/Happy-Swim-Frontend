@@ -45,7 +45,6 @@ const AnnonceCard = (props) => {
               },
             }
           );
-
           if (!response.ok) {
             throw new Error("Erreur lors de la récupération des annonces");
           }
@@ -57,7 +56,6 @@ const AnnonceCard = (props) => {
         }
       }
     };
-
     fetchAnnonces();
   }, [user.token]);
 
@@ -81,7 +79,7 @@ const AnnonceCard = (props) => {
         heureFin: endTime,
         personne: personne,
         ville: selectedAnnonce.ville,
-        prix: price,
+        prix: totalPrice,
         annonceId: selectedAnnonce._id,
       });
       setIsReservationModalOpen(false);
@@ -144,7 +142,7 @@ const AnnonceCard = (props) => {
       setPrice(selectedAnnonce.prix);
       calculateTotalPrice(selectedAnnonce.prix, personne);
     }
-  }, [selectedAnnonce]);
+  }, [selectedAnnonce, personne]);
 
   // Gestion de l'ouverture de la modal principale
   const handleOpenMainModal = (annonce) => {
@@ -194,9 +192,9 @@ const AnnonceCard = (props) => {
                 </div>
                 <Modal
                   isOpen={
+                    isMainModalOpen &&
                     selectedAnnonce &&
-                    selectedAnnonce._id === annonce._id &&
-                    isMainModalOpen
+                    selectedAnnonce._id === annonce._id
                   }
                   onRequestClose={handleCloseMainModal}
                   style={customStyles}
