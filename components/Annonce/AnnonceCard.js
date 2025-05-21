@@ -29,7 +29,6 @@ const AnnonceCard = ({
   const [price, setPrice] = useState(0);
   const [totalPrice, setTotalPrice] = useState(0);
 
-<<<<<<< HEAD:components/AnnonceCard.js
   // Utilisation de useEffect pour récupérer les annonces lorsque le composant est monté
   useEffect(() => {
     const fetchAnnonces = async () => {
@@ -60,61 +59,39 @@ const AnnonceCard = ({
     fetchAnnonces();
   }, [user.token]);
 
-=======
->>>>>>> ad9ed9568c0e10b943f6a4e8febc0e74b7ebd8fc:components/Annonce/AnnonceCard.js
   // Gestion de l'ajout et de la suppression des favoris via Redux
   const handleRegisterReservation = async () => {
     if (date && startTime && endTime) {
-<<<<<<< HEAD:components/AnnonceCard.js
-      onRegisterReservation({
-        titre: selectedAnnonce.titre,
-        date: date,
-        heureDebut: startTime,
-        heureFin: endTime,
-        personne: personne,
-        ville: selectedAnnonce.ville,
-        prix: totalPrice,
-        annonceId: selectedAnnonce._id,
-      });
-      setIsReservationModalOpen(false);
-=======
       try {
-        const response = await fetch(
-          `${backendURL}/reservations`,
-          // "http://localhost:3000/reservations",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${user.token}`,
-            },
-            body: JSON.stringify({
-              titre: reservationAnnonce.titre,
-              date: date,
-              heureDebut: startTime,
-              heureFin: endTime,
-              personne: personne,
-              ville: reservationAnnonce.ville,
-              prix: price,
-              annonceId: reservationAnnonce._id,
-            }),
-          }
-        );
+        const response = await fetch(`${backendURL}/reservations`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${user.token}`,
+          },
+          body: JSON.stringify({
+            titre: selectedAnnonce.titre,
+            date: date,
+            heureDebut: startTime,
+            heureFin: endTime,
+            personne: personne,
+            ville: selectedAnnonce.ville,
+            prix: totalPrice,
+            annonceId: selectedAnnonce._id,
+          }),
+        });
 
         if (!response.ok) {
           throw new Error("Erreur lors de la réservation.");
         }
-        // Si la réponse JSON n'est pas nécessaire, ne l'assignez pas
+
         await response.json();
-        // Fermez les modales après le succès
         handleCloseMainModal();
         handleCloseReservationModal();
-        // Affichez un message de succès
         alert("Réservation réussie !");
       } catch (error) {
         console.error("Une erreur s'est produite :", error.message);
       }
->>>>>>> ad9ed9568c0e10b943f6a4e8febc0e74b7ebd8fc:components/Annonce/AnnonceCard.js
     } else {
       console.error("Veuillez remplir tous les champs nécessaires.");
     }
@@ -170,15 +147,11 @@ const AnnonceCard = ({
 
   // Mise à jour du prix total lors du changement de l'annonce sélectionnée
   useEffect(() => {
-    if (reservationAnnonce) {
-      setPrice(reservationAnnonce.prix);
-      calculateTotalPrice(reservationAnnonce.prix, personne);
+    if (selectedAnnonce) {
+      setPrice(selectedAnnonce.prix);
+      calculateTotalPrice(selectedAnnonce.prix, personne);
     }
-<<<<<<< HEAD:components/AnnonceCard.js
   }, [selectedAnnonce, personne]);
-=======
-  }, [reservationAnnonce, personne]);
->>>>>>> ad9ed9568c0e10b943f6a4e8febc0e74b7ebd8fc:components/Annonce/AnnonceCard.js
 
   // Gestion de l'ouverture de la modal principale
   const handleOpenMainModal = (annonce) => {
@@ -194,20 +167,16 @@ const AnnonceCard = ({
 
   // Gestion de l'ouverture de la modal de réservation
   const handleOpenReservationModal = () => {
-    setReservationAnnonce(selectedAnnonce); // Fixe l'annonce pour la réservation
     setIsReservationModalOpen(true);
   };
 
   // Gestion de la fermeture de la modal de réservation
   const handleCloseReservationModal = () => {
-    setReservationAnnonce(reservationAnnonce); // Fixe l'annonce pour la réservation
-    // Réinitialiser les états liés à la réservation
-    setDate(""); // Réinitialise la date
-    setPersonne(1); // Réinitialise le nombre de personnes à 1
-    setStartTime("10:00"); // Réinitialise l'heure de début
-    setEndTime("21:00"); // Réinitialise l'heure de fin
-    setTotalPrice(selectedAnnonce.prix); // Réinitialise le prix total
-    setReservationAnnonce(null); // Réinitialise l'annonce de réservation
+    setDate("");
+    setPersonne(1);
+    setStartTime("10:00");
+    setEndTime("21:00");
+    setTotalPrice(selectedAnnonce?.prix || 0);
     setIsReservationModalOpen(false);
   };
 
