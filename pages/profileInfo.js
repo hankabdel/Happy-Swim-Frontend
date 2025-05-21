@@ -118,12 +118,8 @@ export default function ProfileInfo() {
           setImage(null);
         }
       });
-<<<<<<< HEAD
+    alert("Annonce Ajoutée Avec Succès");
     setIsOpen(false);
-=======
-    alert("Annonce Ajouter Avec Succès");
-    setIsOpen(false); // Fermeture de la modal
->>>>>>> ad9ed9568c0e10b943f6a4e8febc0e74b7ebd8fc
   };
 
   // Fonction pour supprimer une annonce

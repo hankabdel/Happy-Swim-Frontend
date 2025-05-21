@@ -1,5 +1,5 @@
 // Importation des modules et des styles nécessaires
-import styles from "/styles/AnnonceCard.module.css"; // Importation des styles CSS pour ce composant
+import styles from "../../styles/AnnonceCard.module.css"; // Correction du chemin d'importation
 import React, { useEffect, useState } from "react"; // Importation de React et des hooks useEffect et useState
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"; // Importation du composant FontAwesomeIcon pour les icônes
 import { faHeart } from "@fortawesome/free-solid-svg-icons"; // Importation de l'icône cœur de FontAwesome
@@ -18,6 +18,7 @@ const AnnonceCard = ({
   const [isReservationModalOpen, setIsReservationModalOpen] = useState(false);
   const [selectedAnnonce, setSelectedAnnonce] = useState(null);
   const [reservationAnnonce, setReservationAnnonce] = useState([]);
+  const [annonceData, setAnnonceData] = useState([]); // Ajout de l'état manquant
   // État pour stocker les données des annonces récupérées du backend
   const user = useSelector((state) => state.user.value); // Récupère le user depuis Redux
 
